@@ -34,23 +34,21 @@ function login(){
         //Goes through each user in the database
         db.collection("users").get().then((querySnapshot) => {
             querySnapshot.forEach((doc) => {
+                var found = false;
                 if(doc.data().email == user.email){
                     //Puts them on a profile
                     //button/profile button/makes login button disappear
-
+                    found = true;
                     //console.log("User registered");
                     hideShow("LoginButton");
                     hideShow("ProfileButton");
                     document.getElementById("Welcome").innerHTML = "Welcome, " + doc.data().FirstName;
                 }
-                else{
-                    //Should redirect to a registration page
-
-                    //console.log("User not registerd")
-                    location.href = "register.html";
-                    
-                }
             });
+            if(!found){
+                //console.log("User not registerd")
+                location.href = "register.html";
+            }
         });
         // ...
       }).catch(function(error) {
