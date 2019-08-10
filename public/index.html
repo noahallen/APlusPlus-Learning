@@ -9,15 +9,21 @@
         <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
-        <!--<script src="https://www.gstatic.com/firebasejs/5.10.1/firebase-auth.js"></script>-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="./landing.js"></script>
         <script src="./config.js"></script>
 
     </head>
-    <h1>
-      Welcome to TopNotch Edu's Website!
+    <h1 display="inline-block">
+        <div id = "ButtonDiv" align="right" display="inline-block">
+            <button type ="button" float="right" display = "inline" id="LoginButton" onclick="login()">Login</button>
+            <button type ="button" float="right" display = "inline" id="ProfileButton" onclick="location.href='profile.html'">Profile</button>
+        </div>
+
+        Welcome to TopNotch Edu's Website!
     </h1>
+    
+
     <body onload="initialize()">
         <p>
             Our website, A++ Learning, is trying to solve the issue of students not being able to easily find 
@@ -35,7 +41,6 @@
             <li>Siyi Zhan</li>
         </ul>
 
-        <button type ="button" id="LoginButton" onclick="login()">Login</button>
-
+        
     </body>
 </html>

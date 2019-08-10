@@ -2,7 +2,22 @@
 
 function initialize(){
     firebase.initializeApp(firebaseConfig);
+    hideShow("ProfileButton");
 }
+
+
+function hideShow(idToHide) {
+
+    var x = document.getElementById(idToHide);
+
+    if (x.style.display === "none") {
+        x.style.display = "inline";
+    } 
+    else {
+        x.style.display = "none";
+    }
+}
+
 
 function login(){
     var provider = new firebase.auth.GoogleAuthProvider();
@@ -13,6 +28,30 @@ function login(){
         var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
+        var db = firebase.firestore();
+        //console.log(user.email);
+
+        //Goes through each user in the database
+        db.collection("users").get().then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+                if(doc.data().email == user.email){
+                    //Puts them on a profile
+                    //button/profile button/makes login button disappear
+
+                    //console.log("User registered");
+                    hideShow("LoginButton");
+                    hideShow("ProfileButton");
+                    document.getElementById("Welcome").innerHTML = "Welcome, " + doc.data().FirstName;
+                }
+                else{
+                    //Should redirect to a registration page
+
+                    //console.log("User not registerd")
+                    location.href = "register.html";
+                    
+                }
+            });
+        });
         // ...
       }).catch(function(error) {
         // Handle Errors here.
@@ -23,6 +62,11 @@ function login(){
         // The firebase.auth.AuthCredential type that was used.
         var credential = error.credential;
         // ...
+        console.log(errorCode);
+        console.log(errorMessage);
       });
 }
 
+document.getElementById("ProfileButton").onclick = function(){
+    location.href = "profile.html";
+};
