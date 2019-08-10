@@ -67,6 +67,6 @@ function login(){
       });
 }
 
-document.getElementById("ProfileButton").onclick = function(){
-    location.href = "profile.html";
-};
+// document.getElementById("ProfileButton").onclick = function(){
+//     location.href = "profile.html";
+// };

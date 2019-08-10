@@ -1,2 +1,40 @@
 /*CSS Style Page*/
+*{
+    margin:0;
+    padding:0;
+}
+.title{
+    align:left;
+    color:rgb(255, 0, 0);
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    font-size:90px;
+    font-weight:200;
+}
+
+body {
+    background: linear-gradient(to right, rgba(195, 255, 56, 0.493), rgba(3, 255, 200, 0.603), rgb(106, 252, 143))
+}
+
+.container{
+    width: 80%;
+    margin: auto;
+}
+
+.loginlink{
+   background-color:white;
+   color:black;
+   border: 2x linear-gradient(to right,  #3cba54, #f4c20d	,#db3236, #4885ed)
+
+    
+}
+
+.Description-Box{
+    
+    border:3px blue solid;
+    color:black;
+    padding: 20px;
+    width:50%;
+    align:middle;
+}
 

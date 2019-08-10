@@ -13,34 +13,60 @@
         <script src="./landing.js"></script>
         <script src="./config.js"></script>
 
+        <link rel="stylesheet" type="text/css" href="landingstyle.css">
+
+
     </head>
-    <h1 display="inline-block">
-        <div id = "ButtonDiv" align="right" display="inline-block">
-            <button type ="button" float="right" display = "inline" id="LoginButton" onclick="login()">Login</button>
-            <button type ="button" float="right" display = "inline" id="ProfileButton" onclick="location.href='profile.html'">Profile</button>
-        </div>
+    <div class="container">
+        <h1 display="inline-block">
+                
+            <div  id = "ButtonDiv" align="right" display="inline-block">
+                
+                    <button  class="loginlink" type ="button" float="right" display = "inline" id="LoginButton" onclick="login()">Login</button>
+                
+                    <button  class="loginlink" type ="button" float="right" display = "inline" id="ProfileButton" onclick="location.href='profile.html'">Profile</button>
+                
+            </div>
+            
+            <div class="title">
+                A++ Learning
+            </div>
 
-        Welcome to TopNotch Edu's Website!
-    </h1>
-    
 
-    <body onload="initialize()">
-        <p>
-            Our website, A++ Learning, is trying to solve the issue of students not being able to easily find 
-            academic help within their given schools or universities. It is also meant to help people who are too 
-            shy or scared to reach out to others for help. It will give a wide range of people easier 
-            access to finding the right tutor for their specific university classes that cater 
-            to their needs.
-        </p>
-        <p>Members:</p>
-        <ul>
-            <li>Noah Allen</li>
-            <li>Sahil Patel</li>
-            <li>Tinghui Song</li>
-            <li>Chris Wu</li>
-            <li>Siyi Zhan</li>
-        </ul>
-
+            
+        </h1>
         
-    </body>
+        
+
+        <body onload="initialize()">
+           
+            
+           
+            <div class="tabs">
+                 
+
+            </div>
+            <div class="Description-Box">
+                <p>
+                    Our website, A++ Learning, is trying to solve the issue of students not being able to easily find 
+                    academic help within their given schools or universities. It is also meant to help people who are too 
+                    shy or scared to reach out to others for help. It will give a wide range of people easier 
+                    access to finding the right tutor for their specific university classes that cater 
+                    to their needs.
+                </p>
+            </div>
+            <p>Members:</p>
+            <ul>
+                <li>Noah Allen</li>
+                <li>Sahil Patel</li>
+                <li>Tinghui Song</li>
+                <li>Chris Wu</li>
+                <li>Siyi Zhan</li>
+            </ul>
+
+            
+
+            
+        </body>
+    </div>
 </html>
