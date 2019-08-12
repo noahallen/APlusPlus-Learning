@@ -2324,6 +2324,21 @@
 
 /* Image */
 
+	.personal-pics {
+		width:auto;
+		text-align:left;
+		padding-left:20px;
+		padding-right:20px;
+		
+	}
+	
+	.personal-pics img {
+		width:70%;
+		height:90%;
+		object-fit:contain;
+		border-radius:50%;
+	}
+
 	.image {
 		border-radius: 0;
 		border: 0;
