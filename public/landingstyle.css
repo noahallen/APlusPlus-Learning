@@ -7,17 +7,27 @@
     color:rgb(255, 0, 0);
     text-transform: uppercase;
     letter-spacing: 0.01em;
-    font-size:90px;
-    font-weight:200;
+    font-size:30px;
+    font-weight:120;
 }
 
 body {
-    background: linear-gradient(to right, rgba(195, 255, 56, 0.493), rgba(3, 255, 200, 0.603), rgb(106, 252, 143))
+    background-color:#f4f4f4;
+    color:#555;
+    font-size: 16px;
+    line-height:1.6em;
+    margin:0;
+    
 }
 
 .container{
     width: 80%;
     margin: auto;
+    overflow:hidden;
+}
+
+#main-header{
+    background-color:#00FFFF;
 }
 
 .loginlink{
