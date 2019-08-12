@@ -2324,6 +2324,21 @@
 
 /* Image */
 
+	.personal-pics {
+		width:auto;
+		text-align:left;
+		padding-left:20px;
+		padding-right:20px;
+		
+	}
+	
+	.personal-pics img {
+		width:70%;
+		height:70%;
+		object-fit:cover;
+		border-radius:100%;
+	}
+
 	.image {
 		border-radius: 0;
 		border: 0;
@@ -3490,10 +3505,12 @@
 		#banner .inner {
 			max-width: 65em;
 			width: calc(100% - 6em);
-			margin: 0 auto;
+			margin: auto;
 			position: relative;
 			z-index: 10000;
 			line-height: 1.5;
+			text-align:center;
+			bottom:45px;
 		}
 
 			@media screen and (max-width: 480px) {
