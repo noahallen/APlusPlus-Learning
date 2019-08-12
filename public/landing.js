@@ -2,7 +2,7 @@
 
 function initialize(){
     firebase.initializeApp(firebaseConfig);
-    hideShow("ProfileButton");
+    //hideShow("ProfileButton");
 }
 
 
@@ -42,7 +42,7 @@ function login(){
                     //console.log("User registered");
                     hideShow("LoginButton");
                     hideShow("ProfileButton");
-                    document.getElementById("Welcome").innerHTML = "Welcome, " + doc.data().FirstName;
+                    //document.getElementById("Welcome").innerHTML = "Welcome, " + doc.data().FirstName;
                 }
             });
             if(!found){

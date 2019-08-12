@@ -24,7 +24,7 @@
                 
                     <button  class="loginlink" type ="button" float="right" display = "inline" id="LoginButton" onclick="login()">Login</button>
                 
-                    <button  class="loginlink" type ="button" float="right" display = "inline" id="ProfileButton" onclick="location.href='profile.html'">Profile</button>
+                    <button  class="loginlink" display="none" type ="button" float="right" display = "inline" id="ProfileButton" onclick="location.href='profile.html'">Profile</button>
                 
             </div>
             
@@ -39,13 +39,26 @@
         
 
         <body onload="initialize()">
-           
+            <header id="main-header">
+                <div class="container">
+                    <h2>A++ Learning</h2>
+                </div>
+            </header>
+
+            <!-- NavBar Links -->
+            <nav id="navbar">
+                <div class="container">
+                    <ul>
+                        <li><a href="https://study-abroad-tutor-app.web.app/">Home</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="https://study-abroad-tutor-app.web.app/profile.html">Profile</a></li>
+                        <li><a href="#">Search</a></li>
+                    </ul>
+                </div>
+            </header>
             
            
-            <div class="tabs">
-                 
-
-            </div>
+            <!-- Txt Box 1 -->
             <div class="Description-Box">
                 <p>
                     Our website, A++ Learning, is trying to solve the issue of students not being able to easily find 
