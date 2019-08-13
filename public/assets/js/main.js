@@ -9,6 +9,14 @@ function initialize(){
     //hideShow("ProfileButton");
 }
 
+function logout(){
+	firebase.auth().signOut().then(function() {
+		// Sign-out successful.
+		location.href = "index1.html";
+	  }).catch(function(error) {
+		// An error happened.
+	  });
+}
 
 function login(){
     var provider = new firebase.auth.GoogleAuthProvider();
@@ -29,7 +37,8 @@ function login(){
                 if(doc.data().email == user.email){
                     //Puts them on a profile
                     //button/profile button/makes login button disappear
-                    found = true;
+					found = true;
+					location.href = "index2.html";
                 }
             });
             if(!found){
