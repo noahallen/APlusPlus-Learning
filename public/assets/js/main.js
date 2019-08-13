@@ -4,50 +4,54 @@
 	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
 */
 
+
 function initialize(){
     firebase.initializeApp(firebaseConfig);
-    //hideShow("ProfileButton");
 }
+
 
 function logout(){
 	firebase.auth().signOut().then(function() {
 		// Sign-out successful.
 		location.href = "index1.html";
 	  }).catch(function(error) {
-		// An error happened.
-	  });
+		console.log(error);
+	});
 }
 
 function login(){
-    var provider = new firebase.auth.GoogleAuthProvider();
+
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE).then(function() {
+        var provider = new firebase.auth.GoogleAuthProvider();
 
 
-    firebase.auth().signInWithPopup(provider).then(function(result) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
-        // The signed-in user info.
-        var user = result.user;
-        var db = firebase.firestore();
-        //console.log(user.email);
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            var db = firebase.firestore();
+            //console.log(user.email);
 
-        //Goes through each user in the database
-        var found = false;
-        db.collection("users").get().then((querySnapshot) => {
-            querySnapshot.forEach((doc) => {
-                if(doc.data().email == user.email){
-                    //Puts them on a profile
-                    //button/profile button/makes login button disappear
-					found = true;
-					location.href = "index2.html";
+            //Goes through each user in the database
+            var found = false;
+            db.collection("users").get().then((querySnapshot) => {
+                querySnapshot.forEach((doc) => {
+                    if(doc.data().email == user.email){
+                        //Puts them on a profile
+                        //button/profile button/makes login button disappear
+                        found = true;
+                        location.href = "index2.html";
+                    }
+                });
+                if(!found){
+                    //console.log("User not registerd")
+                    location.href = "register.html";
                 }
             });
-            if(!found){
-                //console.log("User not registerd")
-                location.href = "register.html";
-            }
+            // ...
         });
-        // ...
-      }).catch(function(error) {
+    }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
@@ -58,7 +62,7 @@ function login(){
         // ...
         console.log(errorCode);
         console.log(errorMessage);
-      });
+    });
 }
 
 
@@ -128,3 +132,30 @@ function login(){
 	});
 
 })(jQuery);
+
+
+function createProfileInfo(){
+    var profile = {
+        fname: document.getElementById("fname").value,
+        lname: document.getElementById("lname").value,
+        email: document.getElementById("email").value,
+        school: document.getElementById("school").value,
+        isTutor: document.getElementById("isTutor").value
+    };
+    return profile;
+}
+
+function pushToFireStore(){
+    var profile = createProfileInfo();
+    function addUser(profile) {
+        var db = firebase.firestore();
+    
+        db.collection("users").doc(profile.email).set({
+            FirstName: profile.fname,
+            LastName: profile.lName,
+            email: profile.email,
+            school: profile.school,
+            isTutor: profile.isTutor
+        });
+    }
+}
