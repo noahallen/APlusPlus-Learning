@@ -13,22 +13,62 @@
 	</head>
 	<body>
 
-		<!-- Header -->
-			<header id="header">
-				<div class="inner">
-					<a class="logo">A++ Learning</a>
-				</div>
-			</header>
-			<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
 
-		<!-- Main -->
-		<section id="one">
-			<div class="inner">
-				<header>
-					Welcome to our Registration Page!
-				</header>
-			</div>
-		</section>	
+
+		<!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <a class="logo">A++ Learning</a>
+            </div>
+        </header>
+        <a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+            
+
+
+    
+        <!-- Main -->
+        <br>
+        <br>
+        <!-- FORM  -->
+        <style>
+    
+            *{margin: 0; padding: 0;}
+            body{background: #ecf1f4; font-family: sans-serif;}
+            
+            .form-wrap{ width: 320px; background: #3e3d3d; padding: 40px 20px; box-sizing: border-box; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);}
+            h1{text-align: center; color: #fff; font-weight: normal; margin-bottom:20px;}
+            
+            input{width: 100%; background: none; border: 1px solid #fff; border-radius: 3px; padding: 6px 15px; box-sizing: border-box; margin-bottom: 20px; font-size: 16px; color: #fff;}
+            
+            input[type="button"]{ background: #bac675; border: 0; cursor: pointer; color: #3e3d3d;}
+            input[type="button"]:hover{ background: #a4b15c; transition: .6s;}
+            
+            ::placeholder{color: #fff;}
+            
+        </style>
+        
+        <div class="form-wrap">
+            <h1>Register!</h1>
+            <form>
+
+                First Name <input type="text" placeholder="First Name" id="fname">
+                Last Name <input type="text" placeholder="Last Name" id="lname">
+                Email <input type="email" placeholder="Email" id="email">
+                School Name <input type="text" placeholder="School" id="school">
+                 <input type="radio" name="type" value=true id="student">   Student
+                <br>
+                <input type="radio" name="type" value=true id="tutor">  Tutor
+                <br>
+                <input type="radio" name="type" value=true id="student/tutor">   Student/Tutor
+                <br>
+                <input type="button" value="Register" id="registerbutton">
+
+                
+            
+            </form>
+        
+        </div>
+        <!-- END FORM -->
 			
 
 		<!-- Scripts -->
