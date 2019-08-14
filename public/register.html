@@ -18,7 +18,7 @@
 		<!-- Header -->
         <header id="header">
             <div class="inner">
-                <a class="logo">A++ Learning</a>
+                <a href="index.html" class="logo">A++ Learning</a>
             </div>
         </header>
         <a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
@@ -32,10 +32,12 @@
         <style>
     
             *{margin: 0; padding: 0;}
-            body{background: #ecf1f4; font-family: sans-serif; margin: center;}
+            body{background:#2b2b2b ; font-family: sans-serif; margin-left:15%; margin-right:15%; margin:center;}
             
-            .form-wrap{ width: 400px; background: #2b2b2b; padding: 40px 20px; box-sizing: border-box; position: fixed; left: 50%; top: 57%; transform: translate(-50%, -50%);}
-            h1{text-align: center; color: #ffffffc5; font-weight: normal; margin-bottom:20px;}
+            .form-wrap{ border-style:double; border-width:3px; border-color:white; width: 400px; background: #2b2b2b; padding: 40px 20px; box-sizing: border-box; position: fixed; left: 50%; top: 57%; transform: translate(-50%, -50%);}
+            
+            
+            h1{text-align: center; color: #ffffffc5; font-weight: normal; margin-bottom:20px; font-family:cursive}
             
             input{width: 100%; background: none; border: 1px solid #fff; border-radius: 3px; padding: 6px 15px; box-sizing: border-box; margin-bottom: 20px; font-size: 16px; color: #fff;}
             
@@ -44,37 +46,47 @@
             /* #a4b15c */
             
             ::placeholder{color: #fff;}
+
             
+
         </style>
+
+
+         <div class="box-red">
+
         
-        <div class="form-wrap">
-            <h1>Registration</h1>
-            <form>
+            <div class="form-wrap">
+                <div class="registration-wrap">
+                    <h1>Registration</h1>
+                </div>
+                <form>
 
-                First Name <input type="text" placeholder="First Name" id="fname">
-                Last Name <input type="text" placeholder="Last Name" id="lname">
-                Email <input type="email" placeholder="Email" id="email">
-                School Name <input type="text" placeholder="School" id="school">
-                 <input type="radio" name="type" value=true id="student">   Student
-                <br>
-              
-                <input type="radio" name="type" value=true id="student/tutor">   Student + Tutor
-                <br>
-                <input type="button" value="Register" id="registerbutton">
-
+                    First Name <input type="text" placeholder="First Name" id="fname">
+                    Last Name <input type="text" placeholder="Last Name" id="lname">
+                    Email <input type="email" placeholder="Email" id="email">
+                    School Name <input type="text" placeholder="School" id="school">
+                    <input type="radio" name="type" value=true id="student">   Student
+                    <br>
                 
+                    <input type="radio" name="type" value=true id="student/tutor">   Student + Tutor
+                    <br>
+                    <input type="button" value="Register" id="registerbutton">
+
+                    
+                
+                </form>
             
-            </form>
-        
-        </div>
-        <!-- END FORM -->
-			
+            </div>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+            <!-- END FORM -->
+                
 
-	</body>
+            <!-- Scripts -->
+                <script src="assets/js/jquery.min.js"></script>
+                <script src="assets/js/skel.min.js"></script>
+                <script src="assets/js/util.js"></script>
+                <script src="assets/js/main.js"></script>
+
+        </body>
+    </div>
 </html>

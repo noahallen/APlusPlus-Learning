@@ -2272,7 +2272,33 @@
 	top: 20px;
 }
 
+
+
+
+
+/* .box {
+	height:100%;
+	width:70%;
+	margin-left:15%;
+	margin-right:15%;
+	background:#e5474b;
+	
+}
+.red {
+	background:#e5474b;
+	height:100%;
+
+
+} */
+/* .box-black {
+	height:100%;
+	width:100%;
+	background:black;
+} */
+
 /* Image */
+
+
 
 	.personal-pics {
 		width:auto;
@@ -2340,6 +2366,7 @@
 			.image.main img {
 				width: 100%;
 			}
+
 
 /* List */
 
