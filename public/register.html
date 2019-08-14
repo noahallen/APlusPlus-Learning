@@ -8,10 +8,15 @@
 	<head>
 		<title>Search - A++ Learning</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <script src="./config.js"></script>
 	</head>
-	<body>
+	<body onload="initialize()">
 
 
 
@@ -52,14 +57,22 @@
         </style>
 
 
-         <div class="box-red">
+        <div class="box-red">
+        <div class="form-wrap">
+            <h1>Registration</h1>
+            <form>
 
-        
-            <div class="form-wrap">
-                <div class="registration-wrap">
-                    <h1>Registration</h1>
-                </div>
-                <form>
+                First Name <input type="text" placeholder="First Name" id="fname">
+                Last Name <input type="text" placeholder="Last Name" id="lname">
+                Email <input type="email" placeholder="Email" id="email">
+                School Name <input type="text" placeholder="School" id="school">
+                 <input type="radio" name="type" value=true id="student">   Student
+                <br>
+              
+                <input type="radio" name="type" value=true id="isTutor">   Student + Tutor
+                <br>
+                <input type="button" value="Register" id="registerbutton" onclick="pushToFireStore()">
+
 
                     First Name <input type="text" placeholder="First Name" id="fname">
                     Last Name <input type="text" placeholder="Last Name" id="lname">

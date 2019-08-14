@@ -8,13 +8,18 @@
 	<head>
 		<title>Profile - A++ Learning</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="./config.js"></script>
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	</head>
-	<body>
+	<body onload="initialize(); getEmail();">
 
 		
 			<div class="container emp-profile">
@@ -185,13 +190,6 @@
 							</div>
 						</form>           
 					</div>
-				
-
-
-
-
-
-		
 
 		<!-- Header -->
 		<header id="header">
@@ -205,17 +203,14 @@
 					</nav>
 				</div>
 			</header>
-			<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
-
-
-        
+			<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>      
 
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/skel.min.js"></script>
 			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-		
+      <script src="assets/js/main.js"></script>
+	
 	</body>
 </html>
