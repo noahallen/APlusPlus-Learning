@@ -159,3 +159,29 @@ function pushToFireStore(){
         });
     }
 }
+
+// function chooseCourseNames(){
+// 	var mylist = document.getElementById("courseList");
+// 	document.getElementById("name").value = mylist.options[mylist.selectedIndex].text;
+
+
+function chooseTime(){
+	var mylist = document.getElementById("timeList");
+	document.getElementById("time").value = mylist.options[mylist.selectedIndex].text;
+}
+
+function chooseSubject(){
+	var mylist = document.getElementById("subjectList").value;
+	if ( mylist === "Computer Science"){
+		var array= ["CS 005", "CS 008", "CS 010", "CS 011"];
+	}
+	else if ( mylist === "English"){
+		var array= ["ENGL 1A", "ENGL 1B", "ENGL 1C"];
+	}
+	var string = "";
+	for (i = 0; i < array.length; ++i){
+		string = string  + "<option>" + array[i] + "</option>";
+	}
+	string = "<select name = 'yes'>" + string + "</select=>";
+	document.getElementById("output").innerHTML = mylist;
+}

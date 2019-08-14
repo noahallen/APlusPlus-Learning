@@ -28,13 +28,42 @@
 			<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
 
 		<!-- Main -->
-		<section id="one">
-			<div class="inner">
-				<header>
-					Welcome to our Search Page!
-				</header>
-			</div>
-		</section>	
+		<form>
+			Select Subject:
+			<select id = "subjectList" onchange = "chooseSubject()">
+				<option>Select Subject</option>
+				<option>Computer Science</option>
+				<option>English</option>
+			</select>
+			<div id = "output">
+				<select>
+					<option></option>
+				</select>
+				</div>
+
+			<!-- Select Course Name: 
+			<select id = "courseList" onchange = "chooseCourseNames()">
+				<option>Select Course Name</option>
+				<option>CS 005</option>
+				<option>CS 008</option>
+				<option>CS 010</option>
+				<option>CS 011</option>
+				<option>CS 012</option>
+				<option>CS 014</option>
+				<option>CS 061</option>
+				<option>CS 100</option>
+			</select> -->
+
+			Select Time:
+			<select id = "timeList" onchange = "chooseTime()">
+				<option>Select Time</option>
+				<option>Monday 1, Aug</option>
+				<option>Tuesday 2, Aug</option>
+				<option>Wednesday 3, Aug</option>
+				<option>Thursday 4, Aug</option>
+				<option>Friday 5, Aug</option>
+			</select>
+		</form>
 			
 
 		<!-- Scripts -->
