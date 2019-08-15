@@ -147,6 +147,42 @@ function login(){
 
 })(jQuery);
 
+	function createrUser(){
+		var email;
+		var newUser;
+		var user;
+		firebase.auth().onAuthStateChanged(function(user){
+			user = firebase.auth().currentUser;
+			email = user.email;
+		});
+		var db = firebase.firestore();
+		var found = false;
+		db.collection("users").get().then((querySnapshot) => {
+			querySnapshot.forEach((doc) => {
+				if(!found){
+					if(doc.data().email == email){
+						found = true;
+						user = {
+							fname:doc.data().FirstName,
+							lname:doc.data().LastName,
+							email:doc.data().email,
+							school:doc.data().School,
+							isTutor:doc.data().isTutor
+						};
+					}
+				}
+			});
+			newUser = new User(user);
+			console.log(newUser.email);
+			console.log(newUser.fname);
+			console.log(newUser.lname);
+			console.log(newUser.school);
+			console.log(newUser.isTutor);
+
+		});
+		return newUser;
+	}
+
 
 // function getEmail(){
 //     firebase.auth().onAuthStateChanged(function(user){
@@ -158,16 +194,16 @@ function login(){
 // }
 
 
-// class User{
-//     constructor(){
-//         this.userRef = firebase.firestore().collection("users");
-//         this.email = getEmail();
-//         this.fname;
-//         this.lname;
-//         this.school;
-//         this.isTutor;
+ class User{
+     constructor(){
+		this.userRef = firebase.firestore().collection("users");
+		this.email = getEmail();	
+		this.fname;
+    	this.lname;
+        this.school;
+        this.isTutor;
         
-//     }
+     }
 
 //     get UserEmail(){
 //         return getEmail();
