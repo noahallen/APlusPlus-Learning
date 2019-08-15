@@ -9,6 +9,21 @@ function initialize(){
     firebase.initializeApp(firebaseConfig);
 }
 
+function pushToFireStore(){
+
+    var db = firebase.firestore();
+
+    db.collection("users").doc(document.getElementById("email").value).set({
+        FirstName: document.getElementById("fname").value,
+        LastName: document.getElementById("lname").value,
+        email: document.getElementById("email").value,
+        school: document.getElementById("school").value,
+        isTutor: document.getElementById("isTutor").checked
+    });
+    setTimeout(function(){ location.href ="index2.html"; }, 3000);
+    
+}
+
 
 function logout(){
 	firebase.auth().signOut().then(function() {
@@ -21,7 +36,7 @@ function logout(){
 
 function login(){
 
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE).then(function() {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
         var provider = new firebase.auth.GoogleAuthProvider();
 
 
@@ -134,28 +149,3 @@ function login(){
 })(jQuery);
 
 
-function createProfileInfo(){
-    var profile = {
-        fname: document.getElementById("fname").value,
-        lname: document.getElementById("lname").value,
-        email: document.getElementById("email").value,
-        school: document.getElementById("school").value,
-        isTutor: document.getElementById("isTutor").value
-    };
-    return profile;
-}
-
-function pushToFireStore(){
-    var profile = createProfileInfo();
-    function addUser(profile) {
-        var db = firebase.firestore();
-    
-        db.collection("users").doc(profile.email).set({
-            FirstName: profile.fname,
-            LastName: profile.lName,
-            email: profile.email,
-            school: profile.school,
-            isTutor: profile.isTutor
-        });
-    }
-}
