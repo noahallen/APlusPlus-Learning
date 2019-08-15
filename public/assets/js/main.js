@@ -10,9 +10,8 @@ function initialize(){
 }
 
 function pushToFireStore(){
-
+    
     var db = firebase.firestore();
-
     db.collection("users").doc(document.getElementById("email").value).set({
         FirstName: document.getElementById("fname").value,
         LastName: document.getElementById("lname").value,
@@ -36,14 +35,14 @@ function logout(){
 
 function login(){
 
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.SESSION).then(function() {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
         var provider = new firebase.auth.GoogleAuthProvider();
 
 
         firebase.auth().signInWithPopup(provider).then(function(result) {
             // This gives you a Google Access Token. You can use it to access the Google API.
             var token = result.credential.accessToken;
-            // The signed-in user info.
+            // The signed-in user info.     
             var user = result.user;
             var db = firebase.firestore();
             //console.log(user.email);
@@ -147,5 +146,131 @@ function login(){
 	});
 
 })(jQuery);
+
+
+// function getEmail(){
+//     firebase.auth().onAuthStateChanged(function(user){
+//         if (user){
+//             user = firebase.auth().currentUser;
+//             return user.email;
+//         }
+//     });
+// }
+
+
+// class User{
+//     constructor(){
+//         this.userRef = firebase.firestore().collection("users");
+//         this.email = getEmail();
+//         this.fname;
+//         this.lname;
+//         this.school;
+//         this.isTutor;
+        
+//     }
+
+//     get UserEmail(){
+//         return getEmail();
+//     }
+
+//     get fname(){
+//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
+//         .get()
+//         .then(function(querySnapshot) {
+//             querySnapshot.forEach(function(doc) {
+//                 return doc.data().fname;
+//             });
+//         })
+//         .catch(function(error) {
+//             //
+//         });
+//     }
+
+//     get lname(){
+//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
+//         .get()
+//         .then(function(querySnapshot) {
+//             querySnapshot.forEach(function(doc) {
+//                 return doc.data().lname;
+//             });
+//         })
+//         .catch(function(error) {
+//             //
+//         });
+//     }
+
+//     get school(){
+//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
+//         .get()
+//         .then(function(querySnapshot) {
+//             querySnapshot.forEach(function(doc) {
+//                 return doc.data().school;
+//             });
+//         })
+//         .catch(function(error) {
+//             //
+//         });
+//     }
+
+//     get isTutor(){
+//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
+//         .get()
+//         .then(function(querySnapshot) {
+//             querySnapshot.forEach(function(doc) {
+//                 return doc.data().isTutor;
+//             });
+//         })
+//         .catch(function(error) {
+//             //
+//         });
+//     }
+
+//     set fname(fname){
+//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
+//             FirstName: fname,
+//             LastName: document.getElementById("lname").value,
+//             email: document.getElementById("email").value,
+//             school: document.getElementById("school").value,
+//             isTutor: document.getElementById("isTutor").checked
+//         });
+//         this.fname = fname;
+//     }
+
+//     set lname(lname){
+//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
+//             FirstName: document.getElementById("fname").value,
+//             LastName: lname,
+//             email: document.getElementById("email").value,
+//             school: document.getElementById("school").value,
+//             isTutor: document.getElementById("isTutor").checked
+//         });
+
+//         this.lname = lname;
+//     }
+
+//     set setSchool(school){
+//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
+//             FirstName: document.getElementById("fname").value,
+//             LastName: document.getElementById("lname").value,
+//             email: document.getElementById("email").value,
+//             school: school,
+//             isTutor: document.getElementById("isTutor").checked
+//         });
+
+//         this.school = school;
+//     }
+
+//     set setTutor(isTutor){
+//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
+//             FirstName: document.getElementById("fname").value,
+//             LastName: document.getElementById("lname").value,
+//             email: document.getElementById("email").value,
+//             school: document.getElementById("school").value,
+//             isTutor: isTutor
+//         });
+
+//         this.isTutor = isTutor;
+//     }
+// }
 
 
