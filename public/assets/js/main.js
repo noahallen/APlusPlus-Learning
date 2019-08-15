@@ -165,23 +165,48 @@ function pushToFireStore(){
 // 	document.getElementById("name").value = mylist.options[mylist.selectedIndex].text;
 
 
-function chooseTime(){
-	var mylist = document.getElementById("timeList");
-	document.getElementById("time").value = mylist.options[mylist.selectedIndex].text;
-}
+// function chooseTime(){
+// 	var mylist = document.getElementById("timeList");
+// 	document.getElementById("time").value = mylist.options[mylist.selectedIndex].text;
+// }
 
-function chooseSubject(){
-	var mylist = document.getElementById("subjectList").value;
-	if ( mylist === "Computer Science"){
-		var array= ["CS 005", "CS 008", "CS 010", "CS 011"];
+// function chooseSubject(){
+// 	var mylist = document.getElementById("subjectList").value;
+// 	if ( mylist === "Computer Science"){
+// 		var array= ["CS 005", "CS 008", "CS 010", "CS 011"];
+// 	}
+// 	else if ( mylist === "English"){
+// 		var array= ["ENGL 1A", "ENGL 1B", "ENGL 1C"];
+// 	}
+// 	var string = "";
+// 	for (i = 0; i < array.length; ++i){
+// 		string = string  + "<option>" + array[i] + "</option>";
+// 	}
+// 	string = "<select name = 'yes'>" + string + "</select=>";
+// 	document.getElementById("output").innerHTML = mylist;
+// }
+
+function populate(s1, s2){
+	var s1 = document.getElementById(s1);
+	var s2 = document.getElementById(s2);
+	s2.innerHTML = "";
+	if (s1.value === "Math"){
+		var optArray = [ "|","math 9a|Math 9A","math 9b|Math 9B","math 9c|Math 9C"];
 	}
-	else if ( mylist === "English"){
-		var array= ["ENGL 1A", "ENGL 1B", "ENGL 1C"];
+	else if(s1.value === "Computer Science"){
+		var optArray = [ "|","cs 005|CS 005","cs 008|CS 008","cs 010|CS 010"];	
 	}
-	var string = "";
-	for (i = 0; i < array.length; ++i){
-		string = string  + "<option>" + array[i] + "</option>";
+	else if(s1.value === "English"){
+		var optArray = [ "|","engl 1a|ENGL 1A","engl 1b|ENGL 1B","engl 1c|ENGL 1C"];	
 	}
-	string = "<select name = 'yes'>" + string + "</select=>";
-	document.getElementById("output").innerHTML = mylist;
+	else if(s1.value === "Physics"){
+		var optArray = [ "|","phys 040a|PHYS 040A","phys 040b|PHYS 040B","phys 040c|PHYS 040C"];	
+	}
+	for ( var optoin in optArray){
+		var pair = optArray[optoin].split("|");
+		var newOption = document.createElement("option");
+		newOption.value = pair[0];
+		newOption.innerHTML = pair[1];
+		s2.options.add(newOption);
+	}
 }
