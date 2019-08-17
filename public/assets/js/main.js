@@ -147,74 +147,43 @@ function login(){
 
 })(jQuery);
 
-	async function createUser(){
-		var email;
-		var newUser;
-		var user;
-		// firebase.auth().onAuthStateChanged(function(user)
-			user = firebase.auth().currentUser;
-			email = user.email;
-		console.log(email);
-		var db = firebase.firestore();
-        var docRef = db.collection("users").doc(email);
-        await docRef.get().then(function(doc){
-            if (doc.exists) {
-                user = {
-                    fname:doc.data().FirstName,
-                    lname:doc.data().LastName,
-                    email:doc.data().email,
-                    school:doc.data().School,
-                    isTutor:doc.data().isTutor,
-                };
-			}
-			else{
-				console.log("document doesn't exist");
-			}
-        }).catch(function(error) {
-            console.log("Error getting document:", error);
-		});
-		
-		newUser=new User(
-			email,user.fname, user.lname, user.school, user.isTutor
-		);
-		console.log(newUser);
-		return newUser;
-		//return new User();
-    };
-		// var found = false;
-		// db.collection("users").get().then((querySnapshot) => {
-		// 	querySnapshot.forEach((doc) => {
-		// 		if(!found){
-		// 			if(doc.data().email == email){
-		// 				found = true;
-		// 				user = {
-		// 					fname:doc.data().FirstName,
-		// 					lname:doc.data().LastName,
-		// 					email:doc.data().email,
-		// 					school:doc.data().School,
-		// 					isTutor:doc.data().isTutor
-		// 				};
-		// 			}
-		// 		}
-		// 	});
-		// 	newUser = new User(user);
-		// 	console.log(newUser.email);
-		// 	console.log(newUser.fname);
-		// 	console.log(newUser.lname);
-		// 	console.log(newUser.school);
-		// 	console.log(newUser.isTutor);
 
-	
+async function createUser(){
+    var email;
+    var newUser;
+    var user;
+    // firebase.auth().onAuthStateChanged(function(user)
+        user = firebase.auth().currentUser;
+        email = user.email;
+    //console.log(email);
+    var db = firebase.firestore();
+    var docRef = db.collection("users").doc(email);
+    await docRef.get().then(function(doc){
+        if (doc.exists) {
+            user = {
+                fname:doc.data().FirstName,
+                lname:doc.data().LastName,
+                email:doc.data().email,
+                school:doc.data().School,
+                isTutor:doc.data().isTutor,
+            };
+        }
+        else{
+            console.log("document doesn't exist");
+        }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+    
+    newUser = new User(
+        email,user.fname, user.lname, user.school, user.isTutor
+    );
+    //console.log(newUser);
+    return newUser;
+    //return new User();
+};
+        
 
-
-// function getEmail(){
-//     firebase.auth().onAuthStateChanged(function(user){
-//         if (user){
-//             user = firebase.auth().currentUser;
-//             return user.email;
-//         }
-//     });
-// }
 
 
  class User{
@@ -227,109 +196,6 @@ function login(){
 	}
 }
 
-//     get UserEmail(){
-//         return getEmail();
-//     }
-
-//     get fname(){
-//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
-//         .get()
-//         .then(function(querySnapshot) {
-//             querySnapshot.forEach(function(doc) {
-//                 return doc.data().fname;
-//             });
-//         })
-//         .catch(function(error) {
-//             //
-//         });
-//     }
-
-//     get lname(){
-//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
-//         .get()
-//         .then(function(querySnapshot) {
-//             querySnapshot.forEach(function(doc) {
-//                 return doc.data().lname;
-//             });
-//         })
-//         .catch(function(error) {
-//             //
-//         });
-//     }
-
-//     get school(){
-//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
-//         .get()
-//         .then(function(querySnapshot) {
-//             querySnapshot.forEach(function(doc) {
-//                 return doc.data().school;
-//             });
-//         })
-//         .catch(function(error) {
-//             //
-//         });
-//     }
-
-//     get isTutor(){
-//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
-//         .get()
-//         .then(function(querySnapshot) {
-//             querySnapshot.forEach(function(doc) {
-//                 return doc.data().isTutor;
-//             });
-//         })
-//         .catch(function(error) {
-//             //
-//         });
-//     }
-
-//     set fname(fname){
-//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
-//             FirstName: fname,
-//             LastName: document.getElementById("lname").value,
-//             email: document.getElementById("email").value,
-//             school: document.getElementById("school").value,
-//             isTutor: document.getElementById("isTutor").checked
-//         });
-//         this.fname = fname;
-//     }
-
-//     set lname(lname){
-//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
-//             FirstName: document.getElementById("fname").value,
-//             LastName: lname,
-//             email: document.getElementById("email").value,
-//             school: document.getElementById("school").value,
-//             isTutor: document.getElementById("isTutor").checked
-//         });
-
-//         this.lname = lname;
-//     }
-
-//     set setSchool(school){
-//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
-//             FirstName: document.getElementById("fname").value,
-//             LastName: document.getElementById("lname").value,
-//             email: document.getElementById("email").value,
-//             school: school,
-//             isTutor: document.getElementById("isTutor").checked
-//         });
-
-//         this.school = school;
-//     }
-
-//     set setTutor(isTutor){
-//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
-//             FirstName: document.getElementById("fname").value,
-//             LastName: document.getElementById("lname").value,
-//             email: document.getElementById("email").value,
-//             school: document.getElementById("school").value,
-//             isTutor: isTutor
-//         });
-
-//         this.isTutor = isTutor;
-//     }
-// }
 
 
 function populate(s1, s2){
