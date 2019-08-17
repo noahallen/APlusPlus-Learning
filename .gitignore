@@ -65,3 +65,6 @@ node_modules/
 .env
 
 .vs/
+
+
+.DS_Store
