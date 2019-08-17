@@ -148,129 +148,77 @@ function login(){
 })(jQuery);
 
 
-// function getEmail(){
-//     firebase.auth().onAuthStateChanged(function(user){
-//         if (user){
-//             user = firebase.auth().currentUser;
-//             return user.email;
-//         }
-//     });
-// }
-
-
-// class User{
-//     constructor(){
-//         this.userRef = firebase.firestore().collection("users");
-//         this.email = getEmail();
-//         this.fname;
-//         this.lname;
-//         this.school;
-//         this.isTutor;
+async function createUser(){
+    var email;
+    var newUser;
+    var user;
+    // firebase.auth().onAuthStateChanged(function(user)
+        user = firebase.auth().currentUser;
+        email = user.email;
+    //console.log(email);
+    var db = firebase.firestore();
+    var docRef = db.collection("users").doc(email);
+    await docRef.get().then(function(doc){
+        if (doc.exists) {
+            user = {
+                fname:doc.data().FirstName,
+                lname:doc.data().LastName,
+                email:doc.data().email,
+                school:doc.data().School,
+                isTutor:doc.data().isTutor,
+            };
+        }
+        else{
+            console.log("document doesn't exist");
+        }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+    
+    newUser = new User(
+        email,user.fname, user.lname, user.school, user.isTutor
+    );
+    //console.log(newUser);
+    return newUser;
+    //return new User();
+};
         
-//     }
-
-//     get UserEmail(){
-//         return getEmail();
-//     }
-
-//     get fname(){
-//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
-//         .get()
-//         .then(function(querySnapshot) {
-//             querySnapshot.forEach(function(doc) {
-//                 return doc.data().fname;
-//             });
-//         })
-//         .catch(function(error) {
-//             //
-//         });
-//     }
-
-//     get lname(){
-//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
-//         .get()
-//         .then(function(querySnapshot) {
-//             querySnapshot.forEach(function(doc) {
-//                 return doc.data().lname;
-//             });
-//         })
-//         .catch(function(error) {
-//             //
-//         });
-//     }
-
-//     get school(){
-//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
-//         .get()
-//         .then(function(querySnapshot) {
-//             querySnapshot.forEach(function(doc) {
-//                 return doc.data().school;
-//             });
-//         })
-//         .catch(function(error) {
-//             //
-//         });
-//     }
-
-//     get isTutor(){
-//         firebase.firestore().collection("users").where("email", "==", this.UserEmail)
-//         .get()
-//         .then(function(querySnapshot) {
-//             querySnapshot.forEach(function(doc) {
-//                 return doc.data().isTutor;
-//             });
-//         })
-//         .catch(function(error) {
-//             //
-//         });
-//     }
-
-//     set fname(fname){
-//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
-//             FirstName: fname,
-//             LastName: document.getElementById("lname").value,
-//             email: document.getElementById("email").value,
-//             school: document.getElementById("school").value,
-//             isTutor: document.getElementById("isTutor").checked
-//         });
-//         this.fname = fname;
-//     }
-
-//     set lname(lname){
-//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
-//             FirstName: document.getElementById("fname").value,
-//             LastName: lname,
-//             email: document.getElementById("email").value,
-//             school: document.getElementById("school").value,
-//             isTutor: document.getElementById("isTutor").checked
-//         });
-
-//         this.lname = lname;
-//     }
-
-//     set setSchool(school){
-//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
-//             FirstName: document.getElementById("fname").value,
-//             LastName: document.getElementById("lname").value,
-//             email: document.getElementById("email").value,
-//             school: school,
-//             isTutor: document.getElementById("isTutor").checked
-//         });
-
-//         this.school = school;
-//     }
-
-//     set setTutor(isTutor){
-//         firebase.firestore().collection("users").doc(document.getElementById("email").value).set({
-//             FirstName: document.getElementById("fname").value,
-//             LastName: document.getElementById("lname").value,
-//             email: document.getElementById("email").value,
-//             school: document.getElementById("school").value,
-//             isTutor: isTutor
-//         });
-
-//         this.isTutor = isTutor;
-//     }
-// }
 
 
+
+ class User{
+     constructor(email, fname, lname, school, isTutor){
+		this.email = email;	
+		this.fname = fname;
+    	this.lname = lname;
+        this.school = school;
+        this.isTutor = isTutor;   
+	}
+}
+
+
+
+function populate(s1, s2){
+	var s1 = document.getElementById(s1);
+	var s2 = document.getElementById(s2);
+	s2.innerHTML = "";
+	if (s1.value === "Math"){
+		var optArray = [ "|","math 9a|Math 9A","math 9b|Math 9B","math 9c|Math 9C"];
+	}
+	else if(s1.value === "Computer Science"){
+		var optArray = [ "|","cs 005|CS 005","cs 008|CS 008","cs 010|CS 010"];	
+	}
+	else if(s1.value === "English"){
+		var optArray = [ "|","engl 1a|ENGL 1A","engl 1b|ENGL 1B","engl 1c|ENGL 1C"];	
+	}
+	else if(s1.value === "Physics"){
+		var optArray = [ "|","phys 040a|PHYS 040A","phys 040b|PHYS 040B","phys 040c|PHYS 040C"];	
+	}
+	for ( var optoin in optArray){
+		var pair = optArray[optoin].split("|");
+		var newOption = document.createElement("option");
+		newOption.value = pair[0];
+		newOption.innerHTML = pair[1];
+		s2.options.add(newOption);
+	}
+}
