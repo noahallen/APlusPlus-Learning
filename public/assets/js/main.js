@@ -9,6 +9,20 @@ function initialize(){
     firebase.initializeApp(firebaseConfig);
 }
 
+function pushToFireStore(){
+    
+    var db = firebase.firestore();
+    db.collection("users").doc(document.getElementById("email").value).set({
+        FirstName: document.getElementById("fname").value,
+        LastName: document.getElementById("lname").value,
+        email: document.getElementById("email").value,
+        school: document.getElementById("school").value,
+        isTutor: document.getElementById("isTutor").checked
+    });
+    setTimeout(function(){ location.href ="index2.html"; }, 3000);
+    
+}
+
 
 function logout(){
 	firebase.auth().signOut().then(function() {
@@ -21,14 +35,14 @@ function logout(){
 
 function login(){
 
-    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE).then(function() {
+    firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
         var provider = new firebase.auth.GoogleAuthProvider();
 
 
         firebase.auth().signInWithPopup(provider).then(function(result) {
             // This gives you a Google Access Token. You can use it to access the Google API.
             var token = result.credential.accessToken;
-            // The signed-in user info.
+            // The signed-in user info.     
             var user = result.user;
             var db = firebase.firestore();
             //console.log(user.email);
@@ -133,58 +147,6 @@ function login(){
 
 })(jQuery);
 
-
-function createProfileInfo(){
-    var profile = {
-        fname: document.getElementById("fname").value,
-        lname: document.getElementById("lname").value,
-        email: document.getElementById("email").value,
-        school: document.getElementById("school").value,
-        isTutor: document.getElementById("isTutor").value
-    };
-    return profile;
-}
-
-function pushToFireStore(){
-    var profile = createProfileInfo();
-    function addUser(profile) {
-        var db = firebase.firestore();
-    
-        db.collection("users").doc(profile.email).set({
-            FirstName: profile.fname,
-            LastName: profile.lName,
-            email: profile.email,
-            school: profile.school,
-            isTutor: profile.isTutor
-        });
-    }
-}
-
-// function chooseCourseNames(){
-// 	var mylist = document.getElementById("courseList");
-// 	document.getElementById("name").value = mylist.options[mylist.selectedIndex].text;
-
-
-// function chooseTime(){
-// 	var mylist = document.getElementById("timeList");
-// 	document.getElementById("time").value = mylist.options[mylist.selectedIndex].text;
-// }
-
-// function chooseSubject(){
-// 	var mylist = document.getElementById("subjectList").value;
-// 	if ( mylist === "Computer Science"){
-// 		var array= ["CS 005", "CS 008", "CS 010", "CS 011"];
-// 	}
-// 	else if ( mylist === "English"){
-// 		var array= ["ENGL 1A", "ENGL 1B", "ENGL 1C"];
-// 	}
-// 	var string = "";
-// 	for (i = 0; i < array.length; ++i){
-// 		string = string  + "<option>" + array[i] + "</option>";
-// 	}
-// 	string = "<select name = 'yes'>" + string + "</select=>";
-// 	document.getElementById("output").innerHTML = mylist;
-// }
 
 function populate(s1, s2){
 	var s1 = document.getElementById(s1);

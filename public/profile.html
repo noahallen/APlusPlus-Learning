@@ -8,15 +8,197 @@
 	<head>
 		<title>Profile - A++ Learning</title>
 		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="./config.js"></script>
 		<link rel="stylesheet" href="assets/css/main.css" />
+		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	</head>
-	<body>
+	<body onload="initialize()">
 
 		
+			<div class="container emp-profile">
+						<form method="post">
+							<div class="row">
+								<!-- <div class="col-md-4">
+									<div class="profile-img">
+										<img src="https://core.luminousindia.com/luminousweb/Image/171-1717870_stockvader-predicted-cron-for-may-user-profile-icon-png.png" alt=""/>
+										<div class="file btn btn-lg btn-primary">
+											Change Photo
+											<input type="file" name="file"/>
+										</div>
+									</div>
+								</div> -->
+								<div class="col-md-6">
+									<div class="profile-head">
+												<h5>
+													<!-- Crixus Wu -->
+												</h5>
+												<!-- <h6>
+													Hansome man
+												</h6> -->
+												<p class="proile-rating">RANKING: 
+                                                    <!-- <span>9.5/10</span> -->
+                                                </p>
+										<ul class="nav nav-tabs" id="myTab" role="tablist">
+											<li class="nav-item">
+												<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">About</a>
+											<!-- </li>
+											<li class="nav-item">
+												<a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Timeline</a>
+											</li> -->
+										</ul>
+									</div>
+								</div>
+								<!-- <div class="col-md-2">
+									<input type="submit" class="profile-edit-btn" name="btnAddMore" value="Edit Profile"/>
+								</div> -->
+							</div>
+							<div class="row">
+								<div class="col-md-4">
+									<!-- <div class="profile-work">
+										<p>WORK LINK</p>
+										<a href="">Website Link</a><br/>
+										<a href="">Bootsnipp Profile</a><br/>
+										<a href="">Bootply Profile</a>
+
+									</div> -->
+								</div>
+								<div class="col-md-8">
+									<div class="tab-content profile-tab" id="myTabContent">
+										<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+													<div class="row">
+														<div class="col-md-6">
+															<label>E-mail</label>
+														</div>
+														<div class="col-md-6">
+															<p>
+                                                                <!-- danchaoren@gmail.com -->
+                                                            </p>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-6">
+															<label>Name</label>
+														</div>
+														<div class="col-md-6">
+															<p>
+                                                                <!-- Crixus Wu -->
+                                                            </p>
+														</div>
+													</div>
+
+													<div class="row">
+														<div class="col-md-6">
+															
+															<label>School</label>
+														</div>
+														<div class="col-md-6">
+															<select>
+																<option value="UCR">UCR</option>
+																<option value="UCI">UCI</option>
+																<option value="UCSD">UCSD</option>
+																<option value="UCLA">UCLA</option>
+															</select>
+															<!-- <p>UCR</p> -->
+														</div>
+													</div>
+													<div class="row">
+															<div class="col-md-6">
+																<label>Subject</label>
+															</div>
+															<div class="col-md-6">
+																<select>
+																	<option value="physic">Physics</option>
+																	<option value="math">Math</option>
+																	<option value="english">English</option>
+																	<option value="history">History</option>
+																</select>
+
+															</div>
+														</div>
+													<div class="row">
+															<div class="col-md-6">
+																<label>Tutor or student?</label>
+															</div>
+															<div class="col-md-6">
+																<select>
+																	<option value="student">Student</option>
+																	<option value="tutor+student">Tutor+Student</option>
+																</select>
+													
+															</div>
+														</div>
+													<!-- <div class="row">
+														<div class="col-md-6">
+															<label>Profession</label>
+														</div>
+														<div class="col-md-6">
+															<p>Web Developer and Designer</p>
+														</div>
+													</div> -->
+										</div>
+										<!-- <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+													<div class="row">
+														<div class="col-md-6">
+															<label>Experience</label>
+														</div>
+														<div class="col-md-6">
+															<p>Expert</p>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-6">
+															<label>Hourly Rate</label>
+														</div>
+														<div class="col-md-6">
+															<p>10$/hr</p>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-6">
+															<label>Total Projects</label>
+														</div>
+														<div class="col-md-6">
+															<p>230</p>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-6">
+															<label>English Level</label>
+														</div>
+														<div class="col-md-6">
+															<p>Expert</p>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-md-6">
+															<label>Availability</label>
+														</div>
+														<div class="col-md-6">
+															<p>6 months</p>
+														</div>
+													</div>
+											<div class="row">
+												<div class="col-md-12">
+													<label>Your Bio</label><br/>
+													<p>Your detail description</p>
+												</div>
+											</div>
+										</div> -->
+									</div>
+								</div>
+							</div>
+						</form>           
+					</div>
 
 		<!-- Header -->
-			<header id="header">
+		<header id="header">
 				<div class="inner">
 					<a href="index2.html" class="logo">A++ Learning</a>
 					<nav id="nav">
@@ -27,24 +209,14 @@
 					</nav>
 				</div>
 			</header>
-			<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
-
-		<!-- Main -->
-		<section id="one">
-			<div class="inner">	
-				<header>
-					Welcome to our profile page!
-				</header>
-			</div>
-		</section>
-
+			<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>      
 
 
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/skel.min.js"></script>
 			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
-
+      <script src="assets/js/main.js"></script>
+	
 	</body>
 </html>
