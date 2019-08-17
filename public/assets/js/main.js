@@ -147,6 +147,65 @@ function login(){
 
 })(jQuery);
 
+	async function createUser(){
+		var email;
+		var newUser;
+		var user;
+		// firebase.auth().onAuthStateChanged(function(user)
+			user = firebase.auth().currentUser;
+			email = user.email;
+		console.log(email);
+		var db = firebase.firestore();
+        var docRef = db.collection("users").doc(email);
+        await docRef.get().then(function(doc){
+            if (doc.exists) {
+                user = {
+                    fname:doc.data().FirstName,
+                    lname:doc.data().LastName,
+                    email:doc.data().email,
+                    school:doc.data().School,
+                    isTutor:doc.data().isTutor,
+                };
+			}
+			else{
+				console.log("document doesn't exist");
+			}
+        }).catch(function(error) {
+            console.log("Error getting document:", error);
+		});
+		
+		newUser=new User(
+			email,user.fname, user.lname, user.school, user.isTutor
+		);
+		console.log(newUser);
+		return newUser;
+		//return new User();
+    };
+		// var found = false;
+		// db.collection("users").get().then((querySnapshot) => {
+		// 	querySnapshot.forEach((doc) => {
+		// 		if(!found){
+		// 			if(doc.data().email == email){
+		// 				found = true;
+		// 				user = {
+		// 					fname:doc.data().FirstName,
+		// 					lname:doc.data().LastName,
+		// 					email:doc.data().email,
+		// 					school:doc.data().School,
+		// 					isTutor:doc.data().isTutor
+		// 				};
+		// 			}
+		// 		}
+		// 	});
+		// 	newUser = new User(user);
+		// 	console.log(newUser.email);
+		// 	console.log(newUser.fname);
+		// 	console.log(newUser.lname);
+		// 	console.log(newUser.school);
+		// 	console.log(newUser.isTutor);
+
+	
+
 
 // function getEmail(){
 //     firebase.auth().onAuthStateChanged(function(user){
@@ -158,16 +217,15 @@ function login(){
 // }
 
 
-// class User{
-//     constructor(){
-//         this.userRef = firebase.firestore().collection("users");
-//         this.email = getEmail();
-//         this.fname;
-//         this.lname;
-//         this.school;
-//         this.isTutor;
-        
-//     }
+ class User{
+     constructor(email, fname, lname, school, isTutor){
+		this.email = email;	
+		this.fname = fname;
+    	this.lname = lname;
+        this.school = school;
+        this.isTutor = isTutor;   
+	}
+}
 
 //     get UserEmail(){
 //         return getEmail();
