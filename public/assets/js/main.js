@@ -9,30 +9,69 @@ function initialize(){
     firebase.initializeApp(firebaseConfig);
 }
 
+
+//Pushes a User's registration data to firebase
 function pushToFireStore(){
     
     var db = firebase.firestore();
-    db.collection("users").doc(document.getElementById("email").value).set({
+    var email = document.getElementById("email").value
+    db.collection("users").doc(email).set({
         FirstName: document.getElementById("fname").value,
         LastName: document.getElementById("lname").value,
         email: document.getElementById("email").value,
         school: document.getElementById("school").value,
-        isTutor: document.getElementById("isTutor").checked
+        isTutor: document.getElementById("isTutor").checked,
     });
-    setTimeout(function(){ location.href ="index2.html"; }, 3000);
-    
+
+    if(document.getElementById("isTutor").checked){
+        setTimeout(tutorRegistrationPage(email), 3000);
+    }
+
+    else{
+        setTimeout(function(){ location.href ="index2.html"; }, 3000);
+    } 
+}
+
+//If the user selects they want to be a tutor this takes them to the tutor registration specific page and adds
+//an event listener for the new submit button
+function tutorRegistrationPage(email){
+    location.href ="tutorClasses.html";
+    document.getElementById("tutorSubmit").addEventListener("click", addStrenghts(email));
 }
 
 
+//Adds a tutor's strengths to an array and pushes it to firestore
+function addStrenghts(email){
+    var strenghts = [];
+
+    for(var i = 0; i < 12; i++){
+        if(document.getElementById(i).checked){
+            strenghts.push(document.getElementById(i).name);
+        }
+    }
+
+    var db = firebase.firestore();
+    db.collection("users").doc(email).add({
+        Strenghts: strengths,
+    });
+
+    setTimeout(function(){ location.href ="index2.html"; }, 3000);
+}
+
+
+//Logs the user out and redirects them to the homepage
 function logout(){
 	firebase.auth().signOut().then(function() {
 		// Sign-out successful.
 		location.href = "index1.html";
 	  }).catch(function(error) {
-		console.log(error);
+        console.log(error);
+        location.href = "index1.html";
 	});
 }
 
+
+//Logs the user in through Google Auth
 function login(){
 
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
@@ -148,6 +187,7 @@ function login(){
 })(jQuery);
 
 
+//Initializes a user object initialized with all of the current user's firebase data
 async function createUser(){
     var email;
     var newUser;
@@ -166,6 +206,7 @@ async function createUser(){
                 email:doc.data().email,
                 school:doc.data().School,
                 isTutor:doc.data().isTutor,
+                strenghts:doc.data().Strenghts,
             };
         }
         else{
@@ -176,7 +217,7 @@ async function createUser(){
     });
     
     newUser = new User(
-        email,user.fname, user.lname, user.school, user.isTutor
+        email, user.fname, user.lname, user.school, user.isTutor, user.strengths
     );
     //console.log(newUser);
     return newUser;
@@ -185,14 +226,15 @@ async function createUser(){
         
 
 
-
+//User class storing a user's data
  class User{
-     constructor(email, fname, lname, school, isTutor){
+     constructor(email, fname, lname, school, isTutor, strenghts){
 		this.email = email;	
 		this.fname = fname;
     	this.lname = lname;
         this.school = school;
         this.isTutor = isTutor;   
+        this.strengths = strenghts;
 	}
 }
 
