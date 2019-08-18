@@ -9,30 +9,61 @@ function initialize(){
     firebase.initializeApp(firebaseConfig);
 }
 
+
+//Pushes a User's registration data to firebase
 function pushToFireStore(){
     
     var db = firebase.firestore();
-    db.collection("users").doc(document.getElementById("email").value).set({
+    var email = document.getElementById("email").value
+    db.collection("users").doc(email).set({
         FirstName: document.getElementById("fname").value,
         LastName: document.getElementById("lname").value,
         email: document.getElementById("email").value,
         school: document.getElementById("school").value,
-        isTutor: document.getElementById("isTutor").checked
+        isTutor: document.getElementById("isTutor").checked,
     });
-    setTimeout(function(){ location.href ="index2.html"; }, 3000);
-    
+
+    if(document.getElementById("isTutor").checked){
+        location.href ="tutorClasses.html";
+    }
+
+    else{
+        setTimeout(function(){ location.href ="index2.html"; }, 3000);
+    } 
 }
 
 
+//Adds a tutor's strengths to an array and pushes it to firestore
+function addStrenghts(){
+    user = firebase.auth().currentUser;
+    email = user.email;
+
+    var strengthArr = [];
+
+    for(var i = 0; i < 12; i++){
+        if(document.getElementById(i.toString()).checked){
+            strengthArr.push(document.getElementById(i).name);
+        }
+    }
+    debugger
+    var db = firebase.firestore();
+    db.collection("users").doc(email).update('Strengths', strengthArr);
+
+    setTimeout(function(){ location.href ="index2.html"; }, 1000);
+}
+
+//Logs the user out and redirects them to the homepage
 function logout(){
 	firebase.auth().signOut().then(function() {
 		// Sign-out successful.
 		location.href = "index1.html";
 	  }).catch(function(error) {
-		console.log(error);
+        console.log(error);
+        location.href = "index1.html";
 	});
 }
 
+//Logs the user in through Google Auth
 function login(){
 
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function() {
@@ -221,27 +252,65 @@ function listUserInfo(user) {
 }
 
 
+//User class storing a user's data
  class User{
-     constructor(email, fname, lname, school, isTutor){ //strengths
+     constructor(email, fname, lname, school, isTutor, strenghts){
 		this.email = email;	
 		this.fname = fname;
     	this.lname = lname;
         this.school = school;
-		this.isTutor = isTutor;   
-		//this.strengths = strengths
+        this.isTutor = isTutor;   
+        this.strengths = strenghts;
 	}
 }
 
-
+//Initializes a user object initialized with all of the current user's firebase data
+async function createUser(){
+    var email;
+    var newUser;
+    var user;
+    // firebase.auth().onAuthStateChanged(function(user)
+    user = firebase.auth().currentUser;
+    email = user.email;
+    //console.log(email);
+    var db = firebase.firestore();
+    var docRef = db.collection("users").doc(email);
+    await docRef.get().then(function(doc){
+        if (doc.exists) {
+            user = {
+                fname:doc.data().FirstName,
+                lname:doc.data().LastName,
+                email:doc.data().email,
+                school:doc.data().School,
+                isTutor:doc.data().isTutor,
+                strenghts:doc.data().Strenghts,
+            };
+        }
+        else{
+            console.log("document doesn't exist");
+        }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+    
+    newUser = new User(
+        email, user.fname, user.lname, user.school, user.isTutor, user.strengths
+    );
+    //console.log(newUser);
+    return newUser;
+    //return new User();
+};
 
 function populate(s1, s2){
 	var s1 = document.getElementById(s1);
 	var s2 = document.getElementById(s2);
 	s2.innerHTML = "";
-	if (s1.value === "Math"){
+    // var optArray = [ "|","math 9a|Math 9A","math 9b|Math 9B","math 9c|Math 9C"];
+    
+    if (s1.value === "Math"){
 		var optArray = [ "|","math 9a|Math 9A","math 9b|Math 9B","math 9c|Math 9C"];
 	}
-	else if(s1.value === "Computer Science"){
+	if(s1.value === "Computer Science"){
 		var optArray = [ "|","cs 005|CS 005","cs 008|CS 008","cs 010|CS 010"];	
 	}
 	else if(s1.value === "English"){

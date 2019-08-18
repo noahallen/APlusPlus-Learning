@@ -34,26 +34,24 @@
 			<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
 
 		<!-- Main -->
-		<section id="one">
-			<div class="inner">
-				<header>
-					Welcome to our Search Page!
-				</header>
-			</div>
-		</section>
+		<hr />
 		<h2>What class Do You Need Help With? </h2>
 		<hr />
-		Select Subject:
+		Subject:
 		<select id = "slctSubj" name = "slctSubj" onchange = "populate(this.id, 'slctCourse')" >
+			<option> Select subject</option>
 			<option value = "Math">Math</option>
 			<option value = "Computer Science">Computer Science</option>
 			<option value = "English">English</option>
 			<option value = "Physics">Physics</option>
 		</select>
-			<hr />
-		Select Course:
-		
-		<select id = "slctCourse" name = "slctCourse"></select> 	
+		<hr >
+		Course Name:
+		<select id = "slctCourse" name = "slctCourse">
+		</select> 
+		<hr >
+		<button type="button">Search for Tutors</button>
+			
 			
 
 		<!-- Scripts -->
