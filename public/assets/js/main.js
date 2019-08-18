@@ -28,7 +28,7 @@ function pushToFireStore(){
     }
 
     else{
-        setTimeout(function(){ location.href ="index2.html"; }, 3000);
+        setTimeout(function(){ location.href ="index2.html"; }, 5000);
     } 
 }
 
@@ -77,7 +77,6 @@ function login(){
             var user = result.user;
             var db = firebase.firestore();
             //console.log(user.email);
-
             //Goes through each user in the database
             var found = false;
             db.collection("users").get().then((querySnapshot) => {
@@ -198,9 +197,13 @@ function listUserInfo(user) {
 	var currentUser = createUser(user);
 
 	currentUser.then(function(user){
+        document.getElementById("fnameProf").innerHTML = user.fname + "'s";
+
+
 		document.getElementById("emailDiv").innerHTML = user.email;
 		document.getElementById("fnameDiv").innerHTML = user.fname;
-		document.getElementById("fnameDiv").innerHTML += " " + user.lname;
+        document.getElementById("fnameDiv").innerHTML += " " + user.lname;
+        
 		document.getElementById("schoolDiv").innerHTML = user.school;
 		if (user.isTutor){
             document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
@@ -219,7 +222,7 @@ function listUserInfo(user) {
 
 
 //User class storing a user's data
- class User{
+class User{
      constructor(email, fname, lname, school, isTutor, strengths){
 		this.email = email;	
 		this.fname = fname;
