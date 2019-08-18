@@ -241,6 +241,3 @@ function tutorReg(){
 	}
 }
 
-function isTutorTrue(){
-	
-}
