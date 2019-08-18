@@ -148,51 +148,87 @@ function login(){
 })(jQuery);
 
 
-async function createUser(){
+
+async function getUser(callback) {
+	if(firebase.auth().currentUser) {
+		callback(firebase.auth().currentUser);
+	} else {
+		await firebase.auth().onAuthStateChanged(function(user) {
+			if(user) {
+				callback(user);
+			}
+		});
+	}
+};
+
+
+async function createUser(user){
     var email;
     var newUser;
-    var user;
-    // firebase.auth().onAuthStateChanged(function(user)
-        user = firebase.auth().currentUser;
-        email = user.email;
-    //console.log(email);
-    var db = firebase.firestore();
-    var docRef = db.collection("users").doc(email);
-    await docRef.get().then(function(doc){
-        if (doc.exists) {
-            user = {
-                fname:doc.data().FirstName,
-                lname:doc.data().LastName,
-                email:doc.data().email,
-                school:doc.data().School,
-                isTutor:doc.data().isTutor,
-            };
-        }
-        else{
-            console.log("document doesn't exist");
-        }
-    }).catch(function(error) {
-        console.log("Error getting document:", error);
-    });
-    
-    newUser = new User(
-        email,user.fname, user.lname, user.school, user.isTutor
-    );
-    //console.log(newUser);
-    return newUser;
-    //return new User();
-};
-        
+	email = user.email;;
+	var db = firebase.firestore();
+	var docRef = db.collection("users").doc(email);
+	await docRef.get().then(function(doc){
+		if (doc.exists) {
+			user = {
+				fname:doc.data().FirstName,
+				lname:doc.data().LastName,
+				email:doc.data().email,
+				school:doc.data().school,
+				isTutor:doc.data().isTutor,
+				//Strengths:doc.data().Strengths
+			};
+		}
+		else{
+			console.log("document doesn't exist");
+		}
+	}).catch(function(error) {
+		console.error("Error getting document:", error);
+	});
+	
 
+	newUser = new User(
+		email,user.fname, user.lname, user.school, user.isTutor //,user.strengths
+	);
+	return newUser;
+
+};
+	  
+
+
+
+function listUserInfo(user) {
+	
+	var currentUser = createUser(user);
+
+	currentUser.then(function(user){
+		document.getElementById("emailDiv").innerHTML = user.email;
+		document.getElementById("fnameDiv").innerHTML = user.fname;
+		document.getElementById("fnameDiv").innerHTML += " " + user.lname;
+		document.getElementById("schoolDiv").innerHTML = user.school;
+		if (user.isTutor){
+			document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
+			//document.getElementById("subjectDiv").innerHTML = user.strengths;
+		}
+		else{
+			document.getElementById("isTutorDiv").innerHTML = "Student";
+		}
+		
+	}).catch(function() {
+		console.error('Failed to list user info')
+		logout();
+	});
+}
 
 
  class User{
-     constructor(email, fname, lname, school, isTutor){
+     constructor(email, fname, lname, school, isTutor){ //strengths
 		this.email = email;	
 		this.fname = fname;
     	this.lname = lname;
         this.school = school;
-        this.isTutor = isTutor;   
+		this.isTutor = isTutor;   
+		//this.strengths = strengths
 	}
 }
 
