@@ -25,11 +25,10 @@ function pushToFireStore(){
     });
 
     if(document.getElementById("isTutor").checked){
-        location.href ="tutorClasses.html";
+        setTimeout(function(){ location.href ="tutorClasses.html"; }, 2000);
     }
-
     else{
-        setTimeout(function(){ location.href ="index2.html"; }, 5000);
+        setTimeout(function(){ location.href ="index2.html"; }, 2000);
     } 
 }
 
@@ -50,7 +49,7 @@ function addStrengths(){
     var db = firebase.firestore();
     db.collection("users").doc(email).update('Strengths', strengthArr);
 
-    setTimeout(function(){ location.href ="index2.html"; }, 1000);
+    setTimeout(function(){ location.href ="index2.html"; }, 2000);
 }
 
 
