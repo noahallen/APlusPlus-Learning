@@ -187,7 +187,6 @@ function login(){
 })(jQuery);
 
 
-
 //Initializes a user object initialized with all of the current user's firebase data
 async function createUser(){
     var email;
