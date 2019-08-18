@@ -3876,3 +3876,20 @@
 			/* top: 0; */
 			/* width: 1em; */
 		}
+
+
+		.profile-page{
+			text-align:center;
+			border:double;
+			border-color:red;
+			margin-left: 30%;
+			margin-right: 30%;
+			margin-top:2%;
+		}
+
+		.profile-header{
+			text-align:center;
+			font-size: 250%;
+			color: red;
+			font-family: "Comic Sans MS", cursive, sans-serif;
+		}
