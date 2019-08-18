@@ -244,10 +244,12 @@ function populate(s1, s2){
 	var s1 = document.getElementById(s1);
 	var s2 = document.getElementById(s2);
 	s2.innerHTML = "";
-	if (s1.value === "Math"){
+    // var optArray = [ "|","math 9a|Math 9A","math 9b|Math 9B","math 9c|Math 9C"];
+    
+    if (s1.value === "Math"){
 		var optArray = [ "|","math 9a|Math 9A","math 9b|Math 9B","math 9c|Math 9C"];
 	}
-	else if(s1.value === "Computer Science"){
+	if(s1.value === "Computer Science"){
 		var optArray = [ "|","cs 005|CS 005","cs 008|CS 008","cs 010|CS 010"];	
 	}
 	else if(s1.value === "English"){
