@@ -227,17 +227,4 @@ function populate(s1, s2){
 
 
 
-function tutorReg(){
-	var rad = document.regForm.myRadio;
-	var prev = null;
-	for (var i = 0; i < rad.length; i++) {
-		rad[i].addEventListener('change', function() {
-			(prev) ? console.log(prev.value): null;
-			if (this !== prev) {
-				prev = this;
-			}
-			console.log(this.value)
-		});
-	}
-}
 
