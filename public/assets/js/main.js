@@ -33,8 +33,6 @@ function pushToFireStore(){
 }
 
 
-
-
 //Adds a tutor's strengths to an array and pushes it to firestore
 function addStrenghts(){
     user = firebase.auth().currentUser;
@@ -54,7 +52,6 @@ function addStrenghts(){
     setTimeout(function(){ location.href ="index2.html"; }, 1000);
 }
 
-
 //Logs the user out and redirects them to the homepage
 function logout(){
 	firebase.auth().signOut().then(function() {
@@ -65,7 +62,6 @@ function logout(){
         location.href = "index1.html";
 	});
 }
-
 
 //Logs the user in through Google Auth
 function login(){
@@ -183,6 +179,91 @@ function login(){
 })(jQuery);
 
 
+
+async function getUser(callback) {
+	if(firebase.auth().currentUser) {
+		callback(firebase.auth().currentUser);
+	} else {
+		await firebase.auth().onAuthStateChanged(function(user) {
+			if(user) {
+				callback(user);
+			}
+		});
+	}
+};
+
+
+async function createUser(user){
+    var email;
+    var newUser;
+	email = user.email;;
+	var db = firebase.firestore();
+	var docRef = db.collection("users").doc(email);
+	await docRef.get().then(function(doc){
+		if (doc.exists) {
+			user = {
+				fname:doc.data().FirstName,
+				lname:doc.data().LastName,
+				email:doc.data().email,
+				school:doc.data().school,
+				isTutor:doc.data().isTutor,
+				//Strengths:doc.data().Strengths
+			};
+		}
+		else{
+			console.log("document doesn't exist");
+		}
+	}).catch(function(error) {
+		console.error("Error getting document:", error);
+	});
+	
+
+	newUser = new User(
+		email,user.fname, user.lname, user.school, user.isTutor //,user.strengths
+	);
+	return newUser;
+
+};
+	  
+
+
+
+function listUserInfo(user) {
+	
+	var currentUser = createUser(user);
+
+	currentUser.then(function(user){
+		document.getElementById("emailDiv").innerHTML = user.email;
+		document.getElementById("fnameDiv").innerHTML = user.fname;
+		document.getElementById("fnameDiv").innerHTML += " " + user.lname;
+		document.getElementById("schoolDiv").innerHTML = user.school;
+		if (user.isTutor){
+			document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
+			//document.getElementById("subjectDiv").innerHTML = user.strengths;
+		}
+		else{
+			document.getElementById("isTutorDiv").innerHTML = "Student";
+		}
+		
+	}).catch(function() {
+		console.error('Failed to list user info')
+		logout();
+	});
+}
+
+
+//User class storing a user's data
+ class User{
+     constructor(email, fname, lname, school, isTutor, strenghts){
+		this.email = email;	
+		this.fname = fname;
+    	this.lname = lname;
+        this.school = school;
+        this.isTutor = isTutor;   
+        this.strengths = strenghts;
+	}
+}
+
 //Initializes a user object initialized with all of the current user's firebase data
 async function createUser(){
     var email;
@@ -219,22 +300,6 @@ async function createUser(){
     return newUser;
     //return new User();
 };
-        
-
-
-//User class storing a user's data
- class User{
-     constructor(email, fname, lname, school, isTutor, strenghts){
-		this.email = email;	
-		this.fname = fname;
-    	this.lname = lname;
-        this.school = school;
-        this.isTutor = isTutor;   
-        this.strengths = strenghts;
-	}
-}
-
-
 
 function populate(s1, s2){
 	var s1 = document.getElementById(s1);
