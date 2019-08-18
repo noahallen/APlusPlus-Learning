@@ -15,8 +15,9 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <link rel="stylesheet" href="assets/css/main.css" />
         <script src="./config.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 	</head>
-	<body onload="initialize()">
+	<body onload="initialize(); tutorReg();">
 
 
 
@@ -60,20 +61,24 @@
         <div class="box-red">
         <div class="form-wrap">
             <h1>Registration</h1>
-            <form>
+                <form name="regForm">
 
-                First Name <input type="text" placeholder="First Name" id="fname">
-                Last Name <input type="text" placeholder="Last Name" id="lname">
-                Email <input type="email" placeholder="Email" id="email">
-                School Name <input type="text" placeholder="School" id="school">
-                 <input type="radio" name="type" value=true id="student">   Student
-                <br>
-              
-                <input type="radio" name="type" value=true id="isTutor">   Student + Tutor
-                <br>
-                <input type="button" value="Register" id="registerbutton" onclick="pushToFireStore()">
+                    First Name <input type="text" placeholder="First Name" id="fname">
+                    Last Name <input type="text" placeholder="Last Name" id="lname">
+                    Email <input type="email" placeholder="Email" id="email">
+                    School Name <input type="text" placeholder="School" id="school">
+                    <input type="radio" name="myRadio" value="1" id="student">   Student
+                    <br>
                 
+                    <input type="radio" name="myRadio" value="2" id="isTutor">   Student + Tutor
+                    <br>
+                    <div class="isTutorTrue">
+                        
+                    </div>
+                    <input type="button" value="Register" id="registerbutton" onclick="pushToFireStore()">
+                    
                 </form>
+               
             
             </div>
 
