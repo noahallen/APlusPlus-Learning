@@ -169,10 +169,12 @@ async function createUser(){
             };
         }
         else{
-            console.log("document doesn't exist");
+			console.log("document doesn't exist");
+			logout();
         }
     }).catch(function(error) {
-        console.log("Error getting document:", error);
+		console.log("Error getting document:", error);
+		logout();
     });
     
     newUser = new User(
@@ -221,4 +223,24 @@ function populate(s1, s2){
 		newOption.innerHTML = pair[1];
 		s2.options.add(newOption);
 	}
+}
+
+
+
+function tutorReg(){
+	var rad = document.regForm.myRadio;
+	var prev = null;
+	for (var i = 0; i < rad.length; i++) {
+		rad[i].addEventListener('change', function() {
+			(prev) ? console.log(prev.value): null;
+			if (this !== prev) {
+				prev = this;
+			}
+			console.log(this.value)
+		});
+	}
+}
+
+function isTutorTrue(){
+	
 }
