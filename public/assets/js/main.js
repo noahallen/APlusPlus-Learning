@@ -5,6 +5,7 @@
 */
 
 
+/*------------------------------Firestore Code ------------------------------*/
 function initialize(){
     firebase.initializeApp(firebaseConfig);
 }
@@ -52,6 +53,13 @@ function addStrengths(){
     setTimeout(function(){ location.href ="index2.html"; }, 1000);
 }
 
+
+
+
+
+
+
+/*------------------------------General Code ------------------------------*/
 //Logs the user out and redirects them to the homepage
 function logout(){
 	firebase.auth().signOut().then(function() {
@@ -180,6 +188,14 @@ function login(){
 
 
 
+
+
+
+
+
+
+
+/*------------------------------Profile Page Code ------------------------------*/
 async function getUser(callback) {
 	if(firebase.auth().currentUser) {
 		callback(firebase.auth().currentUser);
@@ -232,18 +248,16 @@ function listUserInfo(user) {
 
 //Initializes a user object initialized with all of the current user's firebase data
 async function createUser(){
-    var email;
+
     var newUser;
-    var user;
-    // firebase.auth().onAuthStateChanged(function(user)
-    user = firebase.auth().currentUser;
-    email = user.email;
-    //console.log(email);
+    var user = firebase.auth().currentUser;
+    var email = user.email;
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(email);
+
+
     await docRef.get().then(function(doc){
         if (doc.exists) {
-            // console.log(doc.data().Strengths);
             user = {
                 fname:doc.data().FirstName,
                 lname:doc.data().LastName,
@@ -260,13 +274,10 @@ async function createUser(){
         console.log("Error getting document:", error);
     });
     
-    //console.log(user.Strengths);
     newUser = new User(
         email, user.fname, user.lname, user.school, user.isTutor, user.Strengths
     );
-    //console.log(newUser);
     return newUser;
-    //return new User();
 };
 
 
@@ -295,8 +306,8 @@ function populate(s1, s2){
 	else if(s1.value === "Physics"){
 		var optArray = [ "|","phys 040a|PHYS 040A","phys 040b|PHYS 040B","phys 040c|PHYS 040C"];	
 	}
-	for ( var optoin in optArray){
-		var pair = optArray[optoin].split("|");
+	for ( var option in optArray){
+		var pair = optArray[option].split("|");
 		var newOption = document.createElement("option");
 		newOption.value = pair[0];
 		newOption.innerHTML = pair[1];
