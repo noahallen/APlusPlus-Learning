@@ -34,7 +34,7 @@ function pushToFireStore(){
 
 
 //Adds a tutor's strengths to an array and pushes it to firestore
-function addStrenghts(){
+function addStrengths(){
     user = firebase.auth().currentUser;
     email = user.email;
 
@@ -191,42 +191,7 @@ async function getUser(callback) {
 		});
 	}
 };
-
-
-async function createUser(user){
-    var email;
-    var newUser;
-	email = user.email;;
-	var db = firebase.firestore();
-	var docRef = db.collection("users").doc(email);
-	await docRef.get().then(function(doc){
-		if (doc.exists) {
-			user = {
-				fname:doc.data().FirstName,
-				lname:doc.data().LastName,
-				email:doc.data().email,
-				school:doc.data().school,
-				isTutor:doc.data().isTutor,
-				//Strengths:doc.data().Strengths
-			};
-		}
-		else{
-			console.log("document doesn't exist");
-		}
-	}).catch(function(error) {
-		console.error("Error getting document:", error);
-	});
-	
-
-	newUser = new User(
-		email,user.fname, user.lname, user.school, user.isTutor //,user.strengths
-	);
-	return newUser;
-
-};
 	  
-
-
 
 function listUserInfo(user) {
 	
@@ -238,8 +203,9 @@ function listUserInfo(user) {
 		document.getElementById("fnameDiv").innerHTML += " " + user.lname;
 		document.getElementById("schoolDiv").innerHTML = user.school;
 		if (user.isTutor){
-			document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
-			//document.getElementById("subjectDiv").innerHTML = user.strengths;
+            document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
+            //console.log(user.Strengths);
+            document.getElementById("subjectDiv").innerHTML = user.Strengths;
 		}
 		else{
 			document.getElementById("isTutorDiv").innerHTML = "Student";
@@ -254,13 +220,13 @@ function listUserInfo(user) {
 
 //User class storing a user's data
  class User{
-     constructor(email, fname, lname, school, isTutor, strenghts){
+     constructor(email, fname, lname, school, isTutor, strengths){
 		this.email = email;	
 		this.fname = fname;
     	this.lname = lname;
         this.school = school;
         this.isTutor = isTutor;   
-        this.strengths = strenghts;
+        this.Strengths = strengths;
 	}
 }
 
@@ -277,13 +243,14 @@ async function createUser(){
     var docRef = db.collection("users").doc(email);
     await docRef.get().then(function(doc){
         if (doc.exists) {
+            // console.log(doc.data().Strengths);
             user = {
                 fname:doc.data().FirstName,
                 lname:doc.data().LastName,
                 email:doc.data().email,
-                school:doc.data().School,
+                school:doc.data().school,
                 isTutor:doc.data().isTutor,
-                strenghts:doc.data().Strenghts,
+                Strengths:doc.data().Strengths,
             };
         }
         else{
@@ -293,14 +260,23 @@ async function createUser(){
         console.log("Error getting document:", error);
     });
     
+    //console.log(user.Strengths);
     newUser = new User(
-        email, user.fname, user.lname, user.school, user.isTutor, user.strengths
+        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths
     );
     //console.log(newUser);
     return newUser;
     //return new User();
 };
 
+
+
+
+
+
+
+
+/*------------------------------Search Page Code ------------------------------*/
 function populate(s1, s2){
 	var s1 = document.getElementById(s1);
 	var s2 = document.getElementById(s2);
