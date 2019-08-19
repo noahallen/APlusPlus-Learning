@@ -45,7 +45,6 @@ function addStrengths(){
             strengthArr.push(document.getElementById(i).name);
         }
     }
-    debugger
     var db = firebase.firestore();
     db.collection("users").doc(email).update('Strengths', strengthArr);
 
