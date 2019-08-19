@@ -24,7 +24,7 @@ function pushToFireStore(){
     });
 
     if(document.getElementById("isTutor").checked){
-        setTimeout(tutorRegistrationPage(email), 3000);
+        location.href ="tutorClasses.html";
     }
 
     else{
@@ -32,30 +32,26 @@ function pushToFireStore(){
     } 
 }
 
-//If the user selects they want to be a tutor this takes them to the tutor registration specific page and adds
-//an event listener for the new submit button
-function tutorRegistrationPage(email){
-    location.href ="tutorClasses.html";
-    document.getElementById("tutorSubmit").addEventListener("click", addStrenghts(email));
-}
+
 
 
 //Adds a tutor's strengths to an array and pushes it to firestore
-function addStrenghts(email){
-    var strenghts = [];
+function addStrenghts(){
+    user = firebase.auth().currentUser;
+    email = user.email;
+
+    var strengthArr = [];
 
     for(var i = 0; i < 12; i++){
-        if(document.getElementById(i).checked){
-            strenghts.push(document.getElementById(i).name);
+        if(document.getElementById(i.toString()).checked){
+            strengthArr.push(document.getElementById(i).name);
         }
     }
-
+    debugger
     var db = firebase.firestore();
-    db.collection("users").doc(email).add({
-        Strenghts: strengths,
-    });
+    db.collection("users").doc(email).update('Strengths', strengthArr);
 
-    setTimeout(function(){ location.href ="index2.html"; }, 3000);
+    setTimeout(function(){ location.href ="index2.html"; }, 1000);
 }
 
 
@@ -193,8 +189,8 @@ async function createUser(){
     var newUser;
     var user;
     // firebase.auth().onAuthStateChanged(function(user)
-        user = firebase.auth().currentUser;
-        email = user.email;
+    user = firebase.auth().currentUser;
+    email = user.email;
     //console.log(email);
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(email);
