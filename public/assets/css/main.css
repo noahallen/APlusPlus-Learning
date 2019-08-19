@@ -3893,3 +3893,24 @@
             font-family: "Comic Sans MS", cursive, sans-serif;
             /* margin-bottom: -3%; */
 		}
+
+
+		.search-boxes{
+			width:90%;
+
+		}
+		.search-boxes h3{
+			font-size:175%;
+			/* text-align:center; */
+		}
+		.search-page{
+			float: left;
+			margin-left:5%;
+		}
+
+		.search-selection{
+			float: right;
+			
+			margin-top:0%;	
+			width:50%;
+		}
