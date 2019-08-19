@@ -3901,6 +3901,7 @@
 		}
 		.search-boxes h3{
 			font-size:175%;
+			/* text-align:center; */
 		}
 		.search-page{
 			float: left;
@@ -3909,6 +3910,7 @@
 
 		.search-selection{
 			float: right;
-			margin-right:30%;
+			
 			margin-top:0%;	
+			width:50%;
 		}
