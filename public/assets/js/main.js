@@ -5,6 +5,7 @@
 */
 
 
+/*------------------------------Firestore Code ------------------------------*/
 function initialize(){
     firebase.initializeApp(firebaseConfig);
 }
@@ -14,51 +15,50 @@ function initialize(){
 function pushToFireStore(){
     
     var db = firebase.firestore();
-    var email = document.getElementById("email").value
+    var user = firebase.auth().currentUser;
+    var email = user.email;
     db.collection("users").doc(email).set({
         FirstName: document.getElementById("fname").value,
         LastName: document.getElementById("lname").value,
-        email: document.getElementById("email").value,
+        email: email,
         school: document.getElementById("school").value,
         isTutor: document.getElementById("isTutor").checked,
     });
 
     if(document.getElementById("isTutor").checked){
-        setTimeout(tutorRegistrationPage(email), 3000);
+        setTimeout(function(){ location.href ="tutorClasses.html"; }, 3000);
     }
-
     else{
         setTimeout(function(){ location.href ="index2.html"; }, 3000);
     } 
 }
 
-//If the user selects they want to be a tutor this takes them to the tutor registration specific page and adds
-//an event listener for the new submit button
-function tutorRegistrationPage(email){
-    location.href ="tutorClasses.html";
-    document.getElementById("tutorSubmit").addEventListener("click", addStrenghts(email));
-}
-
 
 //Adds a tutor's strengths to an array and pushes it to firestore
-function addStrenghts(email){
-    var strenghts = [];
+function addStrengths(){
+    user = firebase.auth().currentUser;
+    email = user.email;
 
-    for(var i = 0; i < 12; i++){
-        if(document.getElementById(i).checked){
-            strenghts.push(document.getElementById(i).name);
+    var strengthArr = [];
+    var numClasses = 12;
+    for(var i = 0; i < numClasses; i++){
+        if(document.getElementById(i.toString()).checked){
+            strengthArr.push(document.getElementById(i).name);
         }
     }
-
     var db = firebase.firestore();
-    db.collection("users").doc(email).add({
-        Strenghts: strengths,
-    });
+    db.collection("users").doc(email).update('Strengths', strengthArr);
 
     setTimeout(function(){ location.href ="index2.html"; }, 3000);
 }
 
 
+
+
+
+
+
+/*------------------------------General Code ------------------------------*/
 //Logs the user out and redirects them to the homepage
 function logout(){
 	firebase.auth().signOut().then(function() {
@@ -69,7 +69,6 @@ function logout(){
         location.href = "index1.html";
 	});
 }
-
 
 //Logs the user in through Google Auth
 function login(){
@@ -85,7 +84,6 @@ function login(){
             var user = result.user;
             var db = firebase.firestore();
             //console.log(user.email);
-
             //Goes through each user in the database
             var found = false;
             db.collection("users").get().then((querySnapshot) => {
@@ -187,26 +185,88 @@ function login(){
 })(jQuery);
 
 
+
+
+
+
+
+
+
+
+/*------------------------------Profile Page Code ------------------------------*/
+
+//Function to get a user variable containing the current user's data from firestore
+async function getUser(callback) {
+	if(firebase.auth().currentUser) {
+		callback(firebase.auth().currentUser);
+	} else {
+		await firebase.auth().onAuthStateChanged(function(user) {
+			if(user) {
+				callback(user);
+			}
+		});
+	}
+};
+	  
+
+//Function to display the user's data on their profile page
+function listUserInfo(user) {
+	
+	var currentUser = createUser(user);
+
+	currentUser.then(function(user){
+        document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
+
+		document.getElementById("emailDiv").innerHTML = user.email;
+		document.getElementById("fnameDiv").innerHTML = user.fname;
+        document.getElementById("fnameDiv").innerHTML += " " + user.lname;
+        
+		document.getElementById("schoolDiv").innerHTML = user.school;
+		if (user.isTutor){
+            document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
+            document.getElementById("subjectDiv").innerHTML = user.Strengths;
+		}
+		else{
+			document.getElementById("isTutorDiv").innerHTML = "Student";
+		}
+	}).catch(function() {
+		console.error('Failed to list user info')
+		logout();
+	});
+}
+
+
+//User class storing a user's data
+class User{
+     constructor(email, fname, lname, school, isTutor, strengths){
+		this.email = email;	
+		this.fname = fname;
+    	this.lname = lname;
+        this.school = school;
+        this.isTutor = isTutor;   
+        this.Strengths = strengths;
+	}
+}
+
 //Initializes a user object initialized with all of the current user's firebase data
 async function createUser(){
-    var email;
+
     var newUser;
-    var user;
-    // firebase.auth().onAuthStateChanged(function(user)
-        user = firebase.auth().currentUser;
-        email = user.email;
-    //console.log(email);
+    var user = firebase.auth().currentUser;
+    var email = user.email;
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(email);
+
+
     await docRef.get().then(function(doc){
         if (doc.exists) {
             user = {
                 fname:doc.data().FirstName,
                 lname:doc.data().LastName,
                 email:doc.data().email,
-                school:doc.data().School,
+                school:doc.data().school,
                 isTutor:doc.data().isTutor,
-                strenghts:doc.data().Strenghts,
+                Strengths:doc.data().Strengths,
             };
         }
         else{
@@ -217,29 +277,19 @@ async function createUser(){
     });
     
     newUser = new User(
-        email, user.fname, user.lname, user.school, user.isTutor, user.strengths
+        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths
     );
-    //console.log(newUser);
     return newUser;
-    //return new User();
 };
-        
-
-
-//User class storing a user's data
- class User{
-     constructor(email, fname, lname, school, isTutor, strenghts){
-		this.email = email;	
-		this.fname = fname;
-    	this.lname = lname;
-        this.school = school;
-        this.isTutor = isTutor;   
-        this.strengths = strenghts;
-	}
-}
 
 
 
+
+
+
+
+
+/*------------------------------Search Page Code ------------------------------*/
 function populate(s1, s2){
 	var s1 = document.getElementById(s1);
 	var s2 = document.getElementById(s2);
@@ -258,8 +308,8 @@ function populate(s1, s2){
 	else if(s1.value === "Physics"){
 		var optArray = [ "|","phys 040a|PHYS 040A","phys 040b|PHYS 040B","phys 040c|PHYS 040C"];	
 	}
-	for ( var optoin in optArray){
-		var pair = optArray[optoin].split("|");
+	for ( var option in optArray){
+		var pair = optArray[option].split("|");
 		var newOption = document.createElement("option");
 		newOption.value = pair[0];
 		newOption.innerHTML = pair[1];
