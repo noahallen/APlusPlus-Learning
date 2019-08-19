@@ -39,13 +39,20 @@ function tutorRegistrationPage(email){
     document.getElementById("tutorSubmit").addEventListener("click", addStrenghts(email));
 }
 
+
 //Adds a tutor's strengths to an array and pushes it to firestore
 function addStrenghts(email){
+    var strenghts = [];
 
+    for(var i = 0; i < 12; i++){
+        if(document.getElementById(i).checked){
+            strenghts.push(document.getElementById(i).name);
+        }
+    }
 
     var db = firebase.firestore();
     db.collection("users").doc(email).add({
-        Strenghts: []
+        Strenghts: strengths,
     });
 
     setTimeout(function(){ location.href ="index2.html"; }, 3000);
