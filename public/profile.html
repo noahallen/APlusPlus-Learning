@@ -4,6 +4,8 @@
 	templated.co @templatedco
 	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
 -->
+
+
 <html>
 	<head>
 		<title>Profile - A++ Learning</title>
@@ -13,58 +15,51 @@
         <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/6.3.4/firebase-firestore.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-		<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="./config.js"></script>
 
 		<link rel="stylesheet" href="assets/css/main.css" />
-		<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	</head>
 	<body onload="initialize(); getUser(listUserInfo);">
 		<!-- Header -->
-		<header id="header">
-			<div class="inner">
-				<a href="index2.html" class="logo">A++ Learning</a>
-				<nav id="nav">
-					<a href="index2.html">Home</a>
-					<a href="profile.html">Profile</a>
-					<a href="search.html">Search</a>
-					<button type="button" onclick="logout()">Logout</button>
-				</nav>
-			</div>
-		</header>
+        <header id="header">
+            <div class="inner">
+                <a href="index2.html" class="logo">A++ Learning</a>
+                <nav id="nav">
+                    <a href="index2.html">Home</a>
+                    <a href="profile.html">Profile</a>
+                    <a href="search.html">Search</a>     
+                    <button type="button" onclick="logout()">Logout</button>
+                </nav>
+            </div>
+        </header>
 		<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>      
 
 
 		<!-- Main -->
 		<div class="profile-header">
-			<div id="fnameProf"></div>Profile
-		</div>
+			<div id="fnameProf"></div>
+        </div>
+        
 		<div class="profile-page">
 			<label>Email</label>
-			<br>
-			<div id="emailDiv"></div>
-			<br>
+            <div id="emailDiv"></div>
+            <br>
 
 			<label>Name</label>
-			<br>
-			<div id="fnameDiv"></div>
-			<br>
+            <div id="fnameDiv"></div>
+            <br>
 
 			<label>School</label>
-			<br>
-			<div id="schoolDiv"></div>
-			<br>
+            <div id="schoolDiv"></div>
+            <br>
 
-			<label>Tutor or student?</label>
-			<br>
-			<div id="isTutorDiv"></div>
-			<br>
+			<label>Account Type</label>
+            <div id="isTutorDiv"></div>
+            <br>
 
 			<label>Subject</label>
-			<br>
-			<div id="subjectDiv"></div>
-			<br>
+            <div id="subjectDiv"></div>
+            <br>
 		</div>
 
 

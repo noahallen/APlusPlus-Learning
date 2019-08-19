@@ -25,10 +25,10 @@ function pushToFireStore(){
     });
 
     if(document.getElementById("isTutor").checked){
-        setTimeout(function(){ location.href ="tutorClasses.html"; }, 2000);
+        setTimeout(function(){ location.href ="tutorClasses.html"; }, 3000);
     }
     else{
-        setTimeout(function(){ location.href ="index2.html"; }, 2000);
+        setTimeout(function(){ location.href ="index2.html"; }, 3000);
     } 
 }
 
@@ -39,8 +39,8 @@ function addStrengths(){
     email = user.email;
 
     var strengthArr = [];
-
-    for(var i = 0; i < 12; i++){
+    var numClasses = 12;
+    for(var i = 0; i < numClasses; i++){
         if(document.getElementById(i.toString()).checked){
             strengthArr.push(document.getElementById(i).name);
         }
@@ -49,7 +49,7 @@ function addStrengths(){
     var db = firebase.firestore();
     db.collection("users").doc(email).update('Strengths', strengthArr);
 
-    setTimeout(function(){ location.href ="index2.html"; }, 2000);
+    setTimeout(function(){ location.href ="index2.html"; }, 3000);
 }
 
 
@@ -194,6 +194,8 @@ function login(){
 
 
 /*------------------------------Profile Page Code ------------------------------*/
+
+//Function to get a user variable containing the current user's data from firestore
 async function getUser(callback) {
 	if(firebase.auth().currentUser) {
 		callback(firebase.auth().currentUser);
@@ -207,13 +209,13 @@ async function getUser(callback) {
 };
 	  
 
+//Function to display the user's data on their profile page
 function listUserInfo(user) {
 	
 	var currentUser = createUser(user);
 
 	currentUser.then(function(user){
-        document.getElementById("fnameProf").innerHTML = user.fname + "'s";
-
+        document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
 
 		document.getElementById("emailDiv").innerHTML = user.email;
 		document.getElementById("fnameDiv").innerHTML = user.fname;
@@ -222,13 +224,11 @@ function listUserInfo(user) {
 		document.getElementById("schoolDiv").innerHTML = user.school;
 		if (user.isTutor){
             document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
-            //console.log(user.Strengths);
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
 		}
 		else{
 			document.getElementById("isTutorDiv").innerHTML = "Student";
 		}
-		
 	}).catch(function() {
 		console.error('Failed to list user info')
 		logout();
