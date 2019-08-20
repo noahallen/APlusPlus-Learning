@@ -34,24 +34,39 @@
 			<a href="#menu" class="navPanelToggle"><span class="fa fa-bars"></span></a>
 
 		<!-- Main -->
-		<hr />
-		<h2>What class Do You Need Help With? </h2>
-		<hr />
-		Subject:
-		<select id = "selectSubj" name = "selectSubj" onchange = "populate(this.id, 'selectCourse')" >
-			<option> Select subject</option>
-			<option value = "Math">Math</option>
-			<option value = "Computer Science">Computer Science</option>
-			<option value = "English">English</option>
-			<option value = "Physics">Physics</option>
-		</select>
-		<hr >
-		Course Name:
-		<select id = "selectCourse" name = "selectCourse">
-		</select> 
-		<hr >
-		<button type="button">Search for Tutors</button>
-			
+		<div class="search-boxes">
+			<div class="search-page">
+				<hr />
+					<h2>What class Do You Need Help With? </h2>
+				<hr />
+				Subject:
+				<select id = "selectSubj" name = "selectSubj" onchange = "populate(this.id, 'selectCourse')" >
+					<option> Select subject</option>
+					<option value = "Math">Math</option>
+					<option value = "Computer Science">Computer Science</option>
+					<option value = "English">English</option>
+					<option value = "Physics">Physics</option>
+				</select>
+				<hr >
+				Course Name:
+				<select id = "selectCourse" name = "selectCourse">
+				</select> 
+				<hr >
+				<button type="button">Search for Tutors</button>
+			</div>	
+			<div class="search-selection">
+				<hr />
+				<h3>Top Choices</h3>
+				<hr />
+				<a href="">Tutor1</a><br>
+				<a href="">Tutor2</a><br>
+				<a href="">Tutor3</a><br>
+				<a href="">Tutor4</a><br>
+				<a href="">Tutor5</a><br>
+				
+			</div>
+		</div>
+
 			
 
 		<!-- Scripts -->
