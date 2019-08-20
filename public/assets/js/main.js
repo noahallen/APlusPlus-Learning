@@ -15,11 +15,12 @@ function initialize(){
 function pushToFireStore(){
     
     var db = firebase.firestore();
-    var email = document.getElementById("email").value
+    var user = firebase.auth().currentUser;
+    var email = user.email;
     db.collection("users").doc(email).set({
         FirstName: document.getElementById("fname").value,
         LastName: document.getElementById("lname").value,
-        email: document.getElementById("email").value,
+        email: email,
         school: document.getElementById("school").value,
         isTutor: document.getElementById("isTutor").checked,
     });
