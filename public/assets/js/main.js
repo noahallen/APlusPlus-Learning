@@ -316,3 +316,21 @@ function populate(s1, s2){
 		s2.options.add(newOption);
 	}
 }
+
+
+
+/*goes through each of the 5 tutor objects in the passed in array and displays them in the form of buttons*/
+function displayPossibleTutors(array){
+	for(i=0; i < array.length(); i++){
+		if(i>4){
+			break;
+		}
+		var button = document.createElement("button");
+		var Name = array[i].FirstName + " " + array[i].LastName;
+		button.innerHTML = Name;
+		button.id='Tutor'+i;
+		button.value = array[i].email;
+		array.shift(); /*deletes 1st object in array*/
+	
+	}
+}
