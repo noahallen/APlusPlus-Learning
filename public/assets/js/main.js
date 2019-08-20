@@ -322,10 +322,10 @@ function displayPossibleTutors(array){
 	for(i=0; i < array.length(); i++){
 		
 		var button = document.createElement("button");
-		button.innerHTML = 
+		var Name = array[i].FirstName + " " + array[i].LastName;
+		button.innerHTML = Name;
 		button.id='Tutor'+i;
-
-
+		button.value = array[i].email;
 		array.shift(); /*deletes 1st object in array*/
 	}
 }
