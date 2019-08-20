@@ -287,8 +287,6 @@ async function createUser(){
 
 
 
-
-
 /*------------------------------Search Page Code ------------------------------*/
 
 //Populates the search parameters based on the subject chosen
@@ -375,3 +373,28 @@ function displayPossibleTutors(array){
 	}
 }
 
+
+/*------------------------------ProfileTutor Page Code ------------------------------*/
+
+//sents a request to the tutor's firebase when students click on their time available buttons
+function pushTimeToFirebase() {
+	
+	var user = firebase.auth().currentUser;
+	var email = user.email;
+	
+
+	var TutorTimeArr = [];
+    var numTime = 100;
+    for(var i = 0; i < numTime; i++){
+        if(document.getElementById(i.toString()).checked){
+            strengthArr.push(document.getElementById(i).name);
+        }
+    }
+    var db = firebase.firestore();
+    db.collection("users").doc(email).update('numTime', numTime);
+
+	setTimeout(function(){ location.href ="index2.html"; }, 3000);
+	
+	alert("Request sent!");
+ 
+}
