@@ -317,26 +317,39 @@ function populate(s1, s2){
 	}
 }
 
-//function direct user to the tutor's profile page when they click on the tutor's name
-function redirectToTutorProfile(){
-	location.href = "profileTutor.html";
+//Store tutor's data and carries it onto tutor's profile page
+function parseURL() {
+    var url = document.location.href,
+        params = url.split('?')[1].split('&'),
+        data = {}, tmp;
+    for (var i = 0; i < params.length; i++) {
+         tmp = params[i].split('=');
+         data[tmp[0]] = tmp[1];
+	}
+	data.email = decodeURIComponent(data.email);
+	
+	listTutorInfo(data.email);
+}
+//Function direct user to the tutor's profile page when they click on the tutor's name + encode email stored in URL
+function redirectToTutorProfile(email){
+	location.href = "profileTutor.html?email=" + encodeURIComponent(email);
 }
 
 //helper function
 function displayTutorProfile(email){
-	redirectToTutorProfile()
-	// listTutorInfo(user);
+	redirectToTutorProfile(email);
 }
-async function createUser(tutorEmail){
 
-    var email = tutorEmail.email;
-    var db = firebase.firestore();
-    var docRef = db.collection("users").doc(email);
+//create a tutor object based on email passed in
+async function createTutor(email){
 
+	var tutor;
+	var db = firebase.firestore();
+	var docRef = db.collection("users").doc(email);
 
     await docRef.get().then(function(doc){
         if (doc.exists) {
-            user = {
+            tutor = {
                 fname:doc.data().FirstName,
                 lname:doc.data().LastName,
                 email:doc.data().email,
@@ -352,33 +365,24 @@ async function createUser(tutorEmail){
         console.log("Error getting document:", error);
     });
     
-    newUser = new User(
-        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths
-    );
-    return newUser;
+    newTutor = new User(
+        email, tutor.fname, tutor.lname, tutor.school, tutor.isTutor, tutor.Strengths
+	);
+    return newTutor;
 };
 
-//helper function
-function listTutorInfo(user) {
-	
-	var currentUser = createUser(user);
+//populates the tutor's info based on email passed in
+function listTutorInfo(email) {
+	var currentUser = createTutor(email);
 
-	currentUser.then(function(user){
-        document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
+	currentUser.then(function(tutor){
+        document.getElementById("fnameProf").innerHTML = tutor.fname + "'s Profile";
+		document.getElementById("fnameDiv").innerHTML = tutor.fname;
+        document.getElementById("fnameDiv").innerHTML += " " + tutor.lname;
+		document.getElementById("schoolDiv").innerHTML = tutor.school;
+        document.getElementById("subjectDiv").innerHTML = tutor.Strengths;
 
-		document.getElementById("fnameDiv").innerHTML = user.fname;
-        document.getElementById("fnameDiv").innerHTML += " " + user.lname;
-        
-		document.getElementById("schoolDiv").innerHTML = user.school;
-		if (user.isTutor){
-            document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
-            document.getElementById("subjectDiv").innerHTML = user.Strengths;
-		}
-		else{
-			document.getElementById("isTutorDiv").innerHTML = "Student";
-		}
 	}).catch(function() {
-		console.error('Failed to list user info')
-		logout();
+		console.log('Failed to list user info')
 	});
 }
