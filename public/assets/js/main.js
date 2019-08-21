@@ -303,7 +303,7 @@ function populate(s1, s2){
 
 
 //Takes the current filter options and returns an array containing the matching tutors
-function pullTutorArray(){
+async function pullTutorArray(){
     var subject = document.getElementById('selectSubj');
     var subjectOption = subject.options[subject.selectedIndex].text;
     if(subjectOption != "Select subject"){
@@ -315,7 +315,8 @@ function pullTutorArray(){
         var db = firebase.firestore();
         var userArr = [];
 
-        db.collection("users").where("Strengths", "array-contains", selectedOption).get().then(function(querySnapshot) {
+        await db.collection("users").where("Strengths", "array-contains", selectedOption).get()
+        .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // console.log(doc.data().email);
                 var currUser = 
@@ -340,27 +341,34 @@ function pullTutorArray(){
 
 /*goes through each of the 5 tutor objects in the passed in array and displays them in the form of buttons*/
 function displayPossibleTutors(){
-    var array = pullTutorArray();
-    if(array != undefined){
-        console.log(array);
-        var i;
-            // for(var i=0; i < 5; i++){
-                for(i of array){
-                console.log("DOES THIS WORK??");
-                // if(i>4){
-                //     console.log("Break") //Doesn't break for less than 5 objects 
-                //     break;
-                // }
+    var arr = pullTutorArray();
+    console.log(arr);
+    arr.then(function(arr) {
+        if(arr != undefined) {
+            console.log(arr);
+            for(var i=0; i < arr.length; i++){
+                console.log("Entered Loop");
                 var button = document.createElement("button");
-                var Name = array[i].FirstName + " " + array[i].LastName;
+                console.log(arr);
+                var Name = arr[i].FirstName + " " + arr[i].LastName;
+               
+                var arrObject = arr[i];
+                console.log(arrObject.FirstName);
+                
+               
                 Name = document.createTextNode(Name);
                 button.appendChild(Name);
                 button.id='Tutor'+i;
-                button.value = array[i].email;
+                button.value = arr[i].email;
                 document.getElementById("searchSel").appendChild(button);
                 console.log("end of itteration")
             }
-        
-        console.log("After Loop")
-    }
+            console.log("After Loop")
+        }
+    });
+}
+
+function removeSubjectsForStudents() {
+    var x = document.getElementById("removeSubj");
+    x.style.display = "none";
 }
