@@ -52,12 +52,6 @@ function addStrengths(){
     setTimeout(function(){ location.href ="index2.html"; }, 3000);
 }
 
-
-
-
-
-
-
 /*------------------------------General Code ------------------------------*/
 //Logs the user out and redirects them to the homepage
 function logout(){
@@ -115,7 +109,6 @@ function login(){
         console.log(errorMessage);
     });
 }
-
 
 (function($) {
 
@@ -183,14 +176,6 @@ function login(){
 	});
 
 })(jQuery);
-
-
-
-
-
-
-
-
 
 
 /*------------------------------Profile Page Code ------------------------------*/
@@ -285,10 +270,6 @@ async function createUser(){
 
 
 
-
-
-
-
 /*------------------------------Search Page Code ------------------------------*/
 
 //Populates the search parameters based on the subject chosen
@@ -357,21 +338,29 @@ function pullTutorArray(){
 }
 
 
-
-
 /*goes through each of the 5 tutor objects in the passed in array and displays them in the form of buttons*/
-function displayPossibleTutors(array){
-	for(i=0; i < array.length(); i++){
-		if(i>4){
-			break;
-		}
-		var button = document.createElement("button");
-		var Name = array[i].FirstName + " " + array[i].LastName;
-		button.innerHTML = Name;
-		button.id='Tutor'+i;
-		button.value = array[i].email;
-		array.shift(); /*deletes 1st object in array*/
-	
-	}
+function displayPossibleTutors(){
+    var array = pullTutorArray();
+    if(array != undefined){
+        console.log(array);
+        var i;
+            // for(var i=0; i < 5; i++){
+                for(i of array){
+                console.log("DOES THIS WORK??");
+                // if(i>4){
+                //     console.log("Break") //Doesn't break for less than 5 objects 
+                //     break;
+                // }
+                var button = document.createElement("button");
+                var Name = array[i].FirstName + " " + array[i].LastName;
+                Name = document.createTextNode(Name);
+                button.appendChild(Name);
+                button.id='Tutor'+i;
+                button.value = array[i].email;
+                document.getElementById("searchSel").appendChild(button);
+                console.log("end of itteration")
+            }
+        
+        console.log("After Loop")
+    }
 }
-
