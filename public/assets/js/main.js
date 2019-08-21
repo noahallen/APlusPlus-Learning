@@ -320,6 +320,77 @@ function populate(s1, s2){
 }
 
 
+//Store tutor's data and carries it onto tutor's profile page
+function parseURL() {
+    var url = document.location.href,
+        params = url.split('?')[1].split('&'),
+        data = {}, tmp;
+    for (var i = 0; i < params.length; i++) {
+         tmp = params[i].split('=');
+         data[tmp[0]] = tmp[1];
+	}
+	data.email = decodeURIComponent(data.email);
+	
+	listTutorInfo(data.email);
+}
+//Function direct user to the tutor's profile page when they click on the tutor's name + encode email stored in URL
+function redirectToTutorProfile(email){
+	location.href = "profileTutor.html?email=" + encodeURIComponent(email);
+}
+
+//helper function
+function displayTutorProfile(email){
+	redirectToTutorProfile(email);
+}
+
+//create a tutor object based on email passed in
+async function createTutor(email){
+
+	var tutor;
+	var db = firebase.firestore();
+	var docRef = db.collection("users").doc(email);
+
+    await docRef.get().then(function(doc){
+        if (doc.exists) {
+            tutor = {
+                fname:doc.data().FirstName,
+                lname:doc.data().LastName,
+                email:doc.data().email,
+                school:doc.data().school,
+                isTutor:doc.data().isTutor,
+                Strengths:doc.data().Strengths,
+            };
+        }
+        else{
+            console.log("document doesn't exist");
+        }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+    
+    newTutor = new User(
+        email, tutor.fname, tutor.lname, tutor.school, tutor.isTutor, tutor.Strengths
+	);
+    return newTutor;
+};
+
+//populates the tutor's info based on email passed in
+function listTutorInfo(email) {
+	var currentUser = createTutor(email);
+
+	currentUser.then(function(tutor){
+        document.getElementById("fnameProf").innerHTML = tutor.fname + "'s Profile";
+		document.getElementById("fnameDiv").innerHTML = tutor.fname;
+        document.getElementById("fnameDiv").innerHTML += " " + tutor.lname;
+		document.getElementById("schoolDiv").innerHTML = tutor.school;
+        document.getElementById("subjectDiv").innerHTML = tutor.Strengths;
+
+	}).catch(function() {
+		console.log('Failed to list user info')
+	});
+}
+
+
 
 //Takes the current filter options and returns an array containing the matching tutors
 function pullTutorArray(){
