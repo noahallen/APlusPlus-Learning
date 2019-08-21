@@ -238,14 +238,13 @@ function listUserInfo(user) {
 
 //User class storing a user's data
 class User{
-     constructor(email, fname, lname, school, isTutor, strengths,availableTime){
+     constructor(email, fname, lname, school, isTutor, strengths){
 		this.email = email;	
 		this.fname = fname;
     	this.lname = lname;
         this.school = school;
         this.isTutor = isTutor;   
 		this.Strengths = strengths;
-		this.availableTime = availableTime;
 
 	}
 }
@@ -269,7 +268,6 @@ async function createUser(){
                 school:doc.data().school,
                 isTutor:doc.data().isTutor,
 				Strengths:doc.data().Strengths,
-				// availableTime:doc.data().AvailableTime,
             };
         }
         else{
@@ -337,7 +335,7 @@ function displayAvailableTime(email){
 			console.log(availTime);
 			var strs = "";
 			for (var i = 0; i <availTime.length; i++) {
-				strs += '<input type="button"  value="'+availTime[i]+'" />';
+				strs += '<input type="button"  value="' + availTime[i]+'" />';
 			}
 			$("#btns").html(strs);
         }
@@ -347,10 +345,5 @@ function displayAvailableTime(email){
     }).catch(function(error) {
         console.log("Error getting document:", error);
     });
-
-	// availTime stores an array of the tutor's available times, need to create a
-	// function that takes in the array and outputs that many buttons onto the page 
-	//size = availTime.length(); use this to create a loop that automtically creates a button
-
 }
 
