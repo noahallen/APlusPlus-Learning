@@ -238,13 +238,15 @@ function listUserInfo(user) {
 
 //User class storing a user's data
 class User{
-     constructor(email, fname, lname, school, isTutor, strengths){
+     constructor(email, fname, lname, school, isTutor, strengths,availableTime){
 		this.email = email;	
 		this.fname = fname;
     	this.lname = lname;
         this.school = school;
         this.isTutor = isTutor;   
-        this.Strengths = strengths;
+		this.Strengths = strengths;
+		this.availableTime = availableTime;
+
 	}
 }
 
@@ -266,7 +268,8 @@ async function createUser(){
                 email:doc.data().email,
                 school:doc.data().school,
                 isTutor:doc.data().isTutor,
-                Strengths:doc.data().Strengths,
+				Strengths:doc.data().Strengths,
+				// availableTime:doc.data().AvailableTime,
             };
         }
         else{
@@ -316,3 +319,38 @@ function populate(s1, s2){
 		s2.options.add(newOption);
 	}
 }
+
+
+
+//function to take the tutors' times avilable and displays them as buttons
+
+function displayAvailableTime(email){
+
+
+	var db = firebase.firestore();
+    var docRef = db.collection("users").doc(email);
+
+	var availTime;
+    docRef.get().then(function(doc){
+        if (doc.exists) {
+            availTime = doc.data().AvailableTime;
+			console.log(availTime);
+			var strs = "";
+			for (var i = 0; i <availTime.length; i++) {
+				strs += '<input type="button"  value="'+availTime[i]+'" />';
+			}
+			$("#btns").html(strs);
+        }
+        else{
+            console.log("document doesn't exist");
+        }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+
+	// availTime stores an array of the tutor's available times, need to create a
+	// function that takes in the array and outputs that many buttons onto the page 
+	//size = availTime.length(); use this to create a loop that automtically creates a button
+
+}
+
