@@ -316,3 +316,69 @@ function populate(s1, s2){
 		s2.options.add(newOption);
 	}
 }
+
+//function direct user to the tutor's profile page when they click on the tutor's name
+function redirectToTutorProfile(){
+	location.href = "profileTutor.html";
+}
+
+//helper function
+function displayTutorProfile(email){
+	redirectToTutorProfile()
+	// listTutorInfo(user);
+}
+async function createUser(tutorEmail){
+
+    var email = tutorEmail.email;
+    var db = firebase.firestore();
+    var docRef = db.collection("users").doc(email);
+
+
+    await docRef.get().then(function(doc){
+        if (doc.exists) {
+            user = {
+                fname:doc.data().FirstName,
+                lname:doc.data().LastName,
+                email:doc.data().email,
+                school:doc.data().school,
+                isTutor:doc.data().isTutor,
+                Strengths:doc.data().Strengths,
+            };
+        }
+        else{
+            console.log("document doesn't exist");
+        }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+    
+    newUser = new User(
+        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths
+    );
+    return newUser;
+};
+
+//helper function
+function listTutorInfo(user) {
+	
+	var currentUser = createUser(user);
+
+	currentUser.then(function(user){
+        document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
+
+		document.getElementById("fnameDiv").innerHTML = user.fname;
+        document.getElementById("fnameDiv").innerHTML += " " + user.lname;
+        
+		document.getElementById("schoolDiv").innerHTML = user.school;
+		if (user.isTutor){
+            document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
+            document.getElementById("subjectDiv").innerHTML = user.Strengths;
+		}
+		else{
+			document.getElementById("isTutorDiv").innerHTML = "Student";
+		}
+	}).catch(function() {
+		console.error('Failed to list user info')
+		logout();
+	});
+}
