@@ -197,12 +197,10 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-	    if(!user.isTutor){
+	if(!user.isTutor){
         removeSubjectsForStudents();
     }
     var currentUser = createUser(user);
-
-
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
 
@@ -347,28 +345,31 @@ async function pullTutorArray(){
 /*goes through each of the 5 tutor objects in the passed in array and displays them in the form of buttons*/
 function displayPossibleTutors(){
     var arr = pullTutorArray();
-    console.log(arr);
+    // console.log(arr);
     arr.then(function(arr) {
         if(arr != undefined) {
-            console.log(arr);
+            // console.log(arr);
             for(var i=0; i < arr.length; i++){
-                console.log("Entered Loop");
+                // console.log("Entered Loop");
+                var bre = document.createElement("br");
                 var button = document.createElement("button");
-                console.log(arr);
+                var searchSel = document.getElementById("searchSel");
+                // console.log(arr);
                 var Name = arr[i].FirstName + " " + arr[i].LastName;
-               
-                var arrObject = arr[i];
-                console.log(arrObject.FirstName);
-                
-               
                 Name = document.createTextNode(Name);
                 button.appendChild(Name);
-                button.id='Tutor'+i;
+                button.id = 'Tutor'+i;
                 button.value = arr[i].email;
-                document.getElementById("searchSel").appendChild(button);
-                console.log("end of itteration")
+                searchSel.appendChild(button);
+                searchSel.appendChild(bre); 
+                button.style.background="grey";
+                button.style.marginTop="20px";
+                button.style.width="100%";
+                button.style.border="2px solid 	#505050";
+                button.style.borderRadius="2px";
+                // console.log("end of itteration")
             }
-            console.log("After Loop")
+            // console.log("After Loop")
         }
     });
 }
