@@ -376,25 +376,26 @@ function displayPossibleTutors(array){
 
 /*------------------------------ProfileTutor Page Code ------------------------------*/
 
-//sents a request to the tutor's firebase when students click on their time available buttons
-function pushTimeToFirebase() {
-	
-	var user = firebase.auth().currentUser;
-	var email = user.email;
-	
-
-	var TutorTimeArr = [];
-    var numTime = 100;
-    for(var i = 0; i < numTime; i++){
-        if(document.getElementById(i.toString()).checked){
-            strengthArr.push(document.getElementById(i).name);
-        }
-    }
+//Add a function that store the request tutor's time, user's email and user's name into an array,
+function creaTimeChosenArray(time) {
+ 
+    var user = firebase.auth().currentUser;
+    var email = user.email;
+    var name=user.Name;
+   
+console.log(user);
     var db = firebase.firestore();
-    db.collection("users").doc(email).update('numTime', numTime);
+    var TutorTimeArr = {
+        FirstName:name,
+        email:email,
+        tutorTime:time
+    };
+    console.log(TutorTimeArr);
+    db.collection("users").doc(email).update('TimeChosed', TutorTimeArr);
 
-	setTimeout(function(){ location.href ="index2.html"; }, 3000);
-	
-	alert("Request sent!");
+    return TutorTimeArr;
+
+    alert("Request sent!");
  
 }
+

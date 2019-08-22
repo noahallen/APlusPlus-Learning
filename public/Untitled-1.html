@@ -1,0 +1,60 @@
+
+		<ul>
+				<input type="button" value="Aug 21 11AM" id="time1" onclick="createTimeChosenArray()">
+				
+		</ul>
+
+
+
+        //Add a function that store the request tutor's time, user's email and user's name into an array,
+        function creaTimeChosenArray() {
+            
+            var user = firebase.auth().currentUser;
+            var email = user.email;
+            var time = document.getElementById('time1');
+            var timeOption = time.options[time.selectedIndex].text;
+        
+            var db = firebase.firestore();
+            var TutorTimeArr = [];
+            
+            db.collection("users").where(timeOption).get().then(function(querySnapshot) 
+            {
+                querySnapshot.forEach(function(doc)
+                {
+                    var currUser = 
+                    {
+                        FirstName:doc.data().FirstName,
+                        LastName:doc.data().LastName,
+                        email:doc.data().email,
+                        Timechosed:timeOption,
+                        
+                    };
+                    TutorTimeArr.push(currUser);
+                });
+            }).catch(function(error) {
+                console.log("Error getting documents: ", error);
+            });
+            // console.log(userArr);
+            return TutorTimeArr;
+        
+            alert("Request sent!");
+         
+        }
+        
+        
+        user = firebase.auth().currentUser;
+        email = user.email;
+        
+        var strengthArr = [];
+        var numClasses = 12;
+        for(var i = 0; i < numClasses; i++){
+            if(document.getElementById(i.toString()).checked){
+                strengthArr.push(document.getElementById(i).name);
+            }
+        }
+        var db = firebase.firestore();
+        db.collection("users").doc(email).update('Strengths', strengthArr);
+        
+        setTimeout(function(){ location.href ="index2.html"; }, 3000);
+        }
+        
