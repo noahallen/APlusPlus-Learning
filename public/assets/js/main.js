@@ -489,3 +489,39 @@ function removeSubjectsForStudents() {
     var x = document.getElementById("removeSubj");
     x.style.display = "none";
 }
+
+
+//*------------------------------ProfileTutor Page Code ------------------------------*/
+
+//Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
+async function creaTimeChosenArray(time,teaEmail) {
+   
+    var teaEmail = "spate125@ucr.edu";//await parseURL();//
+    
+    createUser(firebase.auth().currentUser)
+    .then(function(user) {
+        var email = user.email;
+        var name="HONGTAO WU";//user.FirstName + " " +user.LastName//user.Name;
+        var time = "Aug 22 10pm";
+
+    console.log(user);
+        var db = firebase.firestore();
+        var requestSingle = {
+            FirstName:name,
+            email:email,
+            tutorTime:time
+        };
+    var TutorTimeArr=user.PendingRequests;
+    TutorTimeArr.push(requestSingle);
+
+        console.log(TutorTimeArr);
+        //db.collection("users").doc(teaEmail).update('PendingRequests',TutorTimeArr );
+        db.collection("users").doc(teaEmail).update({
+            PendingRequests: TutorTimeArr
+        })
+        return TutorTimeArr;
+
+        alert("Request sent!");
+    });
+ 
+}
