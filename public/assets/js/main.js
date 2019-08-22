@@ -323,31 +323,16 @@ function populate(s1, s2){
 
 
 //function to take the tutors' times avilable and displays them as buttons
+//takes an array and display the times as buttons
+function displayAvailableTime(availTime){
 
-function displayAvailableTime(email){
-
-
-	var db = firebase.firestore();
-    var docRef = db.collection("users").doc(email);
-
-	var availTime;
-    docRef.get().then(function(doc){
-        if (doc.exists) {
-            availTime = doc.data().AvailableTime;
-			console.log(availTime);
-			var strs = "";
-			for (var i = 0; i <availTime.length; i++) {
-				strs += '<input type="button"  value="' + availTime[i]+'" />';
-			}
-			$("#btns").html(strs);
-      }
-      else{
-          console.log("document doesn't exist");
-      }
-      }).catch(function(error) {
-        console.log("Error getting document:", error);
-      });
+	var strs = "";
+	for (var i = 0; i < availTime.length; i++) {
+		strs += '<input type="button"  value="' + availTime[i] + '" />';
+	}
+	$("#btns").html(strs);
 }
+     
 
 //Store tutor's data and carries it onto tutor's profile page
 function parseURL() {
@@ -474,4 +459,7 @@ function displayPossibleTutors(array){
 	
 	}
 }
+
+
+
 
