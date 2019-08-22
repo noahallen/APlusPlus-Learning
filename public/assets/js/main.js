@@ -199,9 +199,9 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-	if(!user.isTutor){
-        removeSubjectsForStudents();
-    }
+	// if(!user.isTutor){
+    //     removeSubjectsForStudents();
+    // }
     var currentUser = createUser(user);
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
@@ -219,6 +219,8 @@ function listUserInfo(user) {
 		}
 		else{
             document.getElementById("isTutorDiv").innerHTML = "Student";
+            var x = document.getElementById("removeSubj");
+            x.style.display = "none";
            
 		}
 	}).catch(function() {
@@ -485,7 +487,7 @@ function displayPossibleTutors(){
     });
 }
 
-function removeSubjectsForStudents() {
-    var x = document.getElementById("removeSubj");
-    x.style.display = "none";
-}
+// function removeSubjectsForStudents() {
+//     var x = document.getElementById("removeSubj");
+//     x.style.display = "none";
+// }
