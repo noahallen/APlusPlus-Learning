@@ -30,6 +30,7 @@ function pushToFireStore(){
     }
     else{
         setTimeout(function(){ location.href ="index2.html"; }, 3000);
+        
     } 
 }
 
@@ -196,8 +197,11 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-	
-	var currentUser = createUser(user);
+	    if(!user.isTutor){
+        removeSubjectsForStudents();
+    }
+    var currentUser = createUser(user);
+
 
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
@@ -212,7 +216,8 @@ function listUserInfo(user) {
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
 		}
 		else{
-			document.getElementById("isTutorDiv").innerHTML = "Student";
+            document.getElementById("isTutorDiv").innerHTML = "Student";
+           
 		}
 	}).catch(function() {
 		console.error('Failed to list user info')
