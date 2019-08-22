@@ -32,6 +32,7 @@ function pushToFireStore(){
     }
     else{
         setTimeout(function(){ location.href ="index2.html"; }, 3000);
+        
     } 
 }
 
@@ -53,12 +54,6 @@ function addStrengths(){
 
     setTimeout(function(){ location.href ="index2.html"; }, 3000);
 }
-
-
-
-
-
-
 
 /*------------------------------General Code ------------------------------*/
 //Logs the user out and redirects them to the homepage
@@ -117,7 +112,6 @@ function login(){
         console.log(errorMessage);
     });
 }
-
 
 (function($) {
 
@@ -187,14 +181,6 @@ function login(){
 })(jQuery);
 
 
-
-
-
-
-
-
-
-
 /*------------------------------Profile Page Code ------------------------------*/
 
 //Function to get a user variable containing the current user's data from firestore
@@ -213,9 +199,10 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-	
-	var currentUser = createUser(user);
-
+	if(!user.isTutor){
+        removeSubjectsForStudents();
+    }
+    var currentUser = createUser(user);
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
 
@@ -231,7 +218,8 @@ function listUserInfo(user) {
             document.getElementById("requestsDiv").innerHTML = user.PendingRequests;
 		}
 		else{
-			document.getElementById("isTutorDiv").innerHTML = "Student";
+            document.getElementById("isTutorDiv").innerHTML = "Student";
+           
 		}
 	}).catch(function() {
 		console.error('Failed to list user info')
@@ -290,10 +278,6 @@ async function createUser(){
     );
     return newUser;
 };
-
-
-
-
 
 
 
@@ -433,7 +417,7 @@ function listTutorInfo(email) {
 
 
 //Takes the current filter options and returns an array containing the matching tutors
-function pullTutorArray(){
+async function pullTutorArray(){
     var subject = document.getElementById('selectSubj');
     var subjectOption = subject.options[subject.selectedIndex].text;
     if(subjectOption != "Select subject"){
@@ -445,7 +429,8 @@ function pullTutorArray(){
         var db = firebase.firestore();
         var userArr = [];
 
-        db.collection("users").where("Strengths", "array-contains", selectedOption).get().then(function(querySnapshot) {
+        await db.collection("users").where("Strengths", "array-contains", selectedOption).get()
+        .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // console.log(doc.data().email);
                 var currUser = 
@@ -468,21 +453,39 @@ function pullTutorArray(){
 }
 
 
-
-
 /*goes through each of the 5 tutor objects in the passed in array and displays them in the form of buttons*/
-function displayPossibleTutors(array){
-	for(i=0; i < array.length(); i++){
-		if(i>4){
-			break;
-		}
-		var button = document.createElement("button");
-		var Name = array[i].FirstName + " " + array[i].LastName;
-		button.innerHTML = Name;
-		button.id='Tutor'+i;
-		button.value = array[i].email;
-		array.shift(); /*deletes 1st object in array*/
-	
-	}
+function displayPossibleTutors(){
+    var arr = pullTutorArray();
+    // console.log(arr);
+    arr.then(function(arr) {
+        if(arr != undefined) {
+            // console.log(arr);
+            for(var i=0; i < arr.length; i++){
+                // console.log("Entered Loop");
+                var bre = document.createElement("br");
+                var button = document.createElement("button");
+                var searchSel = document.getElementById("searchSel");
+                // console.log(arr);
+                var Name = arr[i].FirstName + " " + arr[i].LastName;
+                Name = document.createTextNode(Name);
+                button.appendChild(Name);
+                button.id = 'Tutor'+i;
+                button.value = arr[i].email;
+                searchSel.appendChild(button);
+                searchSel.appendChild(bre); 
+                button.style.background="grey";
+                button.style.marginTop="20px";
+                button.style.width="100%";
+                button.style.border="2px solid 	#505050";
+                button.style.borderRadius="2px";
+                // console.log("end of itteration")
+            }
+            // console.log("After Loop")
+        }
+    });
 }
 
+function removeSubjectsForStudents() {
+    var x = document.getElementById("removeSubj");
+    x.style.display = "none";
+}
