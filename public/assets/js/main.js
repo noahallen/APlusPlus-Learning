@@ -216,7 +216,7 @@ function listUserInfo(user) {
             document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
             document.getElementById("availTimeDiv").innerHTML = user.AvailableTime;
-            document.getElementById("requestsDiv").innerHTML = user.PendingRequests;
+            // DisplayButtonsAccept(user.PendingRequests);
 		}
 		else{
             document.getElementById("isTutorDiv").innerHTML = "Student";
@@ -505,21 +505,22 @@ function displayPossibleTutors(){
 // 	// write the whole user to firestore
 // }
 
-function DisplayButtonsAccept(PendingRequests){
-	var strs = "";
-
-	for (var i = 0; i < PendingRequests.length; i++) {
-		strs += '<tr>'+
-
-		'<td>'+PendingRequests[i]+'</td>'+
-		'<td><input onclick="Accpet('+PendingRequests[i]+')" type="button" value="accept"></td>'+
-		'<td><input onclick="Reject('+PendingRequests[i]+')" type="button" value="reject"></td>'+
-	'</tr>';
-
-	}
-
-	$("#requestList").html(strs);
 
 
-}
+//Function needs to be fixed based off of what the request object will look like
+// function DisplayButtonsAccept(PendingRequests){
+// 	var strs = "";
+
+// 	for (var i = 0; i < PendingRequests.length; i++) {
+// 		strs += '<tr>'+
+
+// 		'<td>'+"Student: "+ PendingRequests[i] +'</td>'+
+// 		'<td><input onclick="Accpet('+PendingRequests[i]+')" type="button" value="accept"></td>'+
+// 		'<td><input onclick="Reject('+PendingRequests[i]+')" type="button" value="reject"></td>'+
+// 	'</tr>';
+
+// 	}
+
+// 	$("#requestList").html(strs);
+// }
 
