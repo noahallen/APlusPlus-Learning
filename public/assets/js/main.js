@@ -504,8 +504,3 @@ function displayPossibleTutors(){
         }
     });
 }
-
-// function removeSubjectsForStudents() {
-//     var x = document.getElementById("removeSubj");
-//     x.style.display = "none";
-// }
