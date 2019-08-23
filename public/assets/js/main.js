@@ -200,9 +200,7 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-	// if(!user.isTutor){
-    //     removeSubjectsForStudents();
-    // }
+
     var currentUser = createUser(user);
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
@@ -476,12 +474,12 @@ function displayPossibleTutors(){
                     button.value = email;
                     button.onclick = (function(email){
                         return function(){
-                            redirectToTutorProfile(email);
+                            displayTutorProfile(email);
                         }
                      })(email);
                     searchSel.appendChild(button);
                     searchSel.appendChild(bre); 
-                    console.log(email);
+                    // console.log(email);
                     
                     button.style.background="grey";
                     button.style.marginTop="20px";
@@ -524,7 +522,7 @@ async function creaTimeChosenArray(time) {
         var name=user.fname;//user.FirstName + " " +user.LastName//user.Name;
         var name2=user.lname;
         console.log(user["PendingRequests"]);
-    console.log(user);
+        console.log(user);
         var db = firebase.firestore();
         var requestSingle = {
             FirstName:name,
