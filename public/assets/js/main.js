@@ -11,6 +11,7 @@ function initialize(){
 }
 
 
+
 //Pushes a User's registration data to firebase
 function pushToFireStore(){
     
@@ -325,12 +326,11 @@ function populate(s1, s2){
 //function to take the tutors' times avilable and displays them as buttons
 //takes an array and display the times as buttons
 function displayAvailableTime(availTime){
-
 	var strs = "";
 	for (var i = 0; i < availTime.length; i++) {
-		strs += '<input type="button"  onclick=yuyue('+availTime[i]+')   value="' + availTime[i] + '" />';//need to pass in the availTime to the onclick function
+		strs += '<input type="button"  onclick=makeAppointment('+availTime[i]+')   value="' + availTime[i] + '" />';//need to pass in the availTime to the onclick function
 	}
-	$("#availTumeButtons").html(strs);
+	$("#availTimeButtons").html(strs);
 }
      
 
@@ -461,20 +461,20 @@ function displayPossibleTutors(array){
 }
 
 //Push tutor's inputted available time to the tutor's firestore
-function pushAvailTimeToFirestore(availTime){
-	var db = firebase.firestore();
-    var user = firebase.auth().currentUser;//why user's empty here
-	//var email = user.email;
-	console.log(db.user);
-    db.collection("users").doc(email).set({
-        AvailableTime: availTime
-    });
-}
+// function pushAvailTimeToFirestore(availTime){
+// 	var db = firebase.firestore();
+//     var user = firebase.auth().currentUser;
+// 	var email = user.email;
+// 	// console.log(db.user);
+//     db.collection("users").doc(email).set({
+//         AvailableTime: availTime
+// 	});
+// 	// Add availablt time to the user object
+// 	// write the whole user to firestore
+// }
 
 function DisplayButtonsAccept(PendingRequests){
-//first, get pendingre
-
-var strs = "";
+	var strs = "";
 
 	for (var i = 0; i < PendingRequests.length; i++) {
 		strs += '<tr>'+
@@ -483,7 +483,7 @@ var strs = "";
 		'<td><input onclick="Accpet('+PendingRequests[i]+')" type="button" value="accept"></td>'+
 		'<td><input onclick="Reject('+PendingRequests[i]+')" type="button" value="reject"></td>'+
 	'</tr>';
-	//need to pass in the availTime to the onclick function
+
 	}
 
 	$("#requestList").html(strs);
