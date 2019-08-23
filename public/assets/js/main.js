@@ -349,14 +349,8 @@ function parseURL() {
 	listTutorInfo(data.email);
 }
 //Function direct user to the tutor's profile page when they click on the tutor's name + encode email stored in URL
-function redirectToTutorProfile(email){
-    location.href = "profileTutor.html?email=" + encodeURIComponent(email);
-    
-}
-
-//helper function
 function displayTutorProfile(email){
-	redirectToTutorProfile(email);
+    location.href = "profileTutor.html?email=" + encodeURIComponent(email);
 }
 
 //create a tutor object based on email passed in
