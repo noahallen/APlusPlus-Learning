@@ -23,6 +23,8 @@ function pushToFireStore(){
         email: email,
         school: document.getElementById("school").value,
         isTutor: document.getElementById("isTutor").checked,
+        AvailableTime:[],
+        PendingRequests:[],
     });
 
     if(document.getElementById("isTutor").checked){
@@ -30,6 +32,7 @@ function pushToFireStore(){
     }
     else{
         setTimeout(function(){ location.href ="index2.html"; }, 3000);
+        
     } 
 }
 
@@ -51,12 +54,6 @@ function addStrengths(){
 
     setTimeout(function(){ location.href ="index2.html"; }, 3000);
 }
-
-
-
-
-
-
 
 /*------------------------------General Code ------------------------------*/
 //Logs the user out and redirects them to the homepage
@@ -115,7 +112,6 @@ function login(){
         console.log(errorMessage);
     });
 }
-
 
 (function($) {
 
@@ -185,14 +181,6 @@ function login(){
 })(jQuery);
 
 
-
-
-
-
-
-
-
-
 /*------------------------------Profile Page Code ------------------------------*/
 
 //Function to get a user variable containing the current user's data from firestore
@@ -211,9 +199,10 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-	
-	var currentUser = createUser(user);
-
+	if(!user.isTutor){
+        removeSubjectsForStudents();
+    }
+    var currentUser = createUser(user);
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
 
@@ -225,9 +214,12 @@ function listUserInfo(user) {
 		if (user.isTutor){
             document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
+            document.getElementById("availTimeDiv").innerHTML = user.AvailableTime;
+            document.getElementById("requestsDiv").innerHTML = user.PendingRequests;
 		}
 		else{
-			document.getElementById("isTutorDiv").innerHTML = "Student";
+            document.getElementById("isTutorDiv").innerHTML = "Student";
+           
 		}
 	}).catch(function() {
 		console.error('Failed to list user info')
@@ -238,13 +230,15 @@ function listUserInfo(user) {
 
 //User class storing a user's data
 class User{
-     constructor(email, fname, lname, school, isTutor, strengths){
+     constructor(email, fname, lname, school, isTutor, strengths, availTime, requests){
 		this.email = email;	
 		this.fname = fname;
     	this.lname = lname;
         this.school = school;
         this.isTutor = isTutor;   
-		this.Strengths = strengths;
+        this.Strengths = strengths;
+        this.AvailableTime = availTime;
+        this.PendingRequests = requests;
 
 	}
 }
@@ -267,7 +261,9 @@ async function createUser(){
                 email:doc.data().email,
                 school:doc.data().school,
                 isTutor:doc.data().isTutor,
-				Strengths:doc.data().Strengths,
+                Strengths:doc.data().Strengths,
+                AvailableTime:doc.data().AvailableTime,
+                PendingRequests:doc.data().PendingRequests,
             };
         }
         else{
@@ -278,14 +274,10 @@ async function createUser(){
     });
     
     newUser = new User(
-        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths
+        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths, user.AvailableTime, user.PendingRequests
     );
     return newUser;
 };
-
-
-
-
 
 
 
@@ -349,7 +341,7 @@ function parseURL() {
 }
 //Function direct user to the tutor's profile page when they click on the tutor's name + encode email stored in URL
 function redirectToTutorProfile(email){
-	location.href = "profileTutor.html?email=" + encodeURIComponent(email);
+    location.href = "profileTutor.html?email=" + encodeURIComponent(email);
 }
 
 //helper function
@@ -373,6 +365,8 @@ async function createTutor(email){
                 school:doc.data().school,
                 isTutor:doc.data().isTutor,
                 Strengths:doc.data().Strengths,
+                AvailableTime:doc.data().AvailableTime,
+                PedingRequests:doc.data().PendingRequests,
             };
         }
         else{
@@ -383,13 +377,14 @@ async function createTutor(email){
     });
   
     newTutor = new User(
-        email, tutor.fname, tutor.lname, tutor.school, tutor.isTutor, tutor.Strengths
+        email, tutor.fname, tutor.lname, tutor.school, tutor.isTutor, tutor.Strengths, tutor.AvailableTime, tutor.PendingRequests
 	);
     return newTutor;
 };
 
 //populates the tutor's info based on email passed in
 function listTutorInfo(email) {
+    
 	var currentUser = createTutor(email);
 
 	currentUser.then(function(tutor){
@@ -398,6 +393,7 @@ function listTutorInfo(email) {
         document.getElementById("fnameDiv").innerHTML += " " + tutor.lname;
 		document.getElementById("schoolDiv").innerHTML = tutor.school;
         document.getElementById("subjectDiv").innerHTML = tutor.Strengths;
+        displayAvailableTime(doc.data().AvailableTime);
 
 	}).catch(function() {
 		console.log('Failed to list user info')
@@ -407,7 +403,7 @@ function listTutorInfo(email) {
 
 
 //Takes the current filter options and returns an array containing the matching tutors
-function pullTutorArray(){
+async function pullTutorArray(){
     var subject = document.getElementById('selectSubj');
     var subjectOption = subject.options[subject.selectedIndex].text;
     if(subjectOption != "Select subject"){
@@ -419,7 +415,8 @@ function pullTutorArray(){
         var db = firebase.firestore();
         var userArr = [];
 
-        db.collection("users").where("Strengths", "array-contains", selectedOption).get().then(function(querySnapshot) {
+        await db.collection("users").where("Strengths", "array-contains", selectedOption).get()
+        .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
                 // console.log(doc.data().email);
                 var currUser = 
@@ -442,34 +439,39 @@ function pullTutorArray(){
 }
 
 
-
-
 /*goes through each of the 5 tutor objects in the passed in array and displays them in the form of buttons*/
-function displayPossibleTutors(array){
-	for(i=0; i < array.length(); i++){
-		if(i>4){
-			break;
-		}
-		var button = document.createElement("button");
-		var Name = array[i].FirstName + " " + array[i].LastName;
-		button.innerHTML = Name;
-		button.id='Tutor'+i;
-		button.value = array[i].email;
-		array.shift(); /*deletes 1st object in array*/
-	
-	}
-}
-
-//Push tutor's inputted available time to the tutor's firestore
-function pushAvailTimeToFirestore(availTime){
-	var db = firebase.firestore();
-    var user = firebase.auth().currentUser;//why user's empty here
-	//var email = user.email;
-	console.log(db.user);
-    db.collection("users").doc(email).set({
-        AvailableTime: availTime
+function displayPossibleTutors(){
+    var arr = pullTutorArray();
+    // console.log(arr);
+    arr.then(function(arr) {
+        if(arr != undefined) {
+            // console.log(arr);
+            for(var i=0; i < arr.length; i++){
+                // console.log("Entered Loop");
+                var bre = document.createElement("br");
+                var button = document.createElement("button");
+                var searchSel = document.getElementById("searchSel");
+                // console.log(arr);
+                var Name = arr[i].FirstName + " " + arr[i].LastName;
+                Name = document.createTextNode(Name);
+                button.appendChild(Name);
+                button.id = 'Tutor'+i;
+                button.value = arr[i].email;
+                searchSel.appendChild(button);
+                searchSel.appendChild(bre); 
+                button.style.background="grey";
+                button.style.marginTop="20px";
+                button.style.width="100%";
+                button.style.border="2px solid 	#505050";
+                button.style.borderRadius="2px";
+                // console.log("end of itteration")
+            }
+            // console.log("After Loop")
+        }
     });
 }
+
+
 
 function DisplayButtonsAccept(PendingRequests){
 //first, get pendingre
@@ -490,5 +492,4 @@ var strs = "";
 
 
 }
-
 

@@ -3315,7 +3315,7 @@
 			right: 0;
 			text-align: right;
 			top: 0;
-			vertical-align: middle;
+			/* vertical-align: middle; */
 			width: 5em;
 		}
 
@@ -3914,3 +3914,10 @@
 			margin-top:0%;	
 			width:50%;
 		}
+
+		 .search-button{
+			font-size:125%;
+			/* width:55%; */
+			
+			
+		} 
