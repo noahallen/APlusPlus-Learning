@@ -370,7 +370,7 @@ async function createTutor(email){
                 isTutor:doc.data().isTutor,
                 Strengths:doc.data().Strengths,
                 AvailableTime:doc.data().AvailableTime,
-                PedingRequests:doc.data().PendingRequests,
+                PendingRequests:doc.data().PendingRequests,
             };
         }
         else{
@@ -389,7 +389,8 @@ async function createTutor(email){
 //populates the tutor's info based on email passed in
 function listTutorInfo(email) {
     
-	var currentUser = createTutor(email);
+    var currentUser = createTutor(email);
+    document.getElementById("pub-prof-pg").style.marginLeft="30%";
 
 	currentUser.then(function(tutor){
         document.getElementById("fnameProf").innerHTML = tutor.fname + "'s Profile";
@@ -398,6 +399,8 @@ function listTutorInfo(email) {
 		document.getElementById("schoolDiv").innerHTML = tutor.school;
         document.getElementById("subjectDiv").innerHTML = tutor.Strengths;
         displayAvailableTime(doc.data().AvailableTime);
+        
+        
         
 
 	}).catch(function() {
