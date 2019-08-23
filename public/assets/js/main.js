@@ -410,6 +410,7 @@ function listTutorInfo(email) {
 		document.getElementById("schoolDiv").innerHTML = tutor.school;
         document.getElementById("subjectDiv").innerHTML = tutor.Strengths;
         displayAvailableTime(doc.data().AvailableTime);
+        
 
 	}).catch(function() {
 		console.log('Failed to list user info')
@@ -455,32 +456,49 @@ async function pullTutorArray(){
 }
 
 
-/*goes through each of the 5 tutor objects in the passed in array and displays them in the form of buttons*/
+/*goes through each of the 10 tutor objects in the passed in array and displays them in the form of buttons*/
 function displayPossibleTutors(){
+    var div = document.getElementById('searchSel');
+    while(div.firstChild){
+        div.removeChild(div.firstChild);
+    }
     var arr = pullTutorArray();
     // console.log(arr);
+    
     arr.then(function(arr) {
+        
         if(arr != undefined) {
             // console.log(arr);
             for(var i=0; i < arr.length; i++){
-                // console.log("Entered Loop");
-                var bre = document.createElement("br");
-                var button = document.createElement("button");
-                var searchSel = document.getElementById("searchSel");
-                // console.log(arr);
-                var Name = arr[i].FirstName + " " + arr[i].LastName;
-                Name = document.createTextNode(Name);
-                button.appendChild(Name);
-                button.id = 'Tutor'+i;
-                button.value = arr[i].email;
-                searchSel.appendChild(button);
-                searchSel.appendChild(bre); 
-                button.style.background="grey";
-                button.style.marginTop="20px";
-                button.style.width="100%";
-                button.style.border="2px solid 	#505050";
-                button.style.borderRadius="2px";
-                // console.log("end of itteration")
+                if(i < 10){
+                    // console.log("Entered Loop");
+                    
+                    var searchSel = document.getElementById("searchSel");
+                    var bre = document.createElement("br");
+                    var button = document.createElement("button");
+                    var Name = arr[i].FirstName + " " + arr[i].LastName;
+                    var email = arr[i].email;
+
+                    Name = document.createTextNode(Name);
+                    button.appendChild(Name);
+                    button.id = 'Tutor' + i;
+                    button.value = email;
+                    button.onclick = (function(email){
+                        return function(){
+                            redirectToTutorProfile(email);
+                        }
+                     })(email);
+                    searchSel.appendChild(button);
+                    searchSel.appendChild(bre); 
+                    console.log(email);
+                    
+                    button.style.background="grey";
+                    button.style.marginTop="20px";
+                    button.style.width="100%";
+                    button.style.border="2px solid 	#505050";
+                    button.style.borderRadius="2px";
+                    // console.log("end of itteration")
+                }
             }
             // console.log("After Loop")
         }
