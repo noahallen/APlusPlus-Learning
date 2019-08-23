@@ -11,6 +11,7 @@ function initialize(){
 }
 
 
+
 //Pushes a User's registration data to firebase
 function pushToFireStore(){
     
@@ -317,30 +318,16 @@ function populate(s1, s2){
 
 
 //function to take the tutors' times avilable and displays them as buttons
-function displayAvailableTime(email){
+//takes an array and display the times as buttons
+function displayAvailableTime(availTime){
+	var strs = "";
+	for (var i = 0; i < availTime.length; i++) {
+		strs += '<input type="button"  onclick=makeAppointment('+availTime[i]+')   value="' + availTime[i] + '" />';//need to pass in the availTime to the onclick function
+	}
+	$("#availTimeButtons").html(strs);
 
-
-	var db = firebase.firestore();
-    var docRef = db.collection("users").doc(email);
-
-	var availTime;
-    docRef.get().then(function(doc){
-        if (doc.exists) {
-            availTime = doc.data().AvailableTime;
-			console.log(availTime);
-			var strs = "";
-			for (var i = 0; i <availTime.length; i++) {
-				strs += '<input type="button"  value="' + availTime[i]+'" />';
-			}
-			$("#btns").html(strs);
-      }
-      else{
-          console.log("document doesn't exist");
-      }
-      }).catch(function(error) {
-        console.log("Error getting document:", error);
-      });
 }
+     
 
 //Store tutor's data and carries it onto tutor's profile page
 function parseURL() {
@@ -504,3 +491,35 @@ function displayPossibleTutors(){
         }
     });
 }
+
+//Push tutor's inputted available time to the tutor's firestore
+// function pushAvailTimeToFirestore(availTime){
+// 	var db = firebase.firestore();
+//     var user = firebase.auth().currentUser;
+// 	var email = user.email;
+// 	// console.log(db.user);
+//     db.collection("users").doc(email).set({
+//         AvailableTime: availTime
+// 	});
+// 	// Add availablt time to the user object
+// 	// write the whole user to firestore
+// }
+
+function DisplayButtonsAccept(PendingRequests){
+	var strs = "";
+
+	for (var i = 0; i < PendingRequests.length; i++) {
+		strs += '<tr>'+
+
+		'<td>'+PendingRequests[i]+'</td>'+
+		'<td><input onclick="Accpet('+PendingRequests[i]+')" type="button" value="accept"></td>'+
+		'<td><input onclick="Reject('+PendingRequests[i]+')" type="button" value="reject"></td>'+
+	'</tr>';
+
+	}
+
+	$("#requestList").html(strs);
+
+
+}
+
