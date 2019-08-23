@@ -200,9 +200,6 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-	// if(!user.isTutor){
-    //     removeSubjectsForStudents();
-    // }
     var currentUser = createUser(user);
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
@@ -216,17 +213,23 @@ function listUserInfo(user) {
             document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
             document.getElementById("availTimeDiv").innerHTML = user.AvailableTime;
-            document.getElementById("requestsDiv").innerHTML = user.PendingRequests;
+            // DisplayButtonsAccept(user.PendingRequests);
 		}
 		else{
             document.getElementById("isTutorDiv").innerHTML = "Student";
-            var x = document.getElementById("removeSubj");
+
+            var x = document.getElementById("removeSubj1");
             x.style.display = "none";
+            var y = document.getElementById("removeSubj2");
+            y.style.display = "none";
+            var z = document.getElementById("removeSubj3");
+            z.style.display = "none";
+            document.getElementById("prof-pg").style.marginLeft="30%";
            
 		}
 	}).catch(function() {
 		console.error('Failed to list user info')
-		logout();
+		// logout();
 	});
 }
 
@@ -345,13 +348,8 @@ function parseURL() {
 	listTutorInfo(data.email);
 }
 //Function direct user to the tutor's profile page when they click on the tutor's name + encode email stored in URL
-function redirectToTutorProfile(email){
-    location.href = "profileTutor.html?email=" + encodeURIComponent(email);
-}
-
-//helper function
 function displayTutorProfile(email){
-	redirectToTutorProfile(email);
+    location.href = "profileTutor.html?email=" + encodeURIComponent(email);
 }
 
 //create a tutor object based on email passed in
@@ -393,7 +391,8 @@ async function createTutor(email){
 //populates the tutor's info based on email passed in
 function listTutorInfo(email) {
     
-	var currentUser = createTutor(email);
+    var currentUser = createTutor(email);
+    document.getElementById("pub-prof-pg").style.marginLeft="30%";
 
 	currentUser.then(function(tutor){
         document.getElementById("fnameProf").innerHTML = tutor.fname + "'s Profile";
@@ -477,13 +476,11 @@ function displayPossibleTutors(){
                     button.value = email;
                     button.onclick = (function(email){
                         return function(){
-                            redirectToTutorProfile(email);
+                            displayTutorProfile(email);
                         }
                      })(email);
                     searchSel.appendChild(button);
-                    searchSel.appendChild(bre); 
-                    console.log(email);
-                    
+                    searchSel.appendChild(bre);                     
                     button.style.background="grey";
                     button.style.marginTop="20px";
                     button.style.width="100%";
@@ -497,42 +494,12 @@ function displayPossibleTutors(){
     });
 }
 
-//Push tutor's inputted available time to the tutor's firestore
-// function pushAvailTimeToFirestore(availTime){
-// 	var db = firebase.firestore();
-//     var user = firebase.auth().currentUser;
-// 	var email = user.email;
-// 	// console.log(db.user);
-//     db.collection("users").doc(email).set({
-//         AvailableTime: availTime
-// 	});
-// 	// Add availablt time to the user object
-// 	// write the whole user to firestore
-// }
-
-function DisplayButtonsAccept(PendingRequests){
-	var strs = "";
-
-	for (var i = 0; i < PendingRequests.length; i++) {
-		strs += '<tr>'+
-        '<td>'+PendingRequests[i].name+'</td>'+
-        '<td>'+PendingRequests[i].email+'</td>'+
-        '<td>'+PendingRequests[i].time+'</td>'+
-		'<td><input onclick="Accpet('+PendingRequests[i].name+')" type="button" value="accept"></td>'+
-		'<td><input onclick="Reject('+PendingRequests[i].name+')" type="button" value="reject"></td>'+
-	'</tr>';
-
-	}
-
-	$("#requestList").html(strs);
 
 
-}
-
+//*------------------------------ProfileTutor Page Code ------------------------------*/
 
 //Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
-function creaTimeChosenArray(time) {
-   
+async function creaTimeChosenArray(time) {
     //getting the tutor's email
     var url = document.location.href,
     params = url.split('?')[1].split('&'),
@@ -605,3 +572,35 @@ function creaTimeChosenArray(time) {
  
 }
 
+
+//Push tutor's inputted available time to the tutor's firestore
+// function pushAvailTimeToFirestore(availTime){
+// 	var db = firebase.firestore();
+//     var user = firebase.auth().currentUser;
+// 	var email = user.email;
+// 	// console.log(db.user);
+//     db.collection("users").doc(email).set({
+//         AvailableTime: availTime
+// 	});
+// 	// Add availablt time to the user object
+// 	// write the whole user to firestore
+// }
+
+
+
+//Function needs to be fixed based off of what the request object will look like
+// function DisplayButtonsAccept(PendingRequests){
+// 	var strs = "";
+
+// 	for (var i = 0; i < PendingRequests.length; i++) {
+// 		strs += '<tr>'+
+
+// 		'<td>'+"Student: "+ PendingRequests[i] +'</td>'+
+// 		'<td><input onclick="Accpet('+PendingRequests[i]+')" type="button" value="accept"></td>'+
+// 		'<td><input onclick="Reject('+PendingRequests[i]+')" type="button" value="reject"></td>'+
+// 	'</tr>';
+
+// 	}
+
+// 	$("#requestList").html(strs);
+// }
