@@ -200,7 +200,6 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-
     var currentUser = createUser(user);
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
@@ -218,6 +217,7 @@ function listUserInfo(user) {
 		}
 		else{
             document.getElementById("isTutorDiv").innerHTML = "Student";
+
             var x = document.getElementById("removeSubj1");
             x.style.display = "none";
             var y = document.getElementById("removeSubj2");
@@ -225,7 +225,6 @@ function listUserInfo(user) {
             var z = document.getElementById("removeSubj3");
             z.style.display = "none";
             document.getElementById("prof-pg").style.marginLeft="30%";
-            
            
 		}
 	}).catch(function() {
@@ -256,6 +255,8 @@ async function createUser(){
     var newUser;
     var user = firebase.auth().currentUser;
     var email = user.email;
+
+
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(email);
 
@@ -356,7 +357,10 @@ async function createTutor(email){
 
 	var tutor;
 	var db = firebase.firestore();
-	var docRef = db.collection("users").doc(email);
+    var docRef = db.collection("users").doc(email);
+    
+
+
 
     await docRef.get().then(function(doc){
         if (doc.exists) {
@@ -397,8 +401,6 @@ function listTutorInfo(email) {
 		document.getElementById("schoolDiv").innerHTML = tutor.school;
         document.getElementById("subjectDiv").innerHTML = tutor.Strengths;
         displayAvailableTime(doc.data().AvailableTime);
-        
-        
         
 
 	}).catch(function() {
@@ -478,9 +480,7 @@ function displayPossibleTutors(){
                         }
                      })(email);
                     searchSel.appendChild(button);
-                    searchSel.appendChild(bre); 
-                    // console.log(email);
-                    
+                    searchSel.appendChild(bre);                     
                     button.style.background="grey";
                     button.style.marginTop="20px";
                     button.style.width="100%";
@@ -500,7 +500,6 @@ function displayPossibleTutors(){
 
 //Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
 async function creaTimeChosenArray(time) {
-   
     //getting the tutor's email
     var url = document.location.href,
     params = url.split('?')[1].split('&'),
@@ -512,42 +511,67 @@ async function creaTimeChosenArray(time) {
     data.email = decodeURIComponent(data.email);
 
     //store tutor's email into teaEmail
+    //email that the request would be sent to
     var teaEmail = data.email;
+
+    // Request = {
+    //     Student's First and Last Name
+    //     Time
+    //     Student's Email
+    // }
+
 
 
     
-    createUser(firebase.auth().currentUser)
+    createUser()//firebase.auth().currentUser)
     .then(function(user) {
-        var email = user.email;
-        var name=user.fname;//user.FirstName + " " +user.LastName//user.Name;
-        var name2=user.lname;
-        console.log(user["PendingRequests"]);
-        console.log(user);
-        var db = firebase.firestore();
-        var requestSingle = {
-            FirstName:name,
-            LastName:name2,
-            email:email,
-            tutorTime:time
-        };
-      
-    var TTimeArr=user.PendingRequests;
-    console.log(TTimeArr);
-    TTimeArr.push(requestSingle);
+        if(user.email != teaEmail){
+            var currentTutor = createTutor(teaEmail);
+            currentTutor.then(function(tutor){
 
-        console.log(TTimeArr);
-        //db.collection("users").doc(teaEmail).update('PendingRequests',TTimeArr );
-        db.collection("users").doc(teaEmail).update({
-            PendingRequests: TTimeArr
-        })
+                var email = user.email;
+                var fname=user.fname;//user.FirstName + " " +user.LastName//user.Name;
+                var lname=user.lname;
 
-        alert("Request sent!");
-        //return TutorTimeArr;
 
-        
+                var TTimeArr = tutor.PendingRequests;
+
+                // console.log('User',user);
+                // console.log("PendingRequests",user["PendingRequests"]);
+
+
+    
+                
+                var requestSingle = {
+                    FirstName:fname,
+                    LastName:lname,
+                    email:email,
+                    tutorTime:time
+                };
+            
+
+                // var TTimeArr=user.PendingRequests;
+                // console.log('TTimeArr',TTimeArr);
+                TTimeArr.push(requestSingle);
+
+                // console.log("TTTimeArr",TTimeArr);
+                var db = firebase.firestore();
+                db.collection("users").doc(teaEmail).update({
+                    PendingRequests: TTimeArr
+                })
+                
+                alert("Request sent!");
+                //return TutorTimeArr;
+
+            });
+        }
+        else{
+            alert("Can't request your own time!");
+        }
     });
  
 }
+
 
 //Push tutor's inputted available time to the tutor's firestore
 // function pushAvailTimeToFirestore(availTime){
@@ -580,5 +604,3 @@ async function creaTimeChosenArray(time) {
 
 // 	$("#requestList").html(strs);
 // }
-
-
