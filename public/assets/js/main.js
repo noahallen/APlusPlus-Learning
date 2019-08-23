@@ -543,3 +543,5 @@ async function creaTimeChosenArray(time) {
     });
  
 }
+
+
