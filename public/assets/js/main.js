@@ -220,13 +220,19 @@ function listUserInfo(user) {
 		}
 		else{
             document.getElementById("isTutorDiv").innerHTML = "Student";
-            var x = document.getElementById("removeSubj");
+            var x = document.getElementById("removeSubj1");
             x.style.display = "none";
+            var y = document.getElementById("removeSubj2");
+            y.style.display = "none";
+            var z = document.getElementById("removeSubj3");
+            z.style.display = "none";
+            document.getElementById("prof-pg").style.marginLeft="30%";
+            
            
 		}
 	}).catch(function() {
 		console.error('Failed to list user info')
-		logout();
+		// logout();
 	});
 }
 
