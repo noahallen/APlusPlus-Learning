@@ -11,6 +11,7 @@ function initialize(){
 }
 
 
+
 //Pushes a User's registration data to firebase
 function pushToFireStore(){
     
@@ -199,9 +200,9 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-	if(!user.isTutor){
-        removeSubjectsForStudents();
-    }
+	// if(!user.isTutor){
+    //     removeSubjectsForStudents();
+    // }
     var currentUser = createUser(user);
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
@@ -219,6 +220,8 @@ function listUserInfo(user) {
 		}
 		else{
             document.getElementById("isTutorDiv").innerHTML = "Student";
+            var x = document.getElementById("removeSubj");
+            x.style.display = "none";
            
 		}
 	}).catch(function() {
@@ -315,30 +318,16 @@ function populate(s1, s2){
 
 
 //function to take the tutors' times avilable and displays them as buttons
-function displayAvailableTime(email){
+//takes an array and display the times as buttons
+function displayAvailableTime(availTime){
+	var strs = "";
+	for (var i = 0; i < availTime.length; i++) {
+		strs += '<input type="button"  onclick=makeAppointment('+availTime[i]+')   value="' + availTime[i] + '" />';//need to pass in the availTime to the onclick function
+	}
+	$("#availTimeButtons").html(strs);
 
-
-	var db = firebase.firestore();
-    var docRef = db.collection("users").doc(email);
-
-	var availTime;
-    docRef.get().then(function(doc){
-        if (doc.exists) {
-            availTime = doc.data().AvailableTime;
-			console.log(availTime);
-			var strs = "";
-			for (var i = 0; i <availTime.length; i++) {
-				strs += '<input type="button"  value="' + availTime[i]+'" />';
-			}
-			$("#btns").html(strs);
-      }
-      else{
-          console.log("document doesn't exist");
-      }
-      }).catch(function(error) {
-        console.log("Error getting document:", error);
-      });
 }
+     
 
 //Store tutor's data and carries it onto tutor's profile page
 function parseURL() {
@@ -408,6 +397,7 @@ function listTutorInfo(email) {
 		document.getElementById("schoolDiv").innerHTML = tutor.school;
         document.getElementById("subjectDiv").innerHTML = tutor.Strengths;
         displayAvailableTime(doc.data().AvailableTime);
+        
 
 	}).catch(function() {
 		console.log('Failed to list user info')
@@ -453,39 +443,83 @@ async function pullTutorArray(){
 }
 
 
-/*goes through each of the 5 tutor objects in the passed in array and displays them in the form of buttons*/
+/*goes through each of the 10 tutor objects in the passed in array and displays them in the form of buttons*/
 function displayPossibleTutors(){
+    var div = document.getElementById('searchSel');
+    while(div.firstChild){
+        div.removeChild(div.firstChild);
+    }
     var arr = pullTutorArray();
     // console.log(arr);
+    
     arr.then(function(arr) {
+        
         if(arr != undefined) {
             // console.log(arr);
             for(var i=0; i < arr.length; i++){
-                // console.log("Entered Loop");
-                var bre = document.createElement("br");
-                var button = document.createElement("button");
-                var searchSel = document.getElementById("searchSel");
-                // console.log(arr);
-                var Name = arr[i].FirstName + " " + arr[i].LastName;
-                Name = document.createTextNode(Name);
-                button.appendChild(Name);
-                button.id = 'Tutor'+i;
-                button.value = arr[i].email;
-                searchSel.appendChild(button);
-                searchSel.appendChild(bre); 
-                button.style.background="grey";
-                button.style.marginTop="20px";
-                button.style.width="100%";
-                button.style.border="2px solid 	#505050";
-                button.style.borderRadius="2px";
-                // console.log("end of itteration")
+                if(i < 10){
+                    // console.log("Entered Loop");
+                    
+                    var searchSel = document.getElementById("searchSel");
+                    var bre = document.createElement("br");
+                    var button = document.createElement("button");
+                    var Name = arr[i].FirstName + " " + arr[i].LastName;
+                    var email = arr[i].email;
+
+                    Name = document.createTextNode(Name);
+                    button.appendChild(Name);
+                    button.id = 'Tutor' + i;
+                    button.value = email;
+                    button.onclick = (function(email){
+                        return function(){
+                            redirectToTutorProfile(email);
+                        }
+                     })(email);
+                    searchSel.appendChild(button);
+                    searchSel.appendChild(bre); 
+                    console.log(email);
+                    
+                    button.style.background="grey";
+                    button.style.marginTop="20px";
+                    button.style.width="100%";
+                    button.style.border="2px solid 	#505050";
+                    button.style.borderRadius="2px";
+                    // console.log("end of itteration")
+                }
             }
             // console.log("After Loop")
         }
     });
 }
 
-function removeSubjectsForStudents() {
-    var x = document.getElementById("removeSubj");
-    x.style.display = "none";
+//Push tutor's inputted available time to the tutor's firestore
+// function pushAvailTimeToFirestore(availTime){
+// 	var db = firebase.firestore();
+//     var user = firebase.auth().currentUser;
+// 	var email = user.email;
+// 	// console.log(db.user);
+//     db.collection("users").doc(email).set({
+//         AvailableTime: availTime
+// 	});
+// 	// Add availablt time to the user object
+// 	// write the whole user to firestore
+// }
+
+function DisplayButtonsAccept(PendingRequests){
+	var strs = "";
+
+	for (var i = 0; i < PendingRequests.length; i++) {
+		strs += '<tr>'+
+
+		'<td>'+PendingRequests[i]+'</td>'+
+		'<td><input onclick="Accpet('+PendingRequests[i]+')" type="button" value="accept"></td>'+
+		'<td><input onclick="Reject('+PendingRequests[i]+')" type="button" value="reject"></td>'+
+	'</tr>';
+
+	}
+
+	$("#requestList").html(strs);
+
+
 }
+
