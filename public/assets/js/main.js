@@ -494,34 +494,52 @@ function removeSubjectsForStudents() {
 //*------------------------------ProfileTutor Page Code ------------------------------*/
 
 //Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
-async function creaTimeChosenArray(time,teaEmail) {
+async function creaTimeChosenArray(time) {
    
-    var teaEmail = "spate125@ucr.edu";//await parseURL();//
+    //getting the tutor's email
+    var url = document.location.href,
+    params = url.split('?')[1].split('&'),
+    data = {}, tmp;
+    for (var i = 0; i < params.length; i++) {
+     tmp = params[i].split('=');
+     data[tmp[0]] = tmp[1];
+    }
+    data.email = decodeURIComponent(data.email);
+
+    //store tutor's email into teaEmail
+    var teaEmail = data.email;
+
+//"spate125@ucr.edu";//await parseURL();//
     
     createUser(firebase.auth().currentUser)
     .then(function(user) {
         var email = user.email;
-        var name="HONGTAO WU";//user.FirstName + " " +user.LastName//user.Name;
-        var time = "Aug 22 10pm";
-
+        var name=user.fname;//user.FirstName + " " +user.LastName//user.Name;
+        var name2=user.lname;
+        console.log(user["PendingRequests"]);
     console.log(user);
         var db = firebase.firestore();
         var requestSingle = {
             FirstName:name,
+            LastName:name2,
             email:email,
             tutorTime:time
         };
-    var TutorTimeArr=user.PendingRequests;
-    TutorTimeArr.push(requestSingle);
+      
+    var TTimeArr=user.PendingRequests;
+    console.log(TTimeArr);
+    TTimeArr.push(requestSingle);
 
-        console.log(TutorTimeArr);
-        //db.collection("users").doc(teaEmail).update('PendingRequests',TutorTimeArr );
+        console.log(TTimeArr);
+        //db.collection("users").doc(teaEmail).update('PendingRequests',TTimeArr );
         db.collection("users").doc(teaEmail).update({
-            PendingRequests: TutorTimeArr
+            PendingRequests: TTimeArr
         })
-        return TutorTimeArr;
 
         alert("Request sent!");
+        //return TutorTimeArr;
+
+        
     });
  
 }
