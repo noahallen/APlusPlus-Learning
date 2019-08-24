@@ -3890,14 +3890,17 @@
 		.profile-requests{
 			float: left;
 			text-align:center;
-			text-decoration:underline;
-			text-decoration-color:red;
 			border:double;
 			border-color:red;
 			width:25%;
 			margin-left:1%;
 			margin-right: 1%;
 			margin-top:2%;
+			
+		}
+		.profile-requests h3{
+			text-decoration:underline;
+			text-decoration-color:red;
 		}
 		.profile-times{
 			float: left;
@@ -3910,6 +3913,7 @@
 			margin-left:4%;
 			margin-right: 1%;
 			margin-top:2%;
+			height:auto;
 		}
 
 		.profile-header{

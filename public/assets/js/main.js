@@ -213,7 +213,7 @@ function listUserInfo(user) {
             document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
             document.getElementById("availTimeDiv").innerHTML = user.AvailableTime;
-            // DisplayButtonsAccept(user.PendingRequests);
+            listRequestsOnTutorsProfile(user.PendingRequests);
 		}
 		else{
             document.getElementById("isTutorDiv").innerHTML = "Student";
@@ -498,6 +498,68 @@ function displayPossibleTutors(){
 
 //*------------------------------ProfileTutor Page Code ------------------------------*/
 
+function listRequestsOnTutorsProfile(pendReqArr){
+    console.log(pendReqArr);
+    // for(var i = 0; i < 50;i++){    
+    //     var node = document.createElement("LI");                 // Create a <li> node
+    //     var textnode = document.createTextNode("Water");         // Create a text node
+    //     node.appendChild(textnode);                              // Append the text to <li>
+    //     document.getElementById("tut-prof-req").appendChild(node);
+    // }
+    if(pendReqArr != undefined){
+        // var toAdd = document.createDocumentFragment();
+        for(var i = 0; i < pendReqArr.length;i++){
+            console.log("entered loop");
+            var name = pendReqArr[i].FirstName + " " + pendReqArr[i].LastName;
+            var email = pendReqArr[i].Email;
+            var time = pendReqArr[i].TutorTime;
+            var msg = name + " (" + email + ") would like to request you for: " + time;
+            console.log(msg);
+            var rejButton = document.createElement("button");
+            var accButton = document.createElement("button");
+            var br = document.createElement("br");
+
+            var newDiv = document.createElement('div');
+            var displmsg = document.createTextNode(msg);
+            newDiv.id = 'request'+i;
+
+            newDiv.appendChild(displmsg);
+            newDiv.appendChild(br);
+            newDiv.appendChild(accButton);
+            newDiv.appendChild(rejButton);
+
+            newDiv.style.border="1px solid black";
+            newDiv.style.marginLeft="1%";
+            newDiv.style.marginRight="1%";
+            newDiv.style.marginTop="5%";
+            newDiv.style.background="#F5F5F5";
+
+            var reject = document.createTextNode("Reject");
+            rejButton.appendChild(reject);
+            rejButton.style.background="red";
+            rejButton.style.width="45%";
+            // rejButton.style.height="75%";
+            rejButton.style.marginLeft="1%";
+            rejButton.style.fontSize="50%";
+            rejButton.style.marginBottom="2%";
+            
+            var Accept = document.createTextNode("Accept");
+            accButton.appendChild(Accept);
+            accButton.style.background="green";
+            accButton.style.width="45%";
+            // rejButton.style.height="75%";
+            accButton.style.fontSize="50%";
+
+            document.getElementById("tut-prof-req").appendChild(newDiv);
+
+            
+
+            console.log("finish loop"); 
+           
+        }
+    }
+}
+
 //Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
 async function creaTimeChosenArray(time) {
     //getting the tutor's email
@@ -604,3 +666,4 @@ async function creaTimeChosenArray(time) {
 
 // 	$("#requestList").html(strs);
 // }
+
