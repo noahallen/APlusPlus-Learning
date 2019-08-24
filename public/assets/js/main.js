@@ -509,12 +509,13 @@ function listRequestsOnTutorsProfile(pendReqArr){
     if(pendReqArr != undefined){
         // var toAdd = document.createDocumentFragment();
         for(var i = 0; i < pendReqArr.length;i++){
-            console.log("entered loop");
+            var req = pendReqArr[i];
+            // console.log("entered loop");
             var name = pendReqArr[i].FirstName + " " + pendReqArr[i].LastName;
             var email = pendReqArr[i].Email;
             var time = pendReqArr[i].TutorTime;
             var msg = name + " (" + email + ") would like to request you for: " + time;
-            console.log(msg);
+            // console.log(msg);
             var rejButton = document.createElement("button");
             var accButton = document.createElement("button");
             var br = document.createElement("br");
@@ -542,6 +543,13 @@ function listRequestsOnTutorsProfile(pendReqArr){
             rejButton.style.marginLeft="1%";
             rejButton.style.fontSize="50%";
             rejButton.style.marginBottom="2%";
+
+           
+            rejButton.onclick = (function(req){
+                return function(){
+                    rejectRequest(req);
+                }
+             })(req);
             
             var Accept = document.createTextNode("Accept");
             accButton.appendChild(Accept);
@@ -550,11 +558,18 @@ function listRequestsOnTutorsProfile(pendReqArr){
             // rejButton.style.height="75%";
             accButton.style.fontSize="50%";
 
+            
+            accButton.onclick = (function(req){
+                return function(){
+                    rejectRequest(req);
+                }
+             })(req);
+
             document.getElementById("tut-prof-req").appendChild(newDiv);
 
             
 
-            console.log("finish loop"); 
+            // console.log("finish loop"); 
            
         }
     }
