@@ -500,17 +500,8 @@ function displayPossibleTutors(){
 
 
 //Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
-function creaTimeChosenArray(time) {
+async function creaTimeChosenArray(time) {
    
-    //getting the tutor's email
-    var url = document.location.href,
-    params = url.split('?')[1].split('&'),
-    data = {}, tmp;
-    for (var i = 0; i < params.length; i++) {
-     tmp = params[i].split('=');
-     data[tmp[0]] = tmp[1];
-    }
-    data.email = decodeURIComponent(data.email);
 
     //store tutor's email into teaEmail
     //email that the request would be sent to
