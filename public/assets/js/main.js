@@ -499,78 +499,78 @@ function displayPossibleTutors(){
 //*------------------------------ProfileTutor Page Code ------------------------------*/
 
 //Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
-async function creaTimeChosenArray(time) {
-    //getting the tutor's email
-    var url = document.location.href,
-    params = url.split('?')[1].split('&'),
-    data = {}, tmp;
-    for (var i = 0; i < params.length; i++) {
-     tmp = params[i].split('=');
-     data[tmp[0]] = tmp[1];
-    }
-    data.email = decodeURIComponent(data.email);
+// async function creaTimeChosenArray(time) {
+//     //getting the tutor's email
+//     var url = document.location.href,
+//     params = url.split('?')[1].split('&'),
+//     data = {}, tmp;
+//     for (var i = 0; i < params.length; i++) {
+//      tmp = params[i].split('=');
+//      data[tmp[0]] = tmp[1];
+//     }
+//     data.email = decodeURIComponent(data.email);
 
-    //store tutor's email into teaEmail
-    //email that the request would be sent to
-    var teaEmail = data.email;
+//     //store tutor's email into teaEmail
+//     //email that the request would be sent to
+//     var teaEmail = data.email;
 
-    // Request = {
-    //     Student's First and Last Name
-    //     Time
-    //     Student's Email
-    // }
+//     // Request = {
+//     //     Student's First and Last Name
+//     //     Time
+//     //     Student's Email
+//     // }
 
 
 
     
-    createUser()//firebase.auth().currentUser)
-    .then(function(user) {
-        if(user.email != teaEmail){
-            var currentTutor = createTutor(teaEmail);
-            currentTutor.then(function(tutor){
+//     createUser()//firebase.auth().currentUser)
+//     .then(function(user) {
+//         if(user.email != teaEmail){
+//             var currentTutor = createTutor(teaEmail);
+//             currentTutor.then(function(tutor){
 
-                var email = user.email;
-                var fname=user.fname;//user.FirstName + " " +user.LastName//user.Name;
-                var lname=user.lname;
+//                 var email = user.email;
+//                 var fname=user.fname;//user.FirstName + " " +user.LastName//user.Name;
+//                 var lname=user.lname;
 
 
-                var TTimeArr = tutor.PendingRequests;
+//                 var TTimeArr = tutor.PendingRequests;
 
-                // console.log('User',user);
-                // console.log("PendingRequests",user["PendingRequests"]);
+//                 // console.log('User',user);
+//                 // console.log("PendingRequests",user["PendingRequests"]);
 
 
     
                 
-                var requestSingle = {
-                    FirstName:fname,
-                    LastName:lname,
-                    email:email,
-                    tutorTime:time
-                };
+//                 var requestSingle = {
+//                     FirstName:fname,
+//                     LastName:lname,
+//                     email:email,
+//                     tutorTime:time
+//                 };
             
 
-                // var TTimeArr=user.PendingRequests;
-                // console.log('TTimeArr',TTimeArr);
-                TTimeArr.push(requestSingle);
+//                 // var TTimeArr=user.PendingRequests;
+//                 // console.log('TTimeArr',TTimeArr);
+//                 TTimeArr.push(requestSingle);
 
-                // console.log("TTTimeArr",TTimeArr);
-                var db = firebase.firestore();
-                db.collection("users").doc(teaEmail).update({
-                    PendingRequests: TTimeArr
-                })
+//                 // console.log("TTTimeArr",TTimeArr);
+//                 var db = firebase.firestore();
+//                 db.collection("users").doc(teaEmail).update({
+//                     PendingRequests: TTimeArr
+//                 })
                 
-                alert("Request sent!");
-                //return TutorTimeArr;
+//                 alert("Request sent!");
+//                 //return TutorTimeArr;
 
-            });
-        }
-        else{
-            alert("Can't request your own time!");
-        }
-    });
+//             });
+//         }
+//         else{
+//             alert("Can't request your own time!");
+//         }
+//     });
  
-}
+// }
 
 
 //Push tutor's inputted available time to the tutor's firestore
@@ -586,37 +586,28 @@ async function creaTimeChosenArray(time) {
 // 	// write the whole user to firestore
 // }
 
-<<<<<<< HEAD
+
+//Function needs to be fixed based off of what the request object will look like
 function DisplayButtonsAccept(PendingRequests){
 	var strs = "";
 
 	for (var i = 0; i < PendingRequests.length; i++) {
-		strs += '<tr>'+
-        '<td>'+PendingRequests[i].name+'</td>'+
-        '<td>'+PendingRequests[i].email+'</td>'+
-        '<td>'+PendingRequests[i].time+'</td>'+
-		'<td><input onclick="Accpet('+PendingRequests[i].name+')" type="button" value="accept"></td>'+
-		'<td><input onclick="Reject('+PendingRequests[i].name+')" type="button" value="reject"></td>'+
-	'</tr>';
-=======
+        console.log(PendingRequests[i]);
+		strs+='<div class="req">'+
+        '<span>'+PendingRequests[i].FirstName+'</span>'+
+        '<span>'+PendingRequests[i].LastName+'</span>'+
+        '<span>'+PendingRequests[i].Email+'</span>'+
+        '<span>'+PendingRequests[i].TutorTime+'</span>'+
+        '<br/>'+
+        '<input type="button" onclick="acceptRequest('+PendingRequests[i]+')" value="Accept">'+
+        '<input type="button" onclick="rejectRequest('+PendingRequests[i]+')" value="Reject">'+
+    '<hr>'+
+    '</div>';
 
->>>>>>> cdafd9097da632c9ab497b4754916d55209af401
+    }
+$("#requestList").html(strs);
+}
 
-//Function needs to be fixed based off of what the request object will look like
-// function DisplayButtonsAccept(PendingRequests){
-// 	var strs = "";
-
-// 	for (var i = 0; i < PendingRequests.length; i++) {
-// 		strs += '<tr>'+
-
-// 		'<td>'+"Student: "+ PendingRequests[i] +'</td>'+
-// 		'<td><input onclick="Accpet('+PendingRequests[i]+')" type="button" value="accept"></td>'+
-// 		'<td><input onclick="Reject('+PendingRequests[i]+')" type="button" value="reject"></td>'+
-// 	'</tr>';
-
-// 	}
-
-<<<<<<< HEAD
 
 //Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
 function creaTimeChosenArray(time) {
@@ -640,39 +631,31 @@ function creaTimeChosenArray(time) {
     //     Time
     //     Student's Email
     // }
-
-
-
-    
     createUser()//firebase.auth().currentUser)
     .then(function(user) {
         if(user.email != teaEmail){
             var currentTutor = createTutor(teaEmail);
             currentTutor.then(function(tutor){
-
                 var email = user.email;
                 var fname=user.fname;//user.FirstName + " " +user.LastName//user.Name;
                 var lname=user.lname;
-
-
                 var TTimeArr = tutor.PendingRequests;
-
                 // console.log('User',user);
-                // console.log("PendingRequests",user["PendingRequests"]);
-
-
-    
-                
+                // console.log("PendingRequests",user["PendingRequests"]);                
                 var requestSingle = {
                     FirstName:fname,
                     LastName:lname,
-                    email:email,
-                    tutorTime:time
+                    Email:email,
+                    TutorTime:time
                 };
-            
-
                 // var TTimeArr=user.PendingRequests;
                 // console.log('TTimeArr',TTimeArr);
+                for (var i = 0; i < TTimeArr.length; i++) {
+                    if (TTimeArr[i].FirstName == fname && TTimeArr[i].LastName == lname && TTimeArr[i].Email == email && TTimeArr[i].TutorTime == time) {
+                        alert("Request already exist!");
+                        return;
+                    }
+                }
                 TTimeArr.push(requestSingle);
 
                 // console.log("TTTimeArr",TTimeArr);
@@ -693,7 +676,67 @@ function creaTimeChosenArray(time) {
  
 }
 
-=======
-// 	$("#requestList").html(strs);
+
+/*
+ *Accept Button* Add a function which removes a pending request from
+ tutor's firebase (such as when tutor accept student's A tutoring time,
+ Student B who has the same tutoring time request should be removed
+ from tutor's firebase "Also that request should be removed from student B's
+ pending request in the future functionality")
+*/
+
+// function acceptRequest(req){
+
+//  //getting the tutor's email
+//  createUser()//firebase.auth().currentUser)
+//  .then(function (user) {
+//         var AcceptedArr = user.AcceptedRequests;
+//     var acceptObj={
+//     FirstName:req.FirstName,
+//     LastName:req.LastName,
+//     Email:req.Email,
+//     // ReservedTime:req.TutorTime
+
+//    };
+//    AcceptedArr.push(acceptObj);
+//      var db = firebase.firestore();
+//      db.collection("users").doc(user.email).update({
+//          AcceptedRequests: newTimes
+//      })
+//  });
+
+// };
+
+
+/*
+ *Reject Button* Create a function that deletes a specific available time 
+ from tutor's own firestore when it is called (such as when tutor accept 
+ student's tutoring request or "when tutor delete his/her own time 
+ in the future functionality" )
+*/
+
+// function rejectRequest(req){
+//  //getting the tutor's email
+//  createUser()//firebase.auth().currentUser)
+//  .then(function (user) {
+//      var TTimeArr = user.PendingRequests;
+//      var newTimes = [];
+//      for (var i = 0; i < TTimeArr.length; i++) {
+//          if (TTimeArr[i] == req) {
+//              continue;
+//          }
+//          newTimes.push(TTimeArr[i]);
+//      }
+//      var db = firebase.firestore();
+//      db.collection("users").doc(user.email).update({
+//          PendingRequests: newTimes
+//      })
+//  });
+
 // }
->>>>>>> cdafd9097da632c9ab497b4754916d55209af401
+
+// function  (){	
+//     var user=firebase.auth().currentUser;
+//    DisplayButtonsAccept(user.PendingRequests);				
+   
+//    })
