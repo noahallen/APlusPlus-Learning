@@ -343,9 +343,8 @@ function parseURL() {
          tmp = params[i].split('=');
          data[tmp[0]] = tmp[1];
 	}
-	data.email = decodeURIComponent(data.email);
-	
-	listTutorInfo(data.email);
+	return decodeURIComponent(data.email);
+	// listTutorInfo(data.email);
 }
 //Function direct user to the tutor's profile page when they click on the tutor's name + encode email stored in URL
 function displayTutorProfile(email){
@@ -389,8 +388,9 @@ async function createTutor(email){
 };
 
 //populates the tutor's info based on email passed in
-function listTutorInfo(email) {
-    
+function listTutorInfo() {
+    var email = parseURL();
+
     var currentUser = createTutor(email);
     document.getElementById("pub-prof-pg").style.marginLeft="30%";
 
@@ -496,12 +496,12 @@ function displayPossibleTutors(){
 
 
 
-//*------------------------------ProfileTutor Page Code ------------------------------*/
+//*------------------------------Public Tutor Profile Page Code ------------------------------*/
 
 
 //Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
 async function creaTimeChosenArray(time) {
-   
+
     var teaEmail = parseURL();
 
     createUser()
