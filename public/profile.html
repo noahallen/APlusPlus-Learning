@@ -49,7 +49,25 @@
 					<div class="profile-times">
 							<h3>Available Times</h3>
 							<div id="availTimeDiv"></div>
-							<br>
+							<form id = "timeInput">
+								Add a session:
+								<input type = "datetime-local" id = "send" value="2000-01-01T00:00:00">
+								<button type="button" onclick = "pushAvailableTime()">Add!</button>
+								<script>
+									var today = new Date();
+									var dd = today.getDate();
+									var mm = today.getMonth()+1; //January is 0!
+									var yyyy = today.getFullYear();
+
+									if(dd<10){
+											dd='0'+dd
+										} 
+										if(mm<10){
+											mm='0'+mm
+										} 
+									today = yyyy+'-'+mm+'-'+dd+"T00:00:00";
+									document.getElementById("send").setAttribute("value", today);
+								</script>
 					</div>
 				</div>
 					<div class="profile-page" id="prof-pg">
@@ -96,6 +114,8 @@
 					</div>
 				</div>
 			</div>
+			
+			
 		</div>
 		
 		
