@@ -51,7 +51,7 @@
 							<div id="availTimeDiv"></div>
 							<form id = "timeInput">
 								Add a session:
-								<input type = "datetime-local" id = "send" value="2000-01-01T00:00:00">
+								<input type = "datetime-local" id = "tutorInputDate" value="2000-01-01T00:00:00" step="1800" required>
 								<button type="button" onclick = "pushAvailableTime()">Add!</button>
 								<script>
 									var today = new Date();
@@ -66,7 +66,11 @@
 											mm='0'+mm
 										} 
 									today = yyyy+'-'+mm+'-'+dd+"T00:00:00";
-									document.getElementById("send").setAttribute("value", today);
+									// maxDate = yyyy+'-'+(mm+1)+'-'+dd+"T00:00:00";
+									// minDate = today;
+									document.getElementById("tutorInputDate").setAttribute("value", today);
+									// document.getElementById("tutorInputDate").setAttribute("max", maxDate);
+									// document.getElementById("tutorInputDate").setAttribute("min", minDate);
 								</script>
 					</div>
 				</div>

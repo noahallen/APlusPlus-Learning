@@ -289,6 +289,31 @@ async function createUser(){
 };
 
 
+function pushAvailableTime(){
+    var str = document.getElementById("tutorInputDate").value;
+    var d = new Date(str);
+    // var n = d.toString();
+    // year
+    let yyyy = '' + d.getFullYear();
+    // month
+    let mm = ('0' + (d.getMonth() + 1));  // prepend 0 // +1 is because Jan is 0
+    mm = mm.substr(mm.length - 2);        // take last 2 chars
+    // day
+    let dd = ('0' + d.getDate());         // prepend 0
+    dd = dd.substr(dd.length - 2);        // take last 2 chars
+    let hh = "" + d.getHours();
+    if (hh <11){
+        hh = '0' + hh;
+    }
+    let min = "" + d.getMinutes();
+    if (min === '0'){
+        min = "00";
+    }
+
+    var dateAndTime = yyyy + " " + mm + " " + dd + " " + hh + ":" + min;
+    console.log(dateAndTime);
+    // console.log(n);
+}
 
 
 /*------------------------------Search Page Code ------------------------------*/
@@ -525,22 +550,3 @@ function displayPossibleTutors(){
 // 	$("#requestList").html(strs);
 // }
 
-function pushAvailableTime(){
-    var str = document.getElementById("send").value;
-    var d = new Date(str);
-    // var n = d.toString();
-    // year
-    let yyyy = '' + d.getFullYear();
-    // month
-    let mm = ('0' + (d.getMonth() + 1));  // prepend 0 // +1 is because Jan is 0
-    mm = mm.substr(mm.length - 2);        // take last 2 chars
-    // day
-    let dd = ('0' + d.getDate());         // prepend 0
-    dd = dd.substr(dd.length - 2);        // take last 2 chars
-    let hh = "" + d.getHours();
-    let min = "" + d.getMinutes();
-
-    var dateAndTime = yyyy + " " + mm + " " + dd + " " + hh + ":" + min;
-    console.log(dateAndTime);
-    // console.log(n);
-}
