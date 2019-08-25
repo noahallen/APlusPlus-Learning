@@ -349,8 +349,7 @@ function displayAvailableTime(availTime){
      availTimeButtons.appendChild(button);
      availTimeButtons.appendChild(bre); 
     }
-
-}
+// }
      
 
 //Store tutor's data and carries it onto tutor's profile page
@@ -519,13 +518,7 @@ function displayPossibleTutors(){
 
 
 function listRequestsOnTutorsProfile(pendReqArr){
-    console.log(pendReqArr);
-    // for(var i = 0; i < 50;i++){    
-    //     var node = document.createElement("LI");                 // Create a <li> node
-    //     var textnode = document.createTextNode("Water");         // Create a text node
-    //     node.appendChild(textnode);                              // Append the text to <li>
-    //     document.getElementById("tut-prof-req").appendChild(node);
-    // }
+
     if(pendReqArr != undefined){
         // var toAdd = document.createDocumentFragment();
         for(var i = 0; i < pendReqArr.length;i++){
@@ -567,7 +560,7 @@ function listRequestsOnTutorsProfile(pendReqArr){
            
             rejButton.onclick = (function(req){
                 return function(){
-                    rejectRequest(req);
+                    rejectReq(req);
                 }
              })(req);
             
@@ -581,16 +574,11 @@ function listRequestsOnTutorsProfile(pendReqArr){
             
             accButton.onclick = (function(req){
                 return function(){
-                    rejectRequest(req);
+                    acceptReq(req);
                 }
              })(req);
 
             document.getElementById("tut-prof-req").appendChild(newDiv);
-
-            
-
-            // console.log("finish loop"); 
-           
         }
     }
 }
@@ -679,6 +667,28 @@ async function creaTimeChosenArray(time) {
 
 
 
+function acceptReq(req){
+    createUser().then(function(tutor){
+        var db = firebase.firestore();
+        db.collection("users").doc(tutor.email).update({
+            PendingRequests: firebase.firestore.FieldValue.arrayRemove(req),
+            AvailableTime: firebase.firestore.FieldValue.arrayRemove(req.TutorTime)
+        });
+    });
+    alert("Accepted Request");
+}
+
+
+
+function rejectReq(req){
+    createUser().then(function(tutor){
+        var db = firebase.firestore();
+        db.collection("users").doc(tutor.email).update({
+            PendingRequests: firebase.firestore.FieldValue.arrayRemove(req)
+        });
+    });
+    alert("Rejected Request");
+}
 
 // function acceptRequest(req){
 
