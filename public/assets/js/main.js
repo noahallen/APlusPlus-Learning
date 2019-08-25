@@ -288,6 +288,67 @@ async function createUser(){
 };
 
 
+function changeDatetimeFormat(){
+    var str = document.getElementById("tutorInputDate").value;
+    var d = new Date(str);
+    // var n = d.toString();
+    // year
+    let yyyy = '' + d.getFullYear();
+    // month
+    let mm = ('0' + (d.getMonth() + 1));  // prepend 0 // +1 is because Jan is 0
+    mm = mm.substr(mm.length - 2);        // take last 2 chars
+    if ( mm == 01){
+        mm = "Jan";
+    }
+    else if ( mm == 02){
+        mm = "Feb";
+    }
+    else if ( mm == 03){
+        mm = "Mar";
+    }
+    else if ( mm == 04){
+        mm = "Apr";
+    }
+    else if ( mm == 05){
+        mm = "May";
+    }
+    else if ( mm == 06){
+        mm = "Jun";
+    }
+    else if ( mm == 07){
+        mm = "Jul";
+    }
+    else if ( mm == 08){
+        mm = "Aug";
+    }
+    else if ( mm == 09){
+        mm = "Sep";
+    }
+    else if ( mm == 10){
+        mm = "Oct";
+    }
+    else if ( mm == 11){
+        mm = "Nov";
+    }
+    else {
+        mm = "Dec";
+    }
+    // day
+    let dd = ('0' + d.getDate());         // prepend 0
+    dd = dd.substr(dd.length - 2);        // take last 2 chars
+    let hh = "" + d.getHours();
+    if (hh <11){
+        hh = '0' + hh;
+    }
+    let min = "" + d.getMinutes();
+    if (min === '0'){
+        min = "00";
+    }
+
+    var dateAndTime = mm + " " + dd + "," + yyyy + ' ' + hh + ":" + min;
+    console.log(dateAndTime);
+    // console.log(n);
+}
 
 
 /*------------------------------Search Page Code ------------------------------*/
