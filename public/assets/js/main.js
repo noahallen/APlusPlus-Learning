@@ -196,7 +196,35 @@ async function getUser(callback) {
 		});
 	}
 };
-	  
+      
+
+function listAvailTime(arr){
+    if(arr != undefined){
+        // var toAdd = document.createDocumentFragment();
+        for(var i = 0; i < arr.length;i++){
+            
+            
+            var msg = arr[i];
+            // console.log(msg);
+            var br = document.createElement("br");
+
+            var newDiv = document.createElement('div');
+            var displmsg = document.createTextNode(msg);
+
+            newDiv.appendChild(displmsg);
+            newDiv.appendChild(br);
+
+            newDiv.style.border="1px solid black";
+            newDiv.style.marginLeft="1%";
+            newDiv.style.marginRight="1%";
+            newDiv.style.marginTop="5%";
+            newDiv.style.background="#F5F5F5";
+
+
+            document.getElementById("availTimeDiv").appendChild(newDiv);
+        }
+    }
+}
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
@@ -212,7 +240,8 @@ function listUserInfo(user) {
 		if (user.isTutor){
             document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
-            document.getElementById("availTimeDiv").innerHTML = user.AvailableTime;
+            // document.getElementById("availTimeDiv").innerHTML = user.AvailableTime;
+            listAvailTime(user.AvailableTime);
             listRequestsOnTutorsProfile(user.PendingRequests);
 		}
 		else{
@@ -345,8 +374,8 @@ function changeDatetimeFormat(){
         min = "00";
     }
 
-    var dateAndTime = mm + " " + dd + "," + yyyy + ' ' + hh + ":" + min;
-    console.log(dateAndTime);
+
+    var dateAndTime = mm + " " + dd + "," + yyyy + " | " + hh + ":" + min;
     pushAvailTimeToFirestore(dateAndTime);
 }
 
@@ -400,7 +429,6 @@ function populate(s1, s2){
 		s2.options.add(newOption);
 	}
 }
-
 
 
 //function to take the tutors' times avilable and displays them as buttons
@@ -464,10 +492,13 @@ function parseURL() {
 	return decodeURIComponent(data.email);
 	// listTutorInfo(data.email);
 }
+
+
 //Function direct user to the tutor's profile page when they click on the tutor's name + encode email stored in URL
 function displayTutorProfile(email){
     location.href = "profileTutor.html?email=" + encodeURIComponent(email);
 }
+
 
 //create a tutor object based on email passed in
 async function createTutor(email){
@@ -504,6 +535,7 @@ async function createTutor(email){
 	);
     return newTutor;
 };
+
 
 //populates the tutor's info based on email passed in
 function listTutorInfo() {
@@ -666,7 +698,7 @@ function listRequestsOnTutorsProfile(pendReqArr){
             
             var Accept = document.createTextNode("Accept");
             accButton.appendChild(Accept);
-            accButton.style.background="green";
+            accButton.style.background="limegreen";
             accButton.style.width="45%";
             // rejButton.style.height="75%";
             accButton.style.fontSize="50%";
@@ -727,45 +759,21 @@ async function creaTimeChosenArray(time) {
 }
 
 
-
 //Push tutor's inputted available time to the tutor's firestore
 function pushAvailTimeToFirestore(availTime){
-	var db = firebase.firestore();
-    var user = firebase.auth().currentUser;
-    var email = user.email;
-    // var arrTime=user.AvailableTime;
-    // arrTime.push(availTime);
-	// console.log(db.user);
-    db.collection("users").doc(email).update({
-        AvailableTime: firebase.firestore.FieldValue.arrayUnion(availTime)
-    });
-    
+    if(availTime.includes("NaN")){
+        alert("Please Enter a Valid Date!");
+    }
+    else{
+        var db = firebase.firestore();
+        var user = firebase.auth().currentUser;
+        var email = user.email;
+        db.collection("users").doc(email).update({
+            AvailableTime: firebase.firestore.FieldValue.arrayUnion(availTime)
+        });
+        alert("Time added!");
+    }
 }
-
-
-//Function needs to be fixed based off of what the request object will look like
-// function DisplayButtonsAccept(PendingRequests){
-// 	var strs = "";
-
-// 	for (var i = 0; i < PendingRequests.length; i++) {
-//         console.log(PendingRequests[i]);
-// 		strs+='<div class="req">'+
-//         '<span>'+PendingRequests[i].FirstName+'</span>'+
-//         '<span>'+PendingRequests[i].LastName+'</span>'+
-//         '<span>'+PendingRequests[i].Email+'</span>'+
-//         '<span>'+PendingRequests[i].TutorTime+'</span>'+
-//         '<br/>'+
-//         '<input type="button" onclick="acceptRequest('+PendingRequests[i]+')" value="Accept">'+
-//         '<input type="button" onclick="rejectRequest('+PendingRequests[i]+')" value="Reject">'+
-//     '<hr>'+
-//     '</div>';
-
-//     }
-// $("#requestList").html(strs);
-// }
-
-
-
 
 
 function acceptReq(req){
@@ -790,6 +798,29 @@ function rejectReq(req){
     });
     alert("Rejected Request");
 }
+
+
+// Function needs to be fixed based off of what the request object will look like
+// function DisplayButtonsAccept(PendingRequests){
+// 	var strs = "";
+
+// 	for (var i = 0; i < PendingRequests.length; i++) {
+//         console.log(PendingRequests[i]);
+// 		strs+='<div class="req">'+
+//         '<span>'+PendingRequests[i].FirstName+'</span>'+
+//         '<span>'+PendingRequests[i].LastName+'</span>'+
+//         '<span>'+PendingRequests[i].Email+'</span>'+
+//         '<span>'+PendingRequests[i].TutorTime+'</span>'+
+//         '<br/>'+
+//         '<input type="button" onclick="acceptRequest('+PendingRequests[i]+')" value="Accept">'+
+//         '<input type="button" onclick="rejectRequest('+PendingRequests[i]+')" value="Reject">'+
+//     '<hr>'+
+//     '</div>';
+
+//     }
+// $("#requestList").html(strs);
+// }
+
 
 
 
