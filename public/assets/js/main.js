@@ -346,8 +346,7 @@ function changeDatetimeFormat(){
     }
 
     var dateAndTime = mm + " " + dd + "," + yyyy + ' ' + hh + ":" + min;
-    console.log(dateAndTime);
-    // console.log(n);
+    return dateAndTime;
 }
 
 
@@ -386,12 +385,7 @@ function populate(s1, s2){
 //function to take the tutors' times avilable and displays them as buttons
 //takes an array and display the times as buttons
 function displayAvailableTime(availTime){
-	// var strs = "";
-	// for (var i = 0; i < availTime.length; i++) {
-    //     console.log(availTime[i]);
-	// 	strs += '<input type="button"  onclick=creaTimeChosenArray("'+availTime[i]+'")  value="' + availTime[i] + '" />';//need to pass in the availTime to the onclick function
-	// }
-    // $("#availTimeButtons").html(strs);
+
     for (var i = 0; i < availTime.length; i++){
     var availTimeButtons = document.getElementById("availTimeButtons");
     var bre = document.createElement("br");
@@ -410,7 +404,7 @@ function displayAvailableTime(availTime){
      availTimeButtons.appendChild(button);
      availTimeButtons.appendChild(bre); 
     }
-// }
+}
      
 
 //Store tutor's data and carries it onto tutor's profile page
@@ -751,49 +745,5 @@ function rejectReq(req){
     alert("Rejected Request");
 }
 
-// function acceptRequest(req){
-
-//  //getting the tutor's email
-//  createUser()//firebase.auth().currentUser)
-//  .then(function (user) {
-//         var AcceptedArr = user.AcceptedRequests;
-//     var acceptObj={
-//     FirstName:req.FirstName,
-//     LastName:req.LastName,
-//     Email:req.Email,
-//     // ReservedTime:req.TutorTime
-
-//    };
-//    AcceptedArr.push(acceptObj);
-//      var db = firebase.firestore();
-//      db.collection("users").doc(user.email).update({
-//          AcceptedRequests: newTimes
-//      })
-//  });
-
-// };
-
-
-
-
-// function rejectRequest(req){
-//  //getting the tutor's email
-//  createUser()//firebase.auth().currentUser)
-//  .then(function (user) {
-//      var TTimeArr = user.PendingRequests;
-//      var newTimes = [];
-//      for (var i = 0; i < TTimeArr.length; i++) {
-//          if (TTimeArr[i] == req) {
-//              continue;
-//          }
-//          newTimes.push(TTimeArr[i]);
-//      }
-//      var db = firebase.firestore();
-//      db.collection("users").doc(user.email).update({
-//          PendingRequests: newTimes
-//      })
-//  });
-
-// }
 
 
