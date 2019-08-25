@@ -200,9 +200,6 @@ async function getUser(callback) {
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
-	// if(!user.isTutor){
-    //     removeSubjectsForStudents();
-    // }
     var currentUser = createUser(user);
 	currentUser.then(function(user){
         document.getElementById("fnameProf").innerHTML = user.fname + "'s Profile";
@@ -216,10 +213,11 @@ function listUserInfo(user) {
             document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
             document.getElementById("availTimeDiv").innerHTML = user.AvailableTime;
-            // DisplayButtonsAccept(user.PendingRequests);
+            listRequestsOnTutorsProfile(user.PendingRequests);
 		}
 		else{
             document.getElementById("isTutorDiv").innerHTML = "Student";
+
             var x = document.getElementById("removeSubj1");
             x.style.display = "none";
             var y = document.getElementById("removeSubj2");
@@ -227,7 +225,6 @@ function listUserInfo(user) {
             var z = document.getElementById("removeSubj3");
             z.style.display = "none";
             document.getElementById("prof-pg").style.marginLeft="30%";
-            
            
 		}
 	}).catch(function() {
@@ -258,6 +255,8 @@ async function createUser(){
     var newUser;
     var user = firebase.auth().currentUser;
     var email = user.email;
+
+
     var db = firebase.firestore();
     var docRef = db.collection("users").doc(email);
 
@@ -387,13 +386,31 @@ function populate(s1, s2){
 //function to take the tutors' times avilable and displays them as buttons
 //takes an array and display the times as buttons
 function displayAvailableTime(availTime){
-	var strs = "";
-	for (var i = 0; i < availTime.length; i++) {
-		strs += '<input type="button"  onclick=makeAppointment('+availTime[i]+')   value="' + availTime[i] + '" />';//need to pass in the availTime to the onclick function
-	}
-	$("#availTimeButtons").html(strs);
+	// var strs = "";
+	// for (var i = 0; i < availTime.length; i++) {
+    //     console.log(availTime[i]);
+	// 	strs += '<input type="button"  onclick=creaTimeChosenArray("'+availTime[i]+'")  value="' + availTime[i] + '" />';//need to pass in the availTime to the onclick function
+	// }
+    // $("#availTimeButtons").html(strs);
+    for (var i = 0; i < availTime.length; i++){
+    var availTimeButtons = document.getElementById("availTimeButtons");
+    var bre = document.createElement("br");
+    var button = document.createElement("button");
+    var Name = availTime[i];
+    var parameter = availTime[i];
 
-}
+    Name = document.createTextNode(Name);
+    button.appendChild(Name);
+    button.value = parameter;
+    button.onclick = (function(parameter){
+        return function(){
+            creaTimeChosenArray(parameter);
+        }
+     })(parameter);
+     availTimeButtons.appendChild(button);
+     availTimeButtons.appendChild(bre); 
+    }
+// }
      
 
 //Store tutor's data and carries it onto tutor's profile page
@@ -405,9 +422,8 @@ function parseURL() {
          tmp = params[i].split('=');
          data[tmp[0]] = tmp[1];
 	}
-	data.email = decodeURIComponent(data.email);
-	
-	listTutorInfo(data.email);
+	return decodeURIComponent(data.email);
+	// listTutorInfo(data.email);
 }
 //Function direct user to the tutor's profile page when they click on the tutor's name + encode email stored in URL
 function displayTutorProfile(email){
@@ -419,7 +435,10 @@ async function createTutor(email){
 
 	var tutor;
 	var db = firebase.firestore();
-	var docRef = db.collection("users").doc(email);
+    var docRef = db.collection("users").doc(email);
+    
+
+
 
     await docRef.get().then(function(doc){
         if (doc.exists) {
@@ -431,7 +450,7 @@ async function createTutor(email){
                 isTutor:doc.data().isTutor,
                 Strengths:doc.data().Strengths,
                 AvailableTime:doc.data().AvailableTime,
-                PedingRequests:doc.data().PendingRequests,
+                PendingRequests:doc.data().PendingRequests,
             };
         }
         else{
@@ -448,9 +467,11 @@ async function createTutor(email){
 };
 
 //populates the tutor's info based on email passed in
-function listTutorInfo(email) {
-    
-	var currentUser = createTutor(email);
+function listTutorInfo() {
+    var email = parseURL();
+
+    var currentUser = createTutor(email);
+    document.getElementById("pub-prof-pg").style.marginLeft="30%";
 
 	currentUser.then(function(tutor){
         document.getElementById("fnameProf").innerHTML = tutor.fname + "'s Profile";
@@ -458,7 +479,7 @@ function listTutorInfo(email) {
         document.getElementById("fnameDiv").innerHTML += " " + tutor.lname;
 		document.getElementById("schoolDiv").innerHTML = tutor.school;
         document.getElementById("subjectDiv").innerHTML = tutor.Strengths;
-        displayAvailableTime(doc.data().AvailableTime);
+        displayAvailableTime(tutor.AvailableTime);
         
 
 	}).catch(function() {
@@ -534,13 +555,11 @@ function displayPossibleTutors(){
                     button.value = email;
                     button.onclick = (function(email){
                         return function(){
-                            redirectToTutorProfile(email);
+                            displayTutorProfile(email);
                         }
                      })(email);
                     searchSel.appendChild(button);
-                    searchSel.appendChild(bre); 
-                    console.log(email);
-                    
+                    searchSel.appendChild(bre);                     
                     button.style.background="grey";
                     button.style.marginTop="20px";
                     button.style.width="100%";
@@ -553,6 +572,122 @@ function displayPossibleTutors(){
         }
     });
 }
+
+
+
+//*------------------------------Public Tutor Profile Page Code ------------------------------*/
+
+
+function listRequestsOnTutorsProfile(pendReqArr){
+
+    if(pendReqArr != undefined){
+        // var toAdd = document.createDocumentFragment();
+        for(var i = 0; i < pendReqArr.length;i++){
+            var req = pendReqArr[i];
+            // console.log("entered loop");
+            var name = pendReqArr[i].FirstName + " " + pendReqArr[i].LastName;
+            var email = pendReqArr[i].Email;
+            var time = pendReqArr[i].TutorTime;
+            var msg = name + " (" + email + ") would like to request you for: " + time;
+            // console.log(msg);
+            var rejButton = document.createElement("button");
+            var accButton = document.createElement("button");
+            var br = document.createElement("br");
+
+            var newDiv = document.createElement('div');
+            var displmsg = document.createTextNode(msg);
+            newDiv.id = 'request'+i;
+
+            newDiv.appendChild(displmsg);
+            newDiv.appendChild(br);
+            newDiv.appendChild(accButton);
+            newDiv.appendChild(rejButton);
+
+            newDiv.style.border="1px solid black";
+            newDiv.style.marginLeft="1%";
+            newDiv.style.marginRight="1%";
+            newDiv.style.marginTop="5%";
+            newDiv.style.background="#F5F5F5";
+
+            var reject = document.createTextNode("Reject");
+            rejButton.appendChild(reject);
+            rejButton.style.background="red";
+            rejButton.style.width="45%";
+            // rejButton.style.height="75%";
+            rejButton.style.marginLeft="1%";
+            rejButton.style.fontSize="50%";
+            rejButton.style.marginBottom="2%";
+
+           
+            rejButton.onclick = (function(req){
+                return function(){
+                    rejectReq(req);
+                }
+             })(req);
+            
+            var Accept = document.createTextNode("Accept");
+            accButton.appendChild(Accept);
+            accButton.style.background="green";
+            accButton.style.width="45%";
+            // rejButton.style.height="75%";
+            accButton.style.fontSize="50%";
+
+            
+            accButton.onclick = (function(req){
+                return function(){
+                    acceptReq(req);
+                }
+             })(req);
+
+            document.getElementById("tut-prof-req").appendChild(newDiv);
+        }
+    }
+}
+
+//Add a function that store the request tutor's time, user's email and user's name into an array, then push to tutor's firebase
+async function creaTimeChosenArray(time) {
+
+    var teaEmail = parseURL();
+
+    createUser()
+    .then(function(user) {
+        if(user.email != teaEmail){
+            var currentTutor = createTutor(teaEmail);
+            currentTutor.then(function(tutor){
+                var email = user.email;
+                var fname=user.fname;
+                var lname=user.lname;
+                var TTimeArr = tutor.PendingRequests;
+                var requestSingle = {
+                    FirstName:fname,
+                    LastName:lname,
+                    Email:email,
+                    TutorTime:time
+                };
+                
+                for (var i = 0; i < TTimeArr.length; i++) {
+                    if (TTimeArr[i].FirstName == fname && TTimeArr[i].LastName == lname && TTimeArr[i].Email == email && TTimeArr[i].TutorTime == time) {
+                        alert("Request already exist!");
+                        return;
+                    }
+                }
+                TTimeArr.push(requestSingle);
+                var db = firebase.firestore();
+                db.collection("users").doc(teaEmail).update({
+                    PendingRequests: TTimeArr
+                })
+                
+                alert("Request sent!");
+            });
+        }
+        else{
+            alert("Can't request your own time!");
+        }
+    });
+ 
+}
+
+
 
 //Push tutor's inputted available time to the tutor's firestore
 // function pushAvailTimeToFirestore(availTime){
@@ -568,21 +703,97 @@ function displayPossibleTutors(){
 // }
 
 
-
 //Function needs to be fixed based off of what the request object will look like
 // function DisplayButtonsAccept(PendingRequests){
 // 	var strs = "";
 
 // 	for (var i = 0; i < PendingRequests.length; i++) {
-// 		strs += '<tr>'+
+//         console.log(PendingRequests[i]);
+// 		strs+='<div class="req">'+
+//         '<span>'+PendingRequests[i].FirstName+'</span>'+
+//         '<span>'+PendingRequests[i].LastName+'</span>'+
+//         '<span>'+PendingRequests[i].Email+'</span>'+
+//         '<span>'+PendingRequests[i].TutorTime+'</span>'+
+//         '<br/>'+
+//         '<input type="button" onclick="acceptRequest('+PendingRequests[i]+')" value="Accept">'+
+//         '<input type="button" onclick="rejectRequest('+PendingRequests[i]+')" value="Reject">'+
+//     '<hr>'+
+//     '</div>';
 
-// 		'<td>'+"Student: "+ PendingRequests[i] +'</td>'+
-// 		'<td><input onclick="Accpet('+PendingRequests[i]+')" type="button" value="accept"></td>'+
-// 		'<td><input onclick="Reject('+PendingRequests[i]+')" type="button" value="reject"></td>'+
-// 	'</tr>';
-
-// 	}
-
-// 	$("#requestList").html(strs);
+//     }
+// $("#requestList").html(strs);
 // }
+
+
+
+
+
+function acceptReq(req){
+    createUser().then(function(tutor){
+        var db = firebase.firestore();
+        db.collection("users").doc(tutor.email).update({
+            PendingRequests: firebase.firestore.FieldValue.arrayRemove(req),
+            AvailableTime: firebase.firestore.FieldValue.arrayRemove(req.TutorTime)
+        });
+    });
+    alert("Accepted Request");
+}
+
+
+
+function rejectReq(req){
+    createUser().then(function(tutor){
+        var db = firebase.firestore();
+        db.collection("users").doc(tutor.email).update({
+            PendingRequests: firebase.firestore.FieldValue.arrayRemove(req)
+        });
+    });
+    alert("Rejected Request");
+}
+
+// function acceptRequest(req){
+
+//  //getting the tutor's email
+//  createUser()//firebase.auth().currentUser)
+//  .then(function (user) {
+//         var AcceptedArr = user.AcceptedRequests;
+//     var acceptObj={
+//     FirstName:req.FirstName,
+//     LastName:req.LastName,
+//     Email:req.Email,
+//     // ReservedTime:req.TutorTime
+
+//    };
+//    AcceptedArr.push(acceptObj);
+//      var db = firebase.firestore();
+//      db.collection("users").doc(user.email).update({
+//          AcceptedRequests: newTimes
+//      })
+//  });
+
+// };
+
+
+
+
+// function rejectRequest(req){
+//  //getting the tutor's email
+//  createUser()//firebase.auth().currentUser)
+//  .then(function (user) {
+//      var TTimeArr = user.PendingRequests;
+//      var newTimes = [];
+//      for (var i = 0; i < TTimeArr.length; i++) {
+//          if (TTimeArr[i] == req) {
+//              continue;
+//          }
+//          newTimes.push(TTimeArr[i]);
+//      }
+//      var db = firebase.firestore();
+//      db.collection("users").doc(user.email).update({
+//          PendingRequests: newTimes
+//      })
+//  });
+
+// }
+
 
