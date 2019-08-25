@@ -462,25 +462,6 @@ function displayAvailableTime(availTime){
      availTimeButtons.appendChild(button);
      availTimeButtons.appendChild(bre); 
     }
-
-    for (var i = 0; i < availTime.length; i++){
-    var availTimeButtons = document.getElementById("availTimeButtons");
-    var bre = document.createElement("br");
-    var button = document.createElement("button");
-    var Name = availTime[i];
-    var parameter = availTime[i];
-
-    Name = document.createTextNode(Name);
-    button.appendChild(Name);
-    button.value = parameter;
-    button.onclick = (function(parameter){
-        return function(){
-            creaTimeChosenArray(parameter);
-        }
-     })(parameter);
-     availTimeButtons.appendChild(button);
-     availTimeButtons.appendChild(bre); 
-    }
 }
      
 
