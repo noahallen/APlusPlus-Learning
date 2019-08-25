@@ -26,6 +26,7 @@ function pushToFireStore(){
         isTutor: document.getElementById("isTutor").checked,
         AvailableTime:[],
         PendingRequests:[],
+        Reserved:[],
     });
 
     if(document.getElementById("isTutor").checked){
@@ -235,6 +236,7 @@ function listUserInfo(user) {
 		document.getElementById("emailDiv").innerHTML = user.email;
 		document.getElementById("fnameDiv").innerHTML = user.fname;
         document.getElementById("fnameDiv").innerHTML += " " + user.lname;
+        //displayReserved(user.Reserved);
         
 		document.getElementById("schoolDiv").innerHTML = user.school;
 		if (user.isTutor){
@@ -265,7 +267,7 @@ function listUserInfo(user) {
 
 //User class storing a user's data
 class User{
-     constructor(email, fname, lname, school, isTutor, strengths, availTime, requests){
+     constructor(email, fname, lname, school, isTutor, strengths, availTime, requests, reserved){
 		this.email = email;	
 		this.fname = fname;
     	this.lname = lname;
@@ -274,6 +276,7 @@ class User{
         this.Strengths = strengths;
         this.AvailableTime = availTime;
         this.PendingRequests = requests;
+        this.Reserved = reserved;
 
 	}
 }
@@ -301,6 +304,7 @@ async function createUser(){
                 Strengths:doc.data().Strengths,
                 AvailableTime:doc.data().AvailableTime,
                 PendingRequests:doc.data().PendingRequests,
+                Reserved:doc.data().Reserved,
             };
         }
         else{
@@ -311,7 +315,7 @@ async function createUser(){
     });
     
     newUser = new User(
-        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths, user.AvailableTime, user.PendingRequests
+        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths, user.AvailableTime, user.PendingRequests, user.Reserved
     );
     return newUser;
 };
@@ -521,6 +525,7 @@ async function createTutor(email){
                 Strengths:doc.data().Strengths,
                 AvailableTime:doc.data().AvailableTime,
                 PendingRequests:doc.data().PendingRequests,
+                Reserved:doc.data().Reserved,
             };
         }
         else{
@@ -531,7 +536,7 @@ async function createTutor(email){
     });
   
     newTutor = new User(
-        email, tutor.fname, tutor.lname, tutor.school, tutor.isTutor, tutor.Strengths, tutor.AvailableTime, tutor.PendingRequests
+        email, tutor.fname, tutor.lname, tutor.school, tutor.isTutor, tutor.Strengths, tutor.AvailableTime, tutor.PendingRequests, tutor.Reserved
 	);
     return newTutor;
 };
