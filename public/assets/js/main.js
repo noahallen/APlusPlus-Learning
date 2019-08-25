@@ -641,17 +641,18 @@ async function creaTimeChosenArray(time) {
 
 
 //Push tutor's inputted available time to the tutor's firestore
-// function pushAvailTimeToFirestore(availTime){
-// 	var db = firebase.firestore();
-//     var user = firebase.auth().currentUser;
-// 	var email = user.email;
-// 	// console.log(db.user);
-//     db.collection("users").doc(email).set({
-//         AvailableTime: availTime
-// 	});
-// 	// Add availablt time to the user object
-// 	// write the whole user to firestore
-// }
+function pushAvailTimeToFirestore(availTime){
+	var db = firebase.firestore();
+    var user = firebase.auth().currentUser;
+    var email = user.email;
+    // var arrTime=user.AvailableTime;
+    // arrTime.push(availTime);
+	// console.log(db.user);
+    db.collection("users").doc(email).update({
+        AvailableTime: firebase.firestore.FieldValue.arrayUnion(availTime)
+    });
+    
+}
 
 
 //Function needs to be fixed based off of what the request object will look like
