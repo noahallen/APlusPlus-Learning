@@ -288,6 +288,66 @@ async function createUser(){
 };
 
 
+function changeDatetimeFormat(){
+    var str = document.getElementById("tutorInputDate").value;
+    var d = new Date(str);
+    // var n = d.toString();
+    // year
+    let yyyy = '' + d.getFullYear();
+    // month
+    let mm = ('0' + (d.getMonth() + 1));  // prepend 0 // +1 is because Jan is 0
+    mm = mm.substr(mm.length - 2);        // take last 2 chars
+    if ( mm == 01){
+        mm = "Jan";
+    }
+    else if ( mm == 02){
+        mm = "Feb";
+    }
+    else if ( mm == 03){
+        mm = "Mar";
+    }
+    else if ( mm == 04){
+        mm = "Apr";
+    }
+    else if ( mm == 05){
+        mm = "May";
+    }
+    else if ( mm == 06){
+        mm = "Jun";
+    }
+    else if ( mm == 07){
+        mm = "Jul";
+    }
+    else if ( mm == 08){
+        mm = "Aug";
+    }
+    else if ( mm == 09){
+        mm = "Sep";
+    }
+    else if ( mm == 10){
+        mm = "Oct";
+    }
+    else if ( mm == 11){
+        mm = "Nov";
+    }
+    else {
+        mm = "Dec";
+    }
+    // day
+    let dd = ('0' + d.getDate());         // prepend 0
+    dd = dd.substr(dd.length - 2);        // take last 2 chars
+    let hh = "" + d.getHours();
+    if (hh <11){
+        hh = '0' + hh;
+    }
+    let min = "" + d.getMinutes();
+    if (min === '0'){
+        min = "00";
+    }
+
+    var dateAndTime = mm + " " + dd + "," + yyyy + ' ' + hh + ":" + min;
+    return dateAndTime;
+}
 
 
 /*------------------------------Search Page Code ------------------------------*/
@@ -350,6 +410,24 @@ function displayAvailableTime(availTime){
      availTimeButtons.appendChild(bre); 
     }
 
+    for (var i = 0; i < availTime.length; i++){
+    var availTimeButtons = document.getElementById("availTimeButtons");
+    var bre = document.createElement("br");
+    var button = document.createElement("button");
+    var Name = availTime[i];
+    var parameter = availTime[i];
+
+    Name = document.createTextNode(Name);
+    button.appendChild(Name);
+    button.value = parameter;
+    button.onclick = (function(parameter){
+        return function(){
+            creaTimeChosenArray(parameter);
+        }
+     })(parameter);
+     availTimeButtons.appendChild(button);
+     availTimeButtons.appendChild(bre); 
+    }
 }
      
 
@@ -519,13 +597,7 @@ function displayPossibleTutors(){
 
 
 function listRequestsOnTutorsProfile(pendReqArr){
-    console.log(pendReqArr);
-    // for(var i = 0; i < 50;i++){    
-    //     var node = document.createElement("LI");                 // Create a <li> node
-    //     var textnode = document.createTextNode("Water");         // Create a text node
-    //     node.appendChild(textnode);                              // Append the text to <li>
-    //     document.getElementById("tut-prof-req").appendChild(node);
-    // }
+
     if(pendReqArr != undefined){
         // var toAdd = document.createDocumentFragment();
         for(var i = 0; i < pendReqArr.length;i++){
@@ -567,7 +639,7 @@ function listRequestsOnTutorsProfile(pendReqArr){
            
             rejButton.onclick = (function(req){
                 return function(){
-                    rejectRequest(req);
+                    rejectReq(req);
                 }
              })(req);
             
@@ -581,16 +653,11 @@ function listRequestsOnTutorsProfile(pendReqArr){
             
             accButton.onclick = (function(req){
                 return function(){
-                    rejectRequest(req);
+                    acceptReq(req);
                 }
              })(req);
 
             document.getElementById("tut-prof-req").appendChild(newDiv);
-
-            
-
-            // console.log("finish loop"); 
-           
         }
     }
 }
@@ -680,50 +747,28 @@ function pushAvailTimeToFirestore(availTime){
 
 
 
-
-// function acceptRequest(req){
-
-//  //getting the tutor's email
-//  createUser()//firebase.auth().currentUser)
-//  .then(function (user) {
-//         var AcceptedArr = user.AcceptedRequests;
-//     var acceptObj={
-//     FirstName:req.FirstName,
-//     LastName:req.LastName,
-//     Email:req.Email,
-//     // ReservedTime:req.TutorTime
-
-//    };
-//    AcceptedArr.push(acceptObj);
-//      var db = firebase.firestore();
-//      db.collection("users").doc(user.email).update({
-//          AcceptedRequests: newTimes
-//      })
-//  });
-
-// };
+function acceptReq(req){
+    createUser().then(function(tutor){
+        var db = firebase.firestore();
+        db.collection("users").doc(tutor.email).update({
+            PendingRequests: firebase.firestore.FieldValue.arrayRemove(req),
+            AvailableTime: firebase.firestore.FieldValue.arrayRemove(req.TutorTime)
+        });
+    });
+    alert("Accepted Request");
+}
 
 
 
+function rejectReq(req){
+    createUser().then(function(tutor){
+        var db = firebase.firestore();
+        db.collection("users").doc(tutor.email).update({
+            PendingRequests: firebase.firestore.FieldValue.arrayRemove(req)
+        });
+    });
+    alert("Rejected Request");
+}
 
-// function rejectRequest(req){
-//  //getting the tutor's email
-//  createUser()//firebase.auth().currentUser)
-//  .then(function (user) {
-//      var TTimeArr = user.PendingRequests;
-//      var newTimes = [];
-//      for (var i = 0; i < TTimeArr.length; i++) {
-//          if (TTimeArr[i] == req) {
-//              continue;
-//          }
-//          newTimes.push(TTimeArr[i]);
-//      }
-//      var db = firebase.firestore();
-//      db.collection("users").doc(user.email).update({
-//          PendingRequests: newTimes
-//      })
-//  });
-
-// }
 
 
