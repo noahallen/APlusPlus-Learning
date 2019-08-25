@@ -385,6 +385,30 @@ function populate(s1, s2){
 //function to take the tutors' times avilable and displays them as buttons
 //takes an array and display the times as buttons
 function displayAvailableTime(availTime){
+	// var strs = "";
+	// for (var i = 0; i < availTime.length; i++) {
+    //     console.log(availTime[i]);
+	// 	strs += '<input type="button"  onclick=creaTimeChosenArray("'+availTime[i]+'")  value="' + availTime[i] + '" />';//need to pass in the availTime to the onclick function
+	// }
+    // $("#availTimeButtons").html(strs);
+    for (var i = 0; i < availTime.length; i++){
+    var availTimeButtons = document.getElementById("availTimeButtons");
+    var bre = document.createElement("br");
+    var button = document.createElement("button");
+    var Name = availTime[i];
+    var parameter = availTime[i];
+
+    Name = document.createTextNode(Name);
+    button.appendChild(Name);
+    button.value = parameter;
+    button.onclick = (function(parameter){
+        return function(){
+            creaTimeChosenArray(parameter);
+        }
+     })(parameter);
+     availTimeButtons.appendChild(button);
+     availTimeButtons.appendChild(bre); 
+    }
 
     for (var i = 0; i < availTime.length; i++){
     var availTimeButtons = document.getElementById("availTimeButtons");
@@ -684,17 +708,18 @@ async function creaTimeChosenArray(time) {
 
 
 //Push tutor's inputted available time to the tutor's firestore
-// function pushAvailTimeToFirestore(availTime){
-// 	var db = firebase.firestore();
-//     var user = firebase.auth().currentUser;
-// 	var email = user.email;
-// 	// console.log(db.user);
-//     db.collection("users").doc(email).set({
-//         AvailableTime: availTime
-// 	});
-// 	// Add availablt time to the user object
-// 	// write the whole user to firestore
-// }
+function pushAvailTimeToFirestore(availTime){
+	var db = firebase.firestore();
+    var user = firebase.auth().currentUser;
+    var email = user.email;
+    // var arrTime=user.AvailableTime;
+    // arrTime.push(availTime);
+	// console.log(db.user);
+    db.collection("users").doc(email).update({
+        AvailableTime: firebase.firestore.FieldValue.arrayUnion(availTime)
+    });
+    
+}
 
 
 //Function needs to be fixed based off of what the request object will look like
