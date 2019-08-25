@@ -19,7 +19,7 @@
 
 		<link rel="stylesheet" href="assets/css/main.css" />
 	</head>
-	<body onload="initialize(); getUser(listUserInfo);">
+	<body onload="initialize(); getUser(listUserInfo);configureDateInput();">
 		<!-- Header -->
         <header id="header">
             <div class="inner">
@@ -53,25 +53,6 @@
 								Add a session:
 								<input type = "datetime-local" id = "tutorInputDate" value="2000-01-01T00:00:00" min="2019-08-25T00:00:00" step="1800" required>
 								<button type="button" onclick = "changeDatetimeFormat()">Add!</button>
-								<script>
-									var today = new Date();
-									var dd = today.getDate();
-									var mm = today.getMonth()+1; //January is 0!
-									var yyyy = today.getFullYear();
-
-									if(dd<10){
-											dd='0'+dd
-										} 
-										if(mm<10){
-											mm='0'+mm
-										} 
-									today = yyyy+'-'+mm+'-'+dd+"T00:00:00";
-									// maxDate = yyyy+'-'+(mm+1)+'-'+dd+"T00:00:00";
-									minDate = today;
-									document.getElementById("tutorInputDate").setAttribute("value", today);
-									// document.getElementById("tutorInputDate").setAttribute("max", maxDate);
-									document.getElementById("tutorInputDate").setAttribute("min", minDate);
-								</script>
 					</div>
 				</div>
 					<div class="profile-page" id="prof-pg">
