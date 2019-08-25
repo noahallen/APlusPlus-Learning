@@ -346,6 +346,7 @@ function changeDatetimeFormat(){
     }
 
     var dateAndTime = mm + " " + dd + "," + yyyy + ' ' + hh + ":" + min;
+    console.log(dateAndTime);
     pushAvailTimeToFirestore(dateAndTime);
 }
 
@@ -361,11 +362,12 @@ function configureDateInput(){
         if(mm<10){
             mm='0'+mm
         } 
-    today = yyyy+'-'+mm+'-'+dd+"T00:00:00";
-    // maxDate = yyyy+'-'+(mm+1)+'-'+dd+"T00:00:00";
+    today = yyyy + '-' + mm + '-' + dd + "T00:00:00";
+    maxDate = yyyy+'-'+(mm+1)+'-'+dd+"T00:00:00";
+    //minDate = yyyy + '-' + mm + '-'+ dd;
     minDate = today;
     document.getElementById("tutorInputDate").setAttribute("value", today);
-    // document.getElementById("tutorInputDate").setAttribute("max", maxDate);
+    document.getElementById("tutorInputDate").setAttribute("max", maxDate);
     document.getElementById("tutorInputDate").setAttribute("min", minDate);
 }
 
