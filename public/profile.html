@@ -49,10 +49,13 @@
 					<div class="profile-times">
 							<h3>Available Times</h3>
 							<div id="availTimeDiv"></div>
+							<br>
+							<hr />
 							<form id = "timeInput">
-								Add a session:
-								<input type = "datetime-local" id = "tutorInputDate" value="2000-01-01T00:00:00" min="2019-08-25T00:00:00" step="1800" required>
-								<button type="button" onclick = "changeDatetimeFormat()">Add!</button>
+								<b>Add a New Available Time:</b>
+								<br>
+								<input type = "datetime-local" id = "tutorInputDate" value="2000-01-01T00:00:00" min="2019-08-25T00:00:00" step="1800" required="true">
+								<button type="button" class="addbutton" onclick = "changeDatetimeFormat()">Add</button>
 								<script>
 									var today = new Date();
 									var dd = today.getDate();
