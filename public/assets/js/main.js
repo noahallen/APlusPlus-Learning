@@ -211,9 +211,25 @@ function listAvailTime(arr){
 
             var newDiv = document.createElement('div');
             var displmsg = document.createTextNode(msg);
+            //add remove button here 
+            var button = document.createElement("button");
+            var Name = "Remove";
+            var parameter = arr[i];
+
+            Name = document.createTextNode(Name);
+            button.appendChild(Name);
+            button.style = "margin-left:10%;"
+            button.value = parameter;
+            button.onclick = (function(parameter){
+                return function(){
+                    RemoveAvailFirebase(parameter);
+                }
+            })(parameter);
 
             newDiv.appendChild(displmsg);
+            newDiv.appendChild(button);
             newDiv.appendChild(br);
+            //append button here
 
             newDiv.style.border="1px solid black";
             newDiv.style.marginLeft="1%";
@@ -226,6 +242,17 @@ function listAvailTime(arr){
         }
     }
 }
+//Function to remove the AvailTime form firebase
+function RemoveAvailFirebase(TimeToRemove){
+    createUser().then(function(tutor){
+        var db = firebase.firestore();
+        db.collection("users").doc(tutor.email).update({
+            AvailableTime: firebase.firestore.FieldValue.arrayRemove(TimeToRemove)
+        });
+    });
+    alert("Removed The Time");
+}
+
 
 //Function to display the user's data on their profile page
 function listUserInfo(user) {
@@ -445,22 +472,22 @@ function displayAvailableTime(availTime){
 	// }
     // $("#availTimeButtons").html(strs);
     for (var i = 0; i < availTime.length; i++){
-    var availTimeButtons = document.getElementById("availTimeButtons");
-    var bre = document.createElement("br");
-    var button = document.createElement("button");
-    var Name = availTime[i];
-    var parameter = availTime[i];
+        var availTimeButtons = document.getElementById("availTimeButtons");
+        var bre = document.createElement("br");
+        var button = document.createElement("button");
+        var Name = availTime[i];
+        var parameter = availTime[i];
 
-    Name = document.createTextNode(Name);
-    button.appendChild(Name);
-    button.value = parameter;
-    button.onclick = (function(parameter){
-        return function(){
-            creaTimeChosenArray(parameter);
-        }
-     })(parameter);
-     availTimeButtons.appendChild(button);
-     availTimeButtons.appendChild(bre); 
+        Name = document.createTextNode(Name);
+        button.appendChild(Name);
+        button.value = parameter;
+        button.onclick = (function(parameter){
+            return function(){
+                creaTimeChosenArray(parameter);
+            }
+        })(parameter);
+        availTimeButtons.appendChild(button);
+        availTimeButtons.appendChild(bre); 
     }
 }
      
@@ -761,29 +788,30 @@ function pushAvailTimeToFirestore(availTime){
     }
 }
 
+function rejectReq(req){
+    createUser().
+    then(function(tutor){
+        var db=firebase.firestore();
+        db.collection("users").doc(tutor.email).update({
+            PendingRequests:firebase.firestore.FieldValue.arrayRemove(req)
+        });
+    });
+    alert("Rejected Request successful!")
+}
 
 function acceptReq(req){
     createUser().then(function(tutor){
         var db = firebase.firestore();
         db.collection("users").doc(tutor.email).update({
+            Reserved:firebase.firestore.FieldValue.arrayUnion(req),    //add to tutor's firestore reserved field
             PendingRequests: firebase.firestore.FieldValue.arrayRemove(req),
             AvailableTime: firebase.firestore.FieldValue.arrayRemove(req.TutorTime)
         });
     });
-    alert("Accepted Request");
+    alert("Accepted request successful!");
 }
 
 
-
-function rejectReq(req){
-    createUser().then(function(tutor){
-        var db = firebase.firestore();
-        db.collection("users").doc(tutor.email).update({
-            PendingRequests: firebase.firestore.FieldValue.arrayRemove(req)
-        });
-    });
-    alert("Rejected Request");
-}
 
 
 // Function needs to be fixed based off of what the request object will look like
