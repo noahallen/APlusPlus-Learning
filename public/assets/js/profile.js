@@ -109,7 +109,7 @@ function listUserInfo(user) {
 		document.getElementById("fnameDiv").innerHTML = user.fname;
         document.getElementById("fnameDiv").innerHTML += " " + user.lname;
         displayReserved(user.Reserved);
-        //displayOutGoing(user.OutgoingRequests);
+        displayOutGoingReq(user.OutgoingRequests);
 
         
 		document.getElementById("schoolDiv").innerHTML = user.school;
@@ -425,4 +425,38 @@ function acceptReq(req){
         });
     });
     alert("Accepted request successfully!");
+}
+
+//Function to display outgoing request on students' profile
+function displayOutGoingReq(arr){
+    if(arr != undefined){
+        var user = firebase.auth().currentUser;
+        var currEmail = user.email;
+        for(var i = 0; i < arr.length;i++){
+
+            var msg = "You have requested " + arr[i].TutorEmail + " for: " +arr[i].TutorTime;
+
+
+            
+            // console.log(msg);
+            var br = document.createElement("br");
+
+            var newDiv = document.createElement('div');
+            var displmsg = document.createTextNode(msg);
+
+
+            newDiv.appendChild(displmsg);
+            newDiv.appendChild(br);
+            //append button here
+
+            newDiv.style.border="1px solid black";
+            newDiv.style.marginLeft="1%";
+            newDiv.style.marginRight="1%";
+            newDiv.style.marginTop="5%";
+            newDiv.style.background="#F5F5F5";
+
+
+            document.getElementById("OutgoingRequestsID").appendChild(newDiv);
+        }
+    }
 }
