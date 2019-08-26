@@ -17,7 +17,8 @@ function pushToFireStore(){
         school: document.getElementById("school").value,
         isTutor: document.getElementById("isTutor").checked,
         AvailableTime:[],
-        PendingRequests:[],
+        IncomingRequests:[],
+        OutgoingRequests:[],
         Reserved:[],
     });
 
