@@ -746,7 +746,8 @@ async function creaTimeChosenArray(time) {
                     FirstName:fname,
                     LastName:lname,
                     Email:email,
-                    TutorTime:time
+                    TutorTime:time,
+                    TutorEmail:teaEmail
                 };
                 
                 for (var i = 0; i < TTimeArr.length; i++) {
@@ -800,6 +801,14 @@ function rejectReq(req){
 }
 
 function acceptReq(req){
+                          
+    createTutor(req.Email).then(function(user){ //add to student's reserved time firestore
+        var db = firebase.firestore();   
+        db.collection("users").doc(tutor.email).update({
+            Reserved:firebase.firestore.FieldValue.arrayUnion(req)  
+        });
+    });
+    
     createUser().then(function(tutor){
         var db = firebase.firestore();
         db.collection("users").doc(tutor.email).update({
@@ -808,7 +817,9 @@ function acceptReq(req){
             AvailableTime: firebase.firestore.FieldValue.arrayRemove(req.TutorTime)
         });
     });
-    alert("Accepted request successfuly!");
+
+
+    alert("Accepted request successfully!");
 }
 
 
