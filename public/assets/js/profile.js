@@ -44,6 +44,7 @@ function listAvailTime(arr){
             newDiv.appendChild(displmsg);
             newDiv.appendChild(button);
             newDiv.appendChild(br);
+            newDiv.id = "removeButton-div";
             //append button here
 
             newDiv.style.border="1px solid black";
@@ -54,6 +55,7 @@ function listAvailTime(arr){
 
 
             document.getElementById("availTimeDiv").appendChild(newDiv);
+        
         }
     }
 }
@@ -67,7 +69,14 @@ function RemoveAvailFirebase(TimeToRemove){
             AvailableTime: firebase.firestore.FieldValue.arrayRemove(TimeToRemove)
         });
     });
-    alert("Removed The Time");
+    
+     removeElement("removeButton-div");
+    // alert("Removed The Time");
+}
+async function removeElement(elementId) {
+    // Removes an element from the document
+    var element = document.getElementById(elementId);
+    element.parentNode.removeChild(element);
 }
 
 
