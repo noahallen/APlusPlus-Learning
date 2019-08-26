@@ -761,29 +761,30 @@ function pushAvailTimeToFirestore(availTime){
     }
 }
 
+function rejectReq(req){
+    createUser().
+    then(function(tutor){
+        var db=firebase.firestore();
+        db.collection("users").doc(tutor.email).update({
+            PendingRequests:firebase.firestore.FieldValue.arrayRemove(req)
+        });
+    });
+    alert("Rejected Request successful!")
+}
 
 function acceptReq(req){
     createUser().then(function(tutor){
         var db = firebase.firestore();
         db.collection("users").doc(tutor.email).update({
+            Reserved:firebase.firestore.FieldValue.arrayUnion(req),    //add to tutor's firestore reserved field
             PendingRequests: firebase.firestore.FieldValue.arrayRemove(req),
             AvailableTime: firebase.firestore.FieldValue.arrayRemove(req.TutorTime)
         });
     });
-    alert("Accepted Request");
+    alert("Accepted request successful!");
 }
 
 
-
-function rejectReq(req){
-    createUser().then(function(tutor){
-        var db = firebase.firestore();
-        db.collection("users").doc(tutor.email).update({
-            PendingRequests: firebase.firestore.FieldValue.arrayRemove(req)
-        });
-    });
-    alert("Rejected Request");
-}
 
 
 // Function needs to be fixed based off of what the request object will look like
