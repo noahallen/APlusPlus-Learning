@@ -796,7 +796,7 @@ function rejectReq(req){
             PendingRequests:firebase.firestore.FieldValue.arrayRemove(req)
         });
     });
-    alert("Rejected Request successful!")
+    alert("Rejected request successfully!")
 }
 
 function acceptReq(req){
@@ -808,7 +808,7 @@ function acceptReq(req){
             AvailableTime: firebase.firestore.FieldValue.arrayRemove(req.TutorTime)
         });
     });
-    alert("Accepted request successful!");
+    alert("Accepted request successfuly!");
 }
 
 
