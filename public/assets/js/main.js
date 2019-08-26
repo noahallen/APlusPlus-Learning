@@ -128,7 +128,7 @@ function login(){
 
 //User class storing a user's data
 class User{
-    constructor(email, fname, lname, school, isTutor, strengths, availTime, requests, reserved){
+    constructor(email, fname, lname, school, isTutor, strengths, availTime, incoming,reserved,outgoing){
        this.email = email;	
        this.fname = fname;
        this.lname = lname;
@@ -136,8 +136,9 @@ class User{
        this.isTutor = isTutor;   
        this.Strengths = strengths;
        this.AvailableTime = availTime;
-       this.PendingRequests = requests;
+       this.IncomingRequests = incoming;
+       this.OutgoingRequests = outgoing;
        this.Reserved = reserved;
-
+       
    }
 }

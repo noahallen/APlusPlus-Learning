@@ -10,10 +10,11 @@ async function creaTimeChosenArray(time) {
         if(user.email != teaEmail){
             var currentTutor = createTutor(teaEmail);
             currentTutor.then(function(tutor){
+                var db = firebase.firestore();
                 var email = user.email;
                 var fname=user.fname;
                 var lname=user.lname;
-                var TTimeArr = tutor.PendingRequests;
+                var TTimeArr = tutor.IncomingRequests;
                 var requestSingle = {
                     FirstName:fname,
                     LastName:lname,
@@ -22,20 +23,26 @@ async function creaTimeChosenArray(time) {
                     TutorEmail:teaEmail
                 };
                 
+
                 for (var i = 0; i < TTimeArr.length; i++) {
                     if (TTimeArr[i].FirstName == fname && TTimeArr[i].LastName == lname && TTimeArr[i].Email == email && TTimeArr[i].TutorTime == time) {
                         alert("Request already exist!");
                         return;
                     }
                 }
-                TTimeArr.push(requestSingle);
-                var db = firebase.firestore();
+                
+                
                 db.collection("users").doc(teaEmail).update({
-                    PendingRequests: TTimeArr
+                    IncomingRequests: firebase.firestore.FieldValue.arrayUnion(requestSingle),
                 })
                 
+                db.collection("users").doc(user.email).update({
+                    OutgoingRequests: firebase.firestore.FieldValue.arrayUnion(requestSingle),
+                    
+                })
                 alert("Request sent!");
             });
+
         }
         else{
             alert("Can't request your own time!");
@@ -48,12 +55,6 @@ async function creaTimeChosenArray(time) {
 //function to take the tutors' times avilable and displays them as buttons
 //takes an array and display the times as buttons
 function displayAvailableTime(availTime){
-	// var strs = "";
-	// for (var i = 0; i < availTime.length; i++) {
-    //     console.log(availTime[i]);
-	// 	strs += '<input type="button"  onclick=creaTimeChosenArray("'+availTime[i]+'")  value="' + availTime[i] + '" />';//need to pass in the availTime to the onclick function
-	// }
-    // $("#availTimeButtons").html(strs);
     for (var i = 0; i < availTime.length; i++){
         var availTimeButtons = document.getElementById("availTimeButtons");
         var bre = document.createElement("br");
@@ -115,7 +116,8 @@ async function createTutor(email){
                 isTutor:doc.data().isTutor,
                 Strengths:doc.data().Strengths,
                 AvailableTime:doc.data().AvailableTime,
-                PendingRequests:doc.data().PendingRequests,
+                IncomingRequests:doc.data().IncomingRequests,
+                OutgoingRequests:doc.data().OutgoingRequests,
                 Reserved:doc.data().Reserved,
             };
         }
@@ -127,7 +129,7 @@ async function createTutor(email){
     });
   
     newTutor = new User(
-        email, tutor.fname, tutor.lname, tutor.school, tutor.isTutor, tutor.Strengths, tutor.AvailableTime, tutor.PendingRequests, tutor.Reserved
+        email, tutor.fname, tutor.lname, tutor.school, tutor.isTutor, tutor.Strengths, tutor.AvailableTime, tutor.IncomingRequests, tutor.Reserved,tutor.OutgoingRequests
 	);
     return newTutor;
 };

@@ -89,14 +89,15 @@ function listUserInfo(user) {
 		document.getElementById("fnameDiv").innerHTML = user.fname;
         document.getElementById("fnameDiv").innerHTML += " " + user.lname;
         displayReserved(user.Reserved);
+        //displayOutGoing(user.OutgoingRequests);
+
         
 		document.getElementById("schoolDiv").innerHTML = user.school;
 		if (user.isTutor){
             document.getElementById("isTutorDiv").innerHTML = "Student and tutor";
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
-            // document.getElementById("availTimeDiv").innerHTML = user.AvailableTime;
             listAvailTime(user.AvailableTime);
-            listRequestsOnTutorsProfile(user.PendingRequests);  
+            listRequestsOnTutorsProfile(user.IncomingRequests);
 		}
 		else{
             document.getElementById("isTutorDiv").innerHTML = "Student";
@@ -139,8 +140,9 @@ async function createUser(){
                 isTutor:doc.data().isTutor,
                 Strengths:doc.data().Strengths,
                 AvailableTime:doc.data().AvailableTime,
-                PendingRequests:doc.data().PendingRequests,
+                IncomingRequests:doc.data().IncomingRequests,
                 Reserved:doc.data().Reserved,
+                OutgoingRequests:doc.data().OutgoingRequests,
             };
         }
         else{
@@ -151,7 +153,7 @@ async function createUser(){
     });
     
     newUser = new User(
-        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths, user.AvailableTime, user.PendingRequests, user.Reserved
+        email, user.fname, user.lname, user.school, user.isTutor, user.Strengths, user.AvailableTime, user.IncomingRequests, user.Reserved, user.OutgoingRequests
     );
     return newUser;
 };
@@ -285,9 +287,9 @@ function listRequestsOnTutorsProfile(pendReqArr){
         for(var i = 0; i < pendReqArr.length;i++){
             var req = pendReqArr[i];
             // console.log("entered loop");
-            var name = pendReqArr[i].FirstName + " " + pendReqArr[i].LastName;
-            var email = pendReqArr[i].Email;
-            var time = pendReqArr[i].TutorTime;
+            var name = req.FirstName + " " + req.LastName;
+            var email = req.Email;
+            var time = req.TutorTime;
             var msg = name + " (" + email + ") would like to request you for: " + time;
             // console.log(msg);
             var rejButton = document.createElement("button");
@@ -365,11 +367,19 @@ function pushAvailTimeToFirestore(availTime){
 
 
 function rejectReq(req){
+
+    createTutor(req.Email).then(function(user){ //delete from student's OutgoingRequests firestore
+        var db = firebase.firestore();   
+        db.collection("users").doc(user.email).update({
+            OutgoingRequests:firebase.firestore.FieldValue.arrayRemove(req)  
+        });
+    });
     createUser().
     then(function(tutor){
         var db=firebase.firestore();
         db.collection("users").doc(tutor.email).update({
-            PendingRequests:firebase.firestore.FieldValue.arrayRemove(req)
+            IncomingRequests:firebase.firestore.FieldValue.arrayRemove(req)
+            
         });
     });
     alert("Rejected request successfully!")
@@ -381,7 +391,8 @@ function acceptReq(req){
     createTutor(req.Email).then(function(user){ //add to student's reserved time firestore
         var db = firebase.firestore();   
         db.collection("users").doc(user.email).update({
-            Reserved:firebase.firestore.FieldValue.arrayUnion(req)  
+            Reserved:firebase.firestore.FieldValue.arrayUnion(req),
+            OutgoingRequests:firebase.firestore.FieldValue.arrayRemove(req)
         });
     });
     
@@ -389,7 +400,7 @@ function acceptReq(req){
         var db = firebase.firestore();
         db.collection("users").doc(tutor.email).update({
             Reserved:firebase.firestore.FieldValue.arrayUnion(req),    //add to tutor's firestore reserved field
-            PendingRequests: firebase.firestore.FieldValue.arrayRemove(req),
+            IncomingRequests: firebase.firestore.FieldValue.arrayRemove(req),
             AvailableTime: firebase.firestore.FieldValue.arrayRemove(req.TutorTime)
         });
     });
