@@ -33,7 +33,12 @@ function listAvailTime(arr){
 
             Name = document.createTextNode(Name);
             button.appendChild(Name);
-            button.style = "margin-left:10%;"
+            button.style.marginLeft="10%";
+            button.style.marginTop="1%";
+            button.style.marginBottom="1%";
+            button.style.background="red";
+            button.style.border="1px solid black";
+            button.style.fontSize="50%";
             button.value = parameter;
             button.onclick = (function(parameter){
                 return function(){
@@ -41,6 +46,7 @@ function listAvailTime(arr){
                 }
             })(parameter);
 
+            
             newDiv.appendChild(displmsg);
             newDiv.appendChild(button);
             newDiv.appendChild(br);
@@ -51,6 +57,8 @@ function listAvailTime(arr){
             newDiv.style.marginRight="1%";
             newDiv.style.marginTop="5%";
             newDiv.style.background="#F5F5F5";
+            
+            
 
 
             document.getElementById("availTimeDiv").appendChild(newDiv);
@@ -307,6 +315,7 @@ function listRequestsOnTutorsProfile(pendReqArr){
             rejButton.appendChild(reject);
             rejButton.style.background="red";
             rejButton.style.width="45%";
+            rejButton.style.border="1px solid black";
             // rejButton.style.height="75%";
             rejButton.style.marginLeft="1%";
             rejButton.style.fontSize="50%";
@@ -325,6 +334,7 @@ function listRequestsOnTutorsProfile(pendReqArr){
             accButton.style.width="45%";
             // rejButton.style.height="75%";
             accButton.style.fontSize="50%";
+            accButton.style.border="1px solid black";
 
             
             accButton.onclick = (function(req){
