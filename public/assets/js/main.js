@@ -437,15 +437,14 @@ function configureDateInput(){
 
 function displayReserved(arr){
     if(arr != undefined){
-        // var toAdd = document.createDocumentFragment();
         var user = firebase.auth().currentUser;
         var currEmail = user.email;
         for(var i = 0; i < arr.length;i++){
             if(currEmail == arr[i].Email){
-                var msg = "You have reserved " + arr[i].TutorEmail + " for " +arr[i].TutorTime;
+                var msg = "You have reserved " + arr[i].TutorEmail + " for: " +arr[i].TutorTime;
             }
             else{
-                var msg = arr[i].FirstName + " " + arr[i].LastName + " (" + arr[i].Email + ") has reserved you for " + arr[i].TutorTime;
+                var msg = arr[i].FirstName + " " + arr[i].LastName + " (" + arr[i].Email + ") has reserved you for: " + arr[i].TutorTime;
             }
             
             // console.log(msg);
@@ -844,7 +843,7 @@ function acceptReq(req){
                           
     createTutor(req.Email).then(function(user){ //add to student's reserved time firestore
         var db = firebase.firestore();   
-        db.collection("users").doc(tutor.email).update({
+        db.collection("users").doc(user.email).update({
             Reserved:firebase.firestore.FieldValue.arrayUnion(req)  
         });
     });
