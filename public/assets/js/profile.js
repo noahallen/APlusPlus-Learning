@@ -62,7 +62,6 @@ function listAvailTime(arr){
             // console.log(button.value);
             button.onclick = (function(parameter, id){
                 return function(){
-                    
                     RemoveAvailFirebase(parameter, newDiv.className);
                     document.getElementById(id).remove();
                     
@@ -183,10 +182,9 @@ async function createUser(){
 function changeDatetimeFormat(){
     var str = document.getElementById("tutorInputDate").value;
     var d = new Date(str);
-    if(d<new Date())
-    {
-    alert("Cannot choose the past date!");
-    return;
+    if(d < new Date()){
+        alert("Cannot choose the past date!");
+        return;
     }
     // var n = d.toString();
     // year
@@ -287,9 +285,9 @@ function displayReserved(arr){
                 var displmsg = document.createTextNode(msg);
     
                 var buttonEnd = document.createElement("button");
-                var  Name = document.createTextNode("End Course");
+                var  Name = document.createTextNode("Confirm that session has taken place");
                 buttonEnd.appendChild(Name);
-                buttonEnd.style.marginLeft="10%";
+                // buttonEnd.style.marginLeft="10%";
                 buttonEnd.style.marginTop="1%";
                 buttonEnd.style.marginBottom="1%";
                 buttonEnd.style.background="brown";
@@ -302,11 +300,11 @@ function displayReserved(arr){
                 var parameter = arr[i];
                 buttonEnd.value = "EndCourse";
                 buttonEnd.onclick = (function(parameter){
-                return function(){
-                    endCourse(parameter);
+                    return function(){
+                        endCourse(parameter);
 
-                }
-            })(parameter);
+                    }
+                })(parameter);
     
                 newDiv.appendChild(displmsg);
                 newDiv.appendChild(buttonEnd);
@@ -430,8 +428,6 @@ function pushAvailTimeToFirestore(availTime){
         db.collection("users").doc(email).update({
             AvailableTime: firebase.firestore.FieldValue.arrayUnion(availTime)
         });
-        // alert("Time added!");
-        location.reload();
     }
 }
 
@@ -511,21 +507,19 @@ function displayOutGoingReq(arr){
 function endCourse(req){
 
     createTutor(req.Email).then(function(user){ //delete from student's reserved time firestore
-    var db = firebase.firestore();   
-    db.collection("users").doc(user.email).update({
-        Reserved:firebase.firestore.FieldValue.arrayRemove(req),
-
+        var db = firebase.firestore();   
+        db.collection("users").doc(user.email).update({
+            Reserved:firebase.firestore.FieldValue.arrayRemove(req),
+        });
     });
 
-});
+    createUser().then(function(tutor){ //delete tutor's reserved time firestore
+        var db = firebase.firestore();
+        db.collection("users").doc(req.TutorEmail).update({
+            Reserved:firebase.firestore.FieldValue.arrayRemove(req),  
 
-createUser().then(function(tutor){ //delete tutor's reserved time firestore
-    var db = firebase.firestore();
-    db.collection("users").doc(req.TutorEmail).update({
-        Reserved:firebase.firestore.FieldValue.arrayRemove(req),  
-
+        });
     });
-});
-alert("You have finished your course!");
+    alert("You have finished your course!");
 
 }
