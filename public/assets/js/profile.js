@@ -118,16 +118,18 @@ function listUserInfo(user) {
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
             listAvailTime(user.AvailableTime);
             listRequestsOnTutorsProfile(user.IncomingRequests);
+            var x = document.getElementById("addSubj1");
+            x.style.display = "block";
+            var y = document.getElementById("addSubj2");
+            y.style.display = "block";
+            var z = document.getElementById("addSubj3");
+            z.style.display = "block";
 		}
 		else{
+            
             document.getElementById("isTutorDiv").innerHTML = "Student";
 
-            var x = document.getElementById("removeSubj1");
-            x.style.display = "none";
-            var y = document.getElementById("removeSubj2");
-            y.style.display = "none";
-            var z = document.getElementById("removeSubj3");
-            z.style.display = "none";
+            
             document.getElementById("prof-pg").style.marginLeft="30%";
            
 		}
@@ -290,9 +292,10 @@ function displayReserved(arr){
                 // buttonEnd.style.marginLeft="10%";
                 buttonEnd.style.marginTop="1%";
                 buttonEnd.style.marginBottom="1%";
-                buttonEnd.style.background="brown";
+                buttonEnd.style.background="limegreen";
+                buttonEnd.style.color="";
                 buttonEnd.style.border="1px solid black";
-                buttonEnd.style.fontSize="50%";
+                buttonEnd.style.fontSize="60%";
     
     
                 newDiv.id = "removeButton-div" + i;
