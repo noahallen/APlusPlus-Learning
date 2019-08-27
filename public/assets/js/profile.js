@@ -239,6 +239,7 @@ function changeDatetimeFormat(){
 
     var dateAndTime = mm + " " + dd + "," + yyyy + " | " + hh + ":" + min;
     pushAvailTimeToFirestore(dateAndTime);
+    
 }
 
 
