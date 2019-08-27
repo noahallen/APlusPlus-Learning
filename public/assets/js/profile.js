@@ -431,7 +431,11 @@ function pushAvailTimeToFirestore(availTime){
         db.collection("users").doc(email).update({
             AvailableTime: firebase.firestore.FieldValue.arrayUnion(availTime)
         });
+       
+AddNewTime(availTime);
     }
+   
+
 }
 
 
@@ -524,5 +528,57 @@ function endCourse(req){
         });
     });
     alert("You have finished your course!");
+
+}
+
+//fucntion to let time show immediately on the page
+function AddNewTime(msg)
+{
+
+    var br = document.createElement("br");
+
+    var newDiv = document.createElement('div');
+    var displmsg = document.createTextNode(msg);
+    //add remove button here 
+    var button = document.createElement("button");
+    var Name = "Remove";
+    var parameter = msg;
+
+    Name = document.createTextNode(Name);
+    button.appendChild(Name);
+    button.style.marginLeft="10%";
+    button.style.marginTop="1%";
+    button.style.marginBottom="1%";
+    button.style.background="red";
+    button.style.border="1px solid black";
+    button.style.fontSize="50%";
+    button.value = parameter;
+  var rad=  Math.floor(Math.random() * (1000 - 1)) + 1;
+    newDiv.id = "removeButton-div" + rad;
+    newDiv.className = "removeButton-div" + rad;
+
+    var id = newDiv.id;
+    // console.log(button.value);
+    button.onclick = (function(parameter, id){
+        return function(){
+            RemoveAvailFirebase(parameter, newDiv.className);
+            document.getElementById(id).remove();
+            
+        }
+    })(parameter, id);
+    
+    newDiv.appendChild(displmsg);
+    newDiv.appendChild(button);
+    newDiv.appendChild(br);
+    
+
+    newDiv.style.border="1px solid black";
+    newDiv.style.marginLeft="1%";
+    newDiv.style.marginRight="1%";
+    newDiv.style.marginTop="5%";
+    newDiv.style.background="#F5F5F5";
+    
+    
+    document.getElementById("availTimeDiv").appendChild(newDiv);
 
 }
