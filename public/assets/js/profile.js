@@ -298,16 +298,18 @@ function displayReserved(arr){
                 buttonEnd.style.fontSize="60%";
     
     
-                newDiv.id = "removeButton-div" + i;
-                newDiv.className = "removeButton-div" + i;
+                newDiv.id = "EndCourse-div" + i;
+                newDiv.className = "EndCourse-div" + i;
                 var parameter = arr[i];
                 buttonEnd.value = "EndCourse";
-                buttonEnd.onclick = (function(parameter){
+                var id = newDiv.id;
+                buttonEnd.onclick = (function(parameter, id){
                     return function(){
                         endCourse(parameter);
+                        document.getElementById(id).remove();
 
                     }
-                })(parameter);
+                })(parameter, id);
     
                 newDiv.appendChild(displmsg);
                 newDiv.appendChild(buttonEnd);
@@ -523,6 +525,6 @@ function endCourse(req){
 
         });
     });
-    alert("You have finished your course!");
+    // alert("You have finished your course!");
 
 }
