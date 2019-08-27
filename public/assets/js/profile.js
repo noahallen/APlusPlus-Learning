@@ -26,6 +26,7 @@ async function getUser(callback) {
       
 
 
+
 function listAvailTime(arr){
     if(arr != undefined){
         // var toAdd = document.createDocumentFragment();
@@ -61,7 +62,6 @@ function listAvailTime(arr){
             // console.log(button.value);
             button.onclick = (function(parameter, id){
                 return function(){
-                    
                     RemoveAvailFirebase(parameter, newDiv.className);
                     document.getElementById(id).remove();
                     
@@ -118,16 +118,18 @@ function listUserInfo(user) {
             document.getElementById("subjectDiv").innerHTML = user.Strengths;
             listAvailTime(user.AvailableTime);
             listRequestsOnTutorsProfile(user.IncomingRequests);
+            var x = document.getElementById("addSubj1");
+            x.style.display = "block";
+            var y = document.getElementById("addSubj2");
+            y.style.display = "block";
+            var z = document.getElementById("addSubj3");
+            z.style.display = "block";
 		}
 		else{
+            
             document.getElementById("isTutorDiv").innerHTML = "Student";
 
-            var x = document.getElementById("removeSubj1");
-            x.style.display = "none";
-            var y = document.getElementById("removeSubj2");
-            y.style.display = "none";
-            var z = document.getElementById("removeSubj3");
-            z.style.display = "none";
+            
             document.getElementById("prof-pg").style.marginLeft="30%";
            
 		}
@@ -182,6 +184,10 @@ async function createUser(){
 function changeDatetimeFormat(){
     var str = document.getElementById("tutorInputDate").value;
     var d = new Date(str);
+    if(d < new Date()){
+        alert("Cannot choose the past date!");
+        return;
+    }
     // var n = d.toString();
     // year
     let yyyy = '' + d.getFullYear();
@@ -238,24 +244,27 @@ function changeDatetimeFormat(){
 
 
     var dateAndTime = mm + " " + dd + "," + yyyy + " | " + hh + ":" + min;
+
+
     pushAvailTimeToFirestore(dateAndTime);
+    
 }
 
 
 function configureDateInput(){
     var today = new Date();
-    var dd = today.getDate();
+    var dd = today.getDate() + 1;
     var mm = today.getMonth()+1; //January is 0!
     var yyyy = today.getFullYear();
 
     if(dd<10){
             dd='0'+dd
         } 
-        if(mm<10){
-            mm='0'+mm
-        } 
+    if(mm<10){
+        mm='0'+mm
+    } 
     today = yyyy + '-' + mm + '-' + dd + "T00:00:00";
-    maxDate = yyyy+'-'+(mm+1)+'-'+dd+"T00:00:00";
+    maxDate = yyyy+'-'+(mm+3)+'-'+dd+"T00:00:00";
     //minDate = yyyy + '-' + mm + '-'+ dd;
     minDate = today;
     document.getElementById("tutorInputDate").setAttribute("value", today);
@@ -271,32 +280,70 @@ function displayReserved(arr){
         for(var i = 0; i < arr.length;i++){
             if(currEmail == arr[i].Email){
                 var msg = "You have reserved " + arr[i].TutorEmail + " for: " +arr[i].TutorTime;
+           
+                var br = document.createElement("br");
+
+                var newDiv = document.createElement('div');
+                var displmsg = document.createTextNode(msg);
+    
+                var buttonEnd = document.createElement("button");
+                var  Name = document.createTextNode("Confirm that session has taken place");
+                buttonEnd.appendChild(Name);
+                // buttonEnd.style.marginLeft="10%";
+                buttonEnd.style.marginTop="1%";
+                buttonEnd.style.marginBottom="1%";
+                buttonEnd.style.background="limegreen";
+                buttonEnd.style.color="";
+                buttonEnd.style.border="1px solid black";
+                buttonEnd.style.fontSize="60%";
+    
+    
+                newDiv.id = "removeButton-div" + i;
+                newDiv.className = "removeButton-div" + i;
+                var parameter = arr[i];
+                buttonEnd.value = "EndCourse";
+                buttonEnd.onclick = (function(parameter){
+                    return function(){
+                        endCourse(parameter);
+
+                    }
+                })(parameter);
+    
+                newDiv.appendChild(displmsg);
+                newDiv.appendChild(buttonEnd);
+                newDiv.appendChild(br);
+                //append button here
+    
+                newDiv.style.border="1px solid black";
+                newDiv.style.marginLeft="1%";
+                newDiv.style.marginRight="1%";
+                newDiv.style.marginTop="5%";
+                newDiv.style.background="#F5F5F5";
+                document.getElementById("ReservedID").appendChild(newDiv);
+     
             }
             else{
                 var msg = arr[i].FirstName + " " + arr[i].LastName + " (" + arr[i].Email + ") has reserved you for: " + arr[i].TutorTime;
+                var br = document.createElement("br");
+
+                var newDiv = document.createElement('div');
+                var displmsg = document.createTextNode(msg);
+    
+                newDiv.appendChild(displmsg);
+                newDiv.appendChild(br);
+                //append button here
+    
+                newDiv.style.border="1px solid black";
+                newDiv.style.marginLeft="1%";
+                newDiv.style.marginRight="1%";
+                newDiv.style.marginTop="5%";
+                newDiv.style.background="#F5F5F5";
+                document.getElementById("ReservedID").appendChild(newDiv);
             }
             
-            // console.log(msg);
-            var br = document.createElement("br");
-
-            var newDiv = document.createElement('div');
-            var displmsg = document.createTextNode(msg);
-
-
-            newDiv.appendChild(displmsg);
-            newDiv.appendChild(br);
-            //append button here
-
-            newDiv.style.border="1px solid black";
-            newDiv.style.marginLeft="1%";
-            newDiv.style.marginRight="1%";
-            newDiv.style.marginTop="5%";
-            newDiv.style.background="#F5F5F5";
-
-
-            document.getElementById("ReservedID").appendChild(newDiv);
         }
     }
+  
 }
 
 
@@ -360,11 +407,14 @@ function listRequestsOnTutorsProfile(pendReqArr){
             accButton.onclick = (function(req){
                 return function(){
                     acceptReq(req);
+
                 }
              })(req);
 
             document.getElementById("tut-prof-req").appendChild(newDiv);
+           
         }
+        
     }
 }
 
@@ -381,7 +431,6 @@ function pushAvailTimeToFirestore(availTime){
         db.collection("users").doc(email).update({
             AvailableTime: firebase.firestore.FieldValue.arrayUnion(availTime)
         });
-        // alert("Time added!");
     }
 }
 
@@ -425,6 +474,7 @@ function acceptReq(req){
         });
     });
     alert("Accepted request successfully!");
+
 }
 
 //Function to display outgoing request on students' profile
@@ -434,16 +484,11 @@ function displayOutGoingReq(arr){
         var currEmail = user.email;
         for(var i = 0; i < arr.length;i++){
 
-            var msg = "You have requested " + arr[i].TutorEmail + " for: " +arr[i].TutorTime;
-
-
-            
+            var msg = "You have requested " + arr[i].TutorEmail + " for: " +arr[i].TutorTime;   
             // console.log(msg);
             var br = document.createElement("br");
-
             var newDiv = document.createElement('div');
             var displmsg = document.createTextNode(msg);
-
 
             newDiv.appendChild(displmsg);
             newDiv.appendChild(br);
@@ -459,4 +504,25 @@ function displayOutGoingReq(arr){
             document.getElementById("OutgoingRequestsID").appendChild(newDiv);
         }
     }
+}
+
+///Student's endCourse button to end the course on both sides
+function endCourse(req){
+
+    createTutor(req.Email).then(function(user){ //delete from student's reserved time firestore
+        var db = firebase.firestore();   
+        db.collection("users").doc(user.email).update({
+            Reserved:firebase.firestore.FieldValue.arrayRemove(req),
+        });
+    });
+
+    createUser().then(function(tutor){ //delete tutor's reserved time firestore
+        var db = firebase.firestore();
+        db.collection("users").doc(req.TutorEmail).update({
+            Reserved:firebase.firestore.FieldValue.arrayRemove(req),  
+
+        });
+    });
+    alert("You have finished your course!");
+
 }
