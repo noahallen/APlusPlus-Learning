@@ -10,6 +10,10 @@ function pushToFireStore(){
     var db = firebase.firestore();
     var user = firebase.auth().currentUser;
     var email = user.email;
+    if (document.getElementById("fname").value == "" || document.getElementById("lname").value == ""){
+        alert("Please fill in all fields");
+        return;
+    }
     db.collection("users").doc(email).set({
         FirstName: document.getElementById("fname").value,
         LastName: document.getElementById("lname").value,
