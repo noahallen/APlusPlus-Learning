@@ -26,6 +26,7 @@ async function getUser(callback) {
       
 
 
+
 function listAvailTime(arr){
     if(arr != undefined){
         // var toAdd = document.createDocumentFragment();
