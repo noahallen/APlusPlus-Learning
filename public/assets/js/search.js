@@ -45,14 +45,16 @@ async function pullTutorArray(){
         await db.collection("users").where("Strengths", "array-contains", selectedOption).get()
         .then(function(querySnapshot) {
             querySnapshot.forEach(function(doc) {
+                if(doc.data().AvailableTime.length > 0){
                 // console.log(doc.data().email);
-                var currUser = 
-                {
-                    FirstName:doc.data().FirstName,
-                    LastName:doc.data().LastName,
-                    email:doc.data().email,
-                };
-                userArr.push(currUser);
+                    var currUser = 
+                    {
+                        FirstName:doc.data().FirstName,
+                        LastName:doc.data().LastName,
+                        email:doc.data().email,
+                    };
+                    userArr.push(currUser);
+                }
             });
         }).catch(function(error) {
             console.log("Error getting documents: ", error);
