@@ -1,5 +1,16 @@
 /*------------------------------Profile Page Code ------------------------------*/
 
+Element.prototype.remove = function() {
+    this.parentElement.removeChild(this);
+}
+NodeList.prototype.remove = HTMLCollection.prototype.remove = function() {
+    for(var i = this.length - 1; i >= 0; i--) {
+        if(this[i] && this[i].parentElement) {
+            this[i].parentElement.removeChild(this[i]);
+        }
+    }
+}
+
 //Function to get a user variable containing the current user's data from firestore
 async function getUser(callback) {
 	if(firebase.auth().currentUser) {
@@ -14,9 +25,11 @@ async function getUser(callback) {
 };
       
 
+
 function listAvailTime(arr){
     if(arr != undefined){
         // var toAdd = document.createDocumentFragment();
+        
         for(var i = 0; i < arr.length;i++){
             
             
@@ -40,18 +53,25 @@ function listAvailTime(arr){
             button.style.border="1px solid black";
             button.style.fontSize="50%";
             button.value = parameter;
-            button.onclick = (function(parameter){
-                return function(){
-                    RemoveAvailFirebase(parameter);
-                }
-            })(parameter);
 
+            newDiv.id = "removeButton-div" + i;
+            newDiv.className = "removeButton-div" + i;
+
+            var id = newDiv.id;
+            // console.log(button.value);
+            button.onclick = (function(parameter, id){
+                return function(){
+                    
+                    RemoveAvailFirebase(parameter, newDiv.className);
+                    document.getElementById(id).remove();
+                    
+                }
+            })(parameter, id);
             
             newDiv.appendChild(displmsg);
             newDiv.appendChild(button);
             newDiv.appendChild(br);
-            newDiv.id = "removeButton-div";
-            //append button here
+            
 
             newDiv.style.border="1px solid black";
             newDiv.style.marginLeft="1%";
@@ -60,8 +80,6 @@ function listAvailTime(arr){
             newDiv.style.background="#F5F5F5";
             
             
-
-
             document.getElementById("availTimeDiv").appendChild(newDiv);
         
         }
@@ -70,22 +88,15 @@ function listAvailTime(arr){
 
 
 //Function to remove the AvailTime form firebase
-function RemoveAvailFirebase(TimeToRemove){
+function RemoveAvailFirebase(TimeToRemove, id){
     createUser().then(function(tutor){
         var db = firebase.firestore();
         db.collection("users").doc(tutor.email).update({
             AvailableTime: firebase.firestore.FieldValue.arrayRemove(TimeToRemove)
         });
     });
-    
-     removeElement("removeButton-div");
-    // alert("Removed The Time");
 }
-async function removeElement(elementId) {
-    // Removes an element from the document
-    var element = document.getElementById(elementId);
-    element.parentNode.removeChild(element);
-}
+
 
 
 //Function to display the user's data on their profile page
@@ -98,7 +109,7 @@ function listUserInfo(user) {
 		document.getElementById("fnameDiv").innerHTML = user.fname;
         document.getElementById("fnameDiv").innerHTML += " " + user.lname;
         displayReserved(user.Reserved);
-        //displayOutGoing(user.OutgoingRequests);
+        displayOutGoingReq(user.OutgoingRequests);
 
         
 		document.getElementById("schoolDiv").innerHTML = user.school;
@@ -370,7 +381,7 @@ function pushAvailTimeToFirestore(availTime){
         db.collection("users").doc(email).update({
             AvailableTime: firebase.firestore.FieldValue.arrayUnion(availTime)
         });
-        alert("Time added!");
+        // alert("Time added!");
     }
 }
 
@@ -414,4 +425,38 @@ function acceptReq(req){
         });
     });
     alert("Accepted request successfully!");
+}
+
+//Function to display outgoing request on students' profile
+function displayOutGoingReq(arr){
+    if(arr != undefined){
+        var user = firebase.auth().currentUser;
+        var currEmail = user.email;
+        for(var i = 0; i < arr.length;i++){
+
+            var msg = "You have requested " + arr[i].TutorEmail + " for: " +arr[i].TutorTime;
+
+
+            
+            // console.log(msg);
+            var br = document.createElement("br");
+
+            var newDiv = document.createElement('div');
+            var displmsg = document.createTextNode(msg);
+
+
+            newDiv.appendChild(displmsg);
+            newDiv.appendChild(br);
+            //append button here
+
+            newDiv.style.border="1px solid black";
+            newDiv.style.marginLeft="1%";
+            newDiv.style.marginRight="1%";
+            newDiv.style.marginTop="5%";
+            newDiv.style.background="#F5F5F5";
+
+
+            document.getElementById("OutgoingRequestsID").appendChild(newDiv);
+        }
+    }
 }
