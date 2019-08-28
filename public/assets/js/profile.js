@@ -62,7 +62,7 @@ function listAvailTime(arr){
             // console.log(button.value);
             button.onclick = (function(parameter, id){
                 return function(){
-                    RemoveAvailFirebase(parameter, newDiv.className);
+                    RemoveAvailFirebase(parameter);
                     document.getElementById(id).remove();
                     
                 }
@@ -88,7 +88,7 @@ function listAvailTime(arr){
 
 
 //Function to remove the AvailTime form firebase
-function RemoveAvailFirebase(TimeToRemove, id){
+function RemoveAvailFirebase(TimeToRemove){
     createUser().then(function(tutor){
         var db = firebase.firestore();
         db.collection("users").doc(tutor.email).update({
@@ -368,6 +368,7 @@ function listRequestsOnTutorsProfile(pendReqArr){
             var newDiv = document.createElement('div');
             var displmsg = document.createTextNode(msg);
             newDiv.id = 'request'+i;
+            var newDivId = newDiv.id;
 
             newDiv.appendChild(displmsg);
             newDiv.appendChild(br);
@@ -391,11 +392,12 @@ function listRequestsOnTutorsProfile(pendReqArr){
             rejButton.style.marginBottom="2%";
 
            
-            rejButton.onclick = (function(req){
+            rejButton.onclick = (function(req, newDivId){
                 return function(){
                     rejectReq(req);
+                    document.getElementById(newDivId).remove();
                 }
-             })(req);
+             })(req, newDivId);
             
             var Accept = document.createTextNode("Accept");
             accButton.appendChild(Accept);
@@ -406,12 +408,12 @@ function listRequestsOnTutorsProfile(pendReqArr){
             accButton.style.border="1px solid black";
 
             
-            accButton.onclick = (function(req){
+            accButton.onclick = (function(req, newDivId){
                 return function(){
                     acceptReq(req);
-
+                    document.getElementById(newDivId).remove();
                 }
-             })(req);
+             })(req, newDivId);
 
             document.getElementById("tut-prof-req").appendChild(newDiv);
            
@@ -453,7 +455,6 @@ function rejectReq(req){
             
         });
     });
-    alert("Rejected request successfully!")
 }
 
 
@@ -475,15 +476,12 @@ function acceptReq(req){
             AvailableTime: firebase.firestore.FieldValue.arrayRemove(req.TutorTime)
         });
     });
-    alert("Accepted request successfully!");
-
 }
 
 //Function to display outgoing request on students' profile
 function displayOutGoingReq(arr){
     if(arr != undefined){
         var user = firebase.auth().currentUser;
-        var currEmail = user.email;
         for(var i = 0; i < arr.length;i++){
 
             var msg = "You have requested " + arr[i].TutorEmail + " for: " +arr[i].TutorTime;   
