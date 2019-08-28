@@ -435,11 +435,8 @@ function pushAvailTimeToFirestore(availTime){
         db.collection("users").doc(email).update({
             AvailableTime: firebase.firestore.FieldValue.arrayUnion(availTime)
         });
-       
-AddNewTime(availTime);
+        AddNewTime(availTime);
     }
-   
-
 }
 
 
@@ -463,7 +460,8 @@ function rejectReq(req){
 
 
 function acceptReq(req){
-                          
+    DisplayAddedReservation(req);     
+       
     createTutor(req.Email).then(function(user){ //add to student's reserved time firestore
         var db = firebase.firestore();   
         db.collection("users").doc(user.email).update({
@@ -485,7 +483,6 @@ function acceptReq(req){
 //Function to display outgoing request on students' profile
 function displayOutGoingReq(arr){
     if(arr != undefined){
-        var user = firebase.auth().currentUser;
         for(var i = 0; i < arr.length;i++){
 
             var msg = "You have requested " + arr[i].TutorEmail + " for: " +arr[i].TutorTime;   
@@ -553,7 +550,7 @@ function AddNewTime(msg)
     button.style.border="1px solid black";
     button.style.fontSize="50%";
     button.value = parameter;
-  var rad=  Math.floor(Math.random() * (1000 - 1)) + 1;
+    var rad=  Math.floor(Math.random() * (1000 - 1)) + 1;
     newDiv.id = "removeButton-div" + rad;
     newDiv.className = "removeButton-div" + rad;
 
@@ -581,4 +578,75 @@ function AddNewTime(msg)
     
     document.getElementById("availTimeDiv").appendChild(newDiv);
 
+}
+
+function DisplayAddedReservation(req){
+    var user = firebase.auth().currentUser;
+    var currEmail = user.email;
+
+    if(currEmail == req.Email){
+        var msg = "You have reserved " + req.TutorEmail + " for: " + req.TutorTime;
+    
+        var br = document.createElement("br");
+
+        var newDiv = document.createElement('div');
+        var displmsg = document.createTextNode(msg);
+
+        var buttonEnd = document.createElement("button");
+        var  Name = document.createTextNode("Confirm that session has taken place");
+        buttonEnd.appendChild(Name);
+        buttonEnd.style.marginTop="1%";
+        buttonEnd.style.marginBottom="1%";
+        buttonEnd.style.background="limegreen";
+        buttonEnd.style.color="";
+        buttonEnd.style.border="1px solid black";
+        buttonEnd.style.fontSize="60%";
+
+
+        newDiv.id = "EndCourse-div" + i;
+        newDiv.className = "EndCourse-div" + i;
+        var parameter = req;
+        buttonEnd.value = "EndCourse";
+        var id = newDiv.id;
+        buttonEnd.onclick = (function(parameter, id){
+            return function(){
+                endCourse(parameter);
+                document.getElementById(id).remove();
+
+            }
+        })(parameter, id);
+
+        newDiv.appendChild(displmsg);
+        newDiv.appendChild(buttonEnd);
+        newDiv.appendChild(br);
+        //append button here
+
+        newDiv.style.border="1px solid black";
+        newDiv.style.marginLeft="1%";
+        newDiv.style.marginRight="1%";
+        newDiv.style.marginTop="5%";
+        newDiv.style.background="#F5F5F5";
+        document.getElementById("ReservedID").appendChild(newDiv);
+
+    }
+    else{
+        var msg = req.FirstName + " " + req.LastName + " (" + req.Email + ") has reserved you for: " + req.TutorTime;
+        var br = document.createElement("br");
+
+        var newDiv = document.createElement('div');
+        var displmsg = document.createTextNode(msg);
+
+        newDiv.appendChild(displmsg);
+        newDiv.appendChild(br);
+        //append button here
+
+        newDiv.style.border="1px solid black";
+        newDiv.style.marginLeft="1%";
+        newDiv.style.marginRight="1%";
+        newDiv.style.marginTop="5%";
+        newDiv.style.background="#F5F5F5";
+        document.getElementById("ReservedID").appendChild(newDiv);
+    }
+        
+    
 }
